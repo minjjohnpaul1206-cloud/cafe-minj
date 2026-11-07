@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Café Minj · John Paul Minj, Sales & Marketing</title>
+  <meta name="description" content="John Paul Minj — Management Trainee in Sales & Marketing, MBA IIM Jammu. Walk into Café Minj and order any chapter of his work; he makes it for you at the counter.">
+  <meta name="theme-color" content="#1F3B31">
+  <meta property="og:title" content="Café Minj · John Paul Minj">
+  <meta property="og:description" content="A Pune Irani café where every item on the menu is a chapter of John Paul Minj's work in sales and marketing.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam&family=Mukta:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#cv">Skip to the CV</a>
+
+  <!-- ============ THE STREET ============ -->
+  <section id="view-street" class="view" aria-label="Outside Café Minj">
+    <div id="street-art" class="street-art"></div>
+    <div class="flash" aria-hidden="true"></div>
+    <div class="street-intro">
+      <h1>John Paul Minj</h1>
+      <p>Management trainee in sales &amp; marketing, MBA from IIM Jammu. This is my café: every item on the menu is a chapter of my work. Walk in, order anything, and I'll make it for you at the counter.</p>
+      <div class="intro-actions">
+        <button class="btn btn-gold" type="button" data-action="enter">Walk in</button>
+        <a class="btn btn-line" href="#cv" id="cv-link-target">Just the CV, please</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INSIDE ============ -->
+  <section id="view-inside" class="view" aria-label="Inside Café Minj" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" data-action="street"><span class="brand-mark" aria-hidden="true"></span>Café Minj</a>
+      <nav class="topnav" aria-label="Café">
+        <button class="btn btn-small btn-line" type="button" data-action="receipt">Your order <span class="count" id="tray-count">0</span></button>
+        <a class="btn btn-small btn-line" href="#cv">CV</a>
+        <button class="btn btn-small btn-ghost" type="button" data-action="street">Step outside</button>
+      </nav>
+    </header>
+
+    <div class="stage">
+      <div id="scene-host" class="scene-host"></div>
+      <div class="ledge">
+        <div class="speech" id="speech" aria-live="polite">
+          <p class="speech-who">John Paul</p>
+          <p class="speech-text" id="speech-text"></p>
+        </div>
+        <div class="choices" id="choices" role="group" aria-label="What would you like?"></div>
+      </div>
+    </div>
+
+    <section id="served" class="served" aria-live="polite" hidden></section>
+
+    <section class="board" aria-labelledby="board-title">
+      <div class="board-inner">
+        <h2 id="board-title">The whole menu</h2>
+        <p class="board-sub">Prefer to read the board yourself? Tap anything and I'll make it.</p>
+        <div id="board-groups" class="board-groups"></div>
+        <p class="board-foot">Every price is 0.00. This café runs on curiosity.</p>
+      </div>
+    </section>
+
+    <section class="last-call">
+      <h2>Last orders</h2>
+      <p>One coffee with the barista, on the house. Ask for the bill and leave me a note, and I'll get back to you.</p>
+      <button class="btn btn-gold" type="button" data-action="receipt">Bring the bill</button>
+    </section>
+
+    <footer class="foot">
+      <p>Café Minj, Pune. Brewed by John Paul Minj.</p>
+      <p>Built as a café because a story lands better over coffee than over slides.</p>
+    </footer>
+  </section>
+
+  <!-- ============ CV (recruiter quick view) ============ -->
+  <section id="view-cv" class="view cv" aria-label="Curriculum vitae" hidden>
+    <div class="cv-bar">
+      <a class="btn btn-small btn-line" href="#inside">Back to the café</a>
+      <div class="cv-bar-right">
+        <a class="btn btn-small btn-line" id="cv-pdf" hidden download>Download PDF</a>
+        <button class="btn btn-small btn-gold" type="button" data-action="print">Print / save as PDF</button>
+      </div>
+    </div>
+    <article class="cv-paper" id="cv-paper"></article>
+  </section>
+
+  <!-- ============ THE BILL ============ -->
+  <dialog id="bill" aria-labelledby="bill-title">
+    <div class="paper" id="paper"></div>
+  </dialog>
+
+  <script src="js/data.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
