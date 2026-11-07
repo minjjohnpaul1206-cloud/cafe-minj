@@ -13,7 +13,7 @@ window.CAFE = {
     employer: "Eckstein Engineering Business Solutions",
     degree: "MBA, IIM Jammu (2026)",
     city: "Pune, India",
-    email: "minjjohnpaul1206@gmail.com",
+    email: "johnpaul@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
     linkedin: "https://www.linkedin.com/in/johnpaulminj/",
