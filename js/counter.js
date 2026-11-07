@@ -18,7 +18,7 @@
       let i = 0;
       (function type() {
         if (token !== sayToken) return done();
-        t.textContent = text.slice(0, (i += 2));
+        t.textContent = text.slice(0, (i += 3));
         if (i < text.length) setTimeout(type, 16);
         else { speech.textContent = text; done(); }
       })();
@@ -42,10 +42,10 @@
       const s = shelf(state.shelf), full = state.stamps.length === D.items.length;
       return btn("Tell me the story", "The full details, below", "story", "primary")
         + (full ? "" : btn("Another from " + s.label, "", "shelf:" + s.id) + btn("Surprise me", "Barista's choice", "surprise"))
-        + btn("That's all, bring the bill", "", "bill") + btn("Back to the menu", "", "greet");
+        + btn("Bring the bill", "And get in touch", "bill") + btn("Back to the menu", "", "greet");
     },
     name: () => `<form class="name-form" id="name-form">
-        <label for="name-input">Name for the order</label>
+        <label for="name-input">Name for the order <span class="optional">(optional, it just goes on the cup)</span></label>
         <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name">
         <div class="name-btns">
           <button type="submit" class="choice primary" value="here"><b>For here</b><small>In a proper cup</small></button>
@@ -69,6 +69,7 @@
   function openShelf(id) {
     const s = shelf(id);
     state.shelf = id; step("shelf");
+    scrollToEl(".stage", true);
     say(`${s.label}. ${s.blurb} What'll it be?`);
   }
   function wifi() {
@@ -141,6 +142,8 @@
     await say(full ? `${it.line} And that's your loyalty card full: every chapter, my whole career so far. The reward is a coffee with me, for real. Shall I bring the bill?` : it.line);
     step("served");
     state.busy = false;
+    await wait(900);
+    if (state.step === "served") scrollToEl("#served"); // open the story, unless they've already moved on
   }
 
   /* ---------- the story card under the counter ---------- */
@@ -161,8 +164,14 @@
         <p class="said">“${esc(it.line)}”</p>
         <ul class="notes">${it.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>
         <div class="tags">${(it.tags || []).map(t => `<span>${esc(t)}</span>`).join("")}</div>
-        <button type="button" class="btn btn-small btn-dark" data-act="counter">Back to the counter</button>
-      </div></article>`;
+      </div></article>
+      <nav class="story-next" aria-label="What next">
+        <p>What next?</p>
+        ${btn("Another from " + shelf(it.shelf).label, "", "shelf:" + it.shelf)}
+        ${btn("Surprise me", "Barista's choice", "surprise")}
+        ${btn("See the whole menu", "", "board")}
+        ${btn("Get in touch", "Email, phone, LinkedIn", "bill", "primary")}
+      </nav>`;
   }
 
   /* ---------- menu board + loyalty card ---------- */
@@ -174,7 +183,6 @@
 
   function updateStamps() {
     const n = state.stamps.length, total = D.items.length;
-    $("#tray-count").textContent = state.tray.length;
     $$(".board-item").forEach(b => b.classList.toggle("had", state.stamps.includes(b.dataset.act.slice(5))));
     $("#stamps").innerHTML = D.items.map((_, i) => `<span class="stamp-dot${i < n ? " on" : ""}"></span>`).join("");
     $("#stamp-count").textContent = n === total ? "Card full: coffee with John Paul unlocked" : `${n} of ${total} stamps`;

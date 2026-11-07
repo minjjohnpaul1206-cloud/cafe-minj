@@ -3,7 +3,7 @@
    Public: Cafe.scene.serve(item) → the item's SVG element, Cafe.scene.wave()
    ========================================================= */
 (() => {
-  const { A, D, P, $, reduce, wait, usesCup } = Cafe;
+  const { A, D, P, $, reduce, PACE, wait, usesCup } = Cafe;
   const NS = "http://www.w3.org/2000/svg";
 
   $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules);
@@ -29,13 +29,13 @@
     const from = el.style.transform || to;
     el.style.transform = to;
     if (reduce || !dur || from === to) return Promise.resolve();
-    return el.animate([{ transform: from }, { transform: to }], { duration: dur, easing }).finished.catch(() => {});
+    return el.animate([{ transform: from }, { transform: to }], { duration: dur * PACE, easing }).finished.catch(() => {});
   }
   function fade(el, to, dur = 400) {
     const from = el.style.opacity || "1";
     el.style.opacity = to;
     if (reduce || !dur) return Promise.resolve();
-    return el.animate([{ opacity: from }, { opacity: String(to) }], { duration: dur }).finished.catch(() => {});
+    return el.animate([{ opacity: from }, { opacity: String(to) }], { duration: dur * PACE }).finished.catch(() => {});
   }
   const itemAt = (x, y, s) => `translate(${x - 60 * s}px, ${y - 110 * s}px) scale(${s})`; // art base is (60,110)
   const at = (x, y) => `translate(${x}px, ${y}px)`;

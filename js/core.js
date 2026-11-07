@@ -8,7 +8,8 @@ window.Cafe = (() => {
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+  const PACE = 0.7; // one knob for the speed of every animation (lower = faster)
+  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms * PACE));
 
   /* remembered between visits, if the browser allows it */
   const store = {
@@ -32,6 +33,7 @@ window.Cafe = (() => {
     returning: savedName !== null,
     togo: store.get("togo", false),
     wroteOnce: false,
+    queued: null,                               // an item picked from the street menu
   };
 
   /* machine drinks come in a named paper cup when the order is "to go" */
@@ -45,5 +47,5 @@ window.Cafe = (() => {
     return true;
   }
 
-  return { D, P: D.person, A: window.ART, $, $$, esc, reduce, wait, store, item, shelf, shelfItems, short, state, usesCup, scrollToEl };
+  return { D, P: D.person, A: window.ART, $, $$, esc, reduce, PACE, wait, store, item, shelf, shelfItems, short, state, usesCup, scrollToEl };
 })();

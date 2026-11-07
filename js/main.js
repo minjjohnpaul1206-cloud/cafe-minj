@@ -4,7 +4,7 @@
    runs every [data-act] button on the site.
    ========================================================= */
 (() => {
-  const { D, P, A, $, reduce, state, scrollToEl } = Cafe;
+  const { D, P, A, $, esc, reduce, state, shelfItems, scrollToEl } = Cafe;
   const { counter, pages, scene } = Cafe;
 
   /* ---------- the street front ---------- */
@@ -17,10 +17,17 @@
   }
   fitStreet(); addEventListener("resize", fitStreet);
 
+  /* the menu outside: every item, one tap from being made */
+  $("#street-shelves").innerHTML = D.shelves.map(s => `<div class="street-shelf">
+      <h3>${esc(s.label)}</h3><p>${esc(s.sub)}</p>
+      <ul>${shelfItems(s.id).map(i => `<li><button type="button" data-act="visit:${i.id}">${esc(i.name)}</button></li>`).join("")}</ul>
+    </div>`).join("");
+
   let entering = false;
   async function enter() { // the door swings open and we walk into the light
     if (entering) return;
     entering = true;
+    scrollTo(0, 0); // the door is at the top, even if they came from the menu below
     if (!reduce) {
       $(".street-intro").animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: "forwards" });
       await scene.tw($("#door"), "perspective(600px) scaleX(.14)", 650, "cubic-bezier(.6,0,.3,1)");
@@ -51,7 +58,12 @@
       if (!state.greeted || from === "street") {
         const first = !state.greeted;
         state.greeted = true;
-        setTimeout(() => { counter.greet(first); if (first) scene.wave(); }, reduce ? 0 : 450);
+        setTimeout(async () => {
+          const q = state.queued; state.queued = null;
+          if (!q) { counter.greet(first); if (first) scene.wave(); return; }
+          await counter.greet(first);
+          counter.order(q); // they already chose on the street
+        }, reduce ? 0 : 450);
       }
     }
   }
@@ -64,6 +76,9 @@
   /* ---------- every button on the site: data-act="verb" or "verb:arg" ---------- */
   const actions = {
     enter, street: goStreet,
+    visit: id => { state.queued = id; enter(); },
+    streetmenu: () => scrollToEl("#street-menu"),
+    board: () => scrollToEl("#board"),
     shelf: counter.openShelf, item: counter.order, greet: () => counter.greet(false),
     wifi: counter.wifi, rules: counter.rules, surprise: counter.surprise,
     skipname: () => counter.setName("", false), rename: counter.rename,
@@ -72,7 +87,7 @@
     cv: () => (location.hash = "cv"),
     story: () => scrollToEl("#served"), counter: () => scrollToEl(".stage"),
   };
-  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story"];
+  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story", "board"];
 
   document.addEventListener("click", e => {
     const el = e.target.closest("[data-act]");

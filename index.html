@@ -9,6 +9,11 @@
   <meta property="og:title" content="Café Minj · John Paul Minj">
   <meta property="og:description" content="A Pune Irani café where every item on the menu is a chapter of John Paul Minj's work in sales and marketing.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://minjjohnpaul1206-cloud.github.io/cafe-minj/">
+  <meta property="og:image" content="https://minjjohnpaul1206-cloud.github.io/cafe-minj/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +25,7 @@
 
   <!-- ============ THE STREET ============ -->
   <section id="view-street" class="view" aria-label="Outside Café Minj">
+   <div class="street-hero">
     <div id="street-art" class="street-art"></div>
     <div class="flash" aria-hidden="true"></div>
     <div class="street-intro">
@@ -27,7 +33,19 @@
       <p>Management trainee in sales &amp; marketing, MBA from IIM Jammu. This is my café: every item on the menu is a chapter of my work. Walk in, order anything, and I'll make it for you at the counter.</p>
       <div class="intro-actions">
         <button class="btn btn-gold" type="button" data-act="enter">Walk in</button>
-        <a class="btn btn-line" href="#cv" id="cv-link-target">Just the CV, please</a>
+        <a class="btn btn-line" href="#cv">Just the CV, please</a>
+      </div>
+      <button class="text-link" type="button" data-act="streetmenu">Or read the menu before you come in</button>
+    </div>
+   </div>
+
+    <div class="street-menu" id="street-menu">
+      <h2>On the board today</h2>
+      <p>Five shelves, fifteen chapters of my work. Pick anything and I'll make it for you inside.</p>
+      <div class="street-shelves" id="street-shelves"></div>
+      <div class="street-menu-actions">
+        <button class="btn btn-gold" type="button" data-act="enter">Walk in</button>
+        <a class="btn btn-line" href="#cv">Just the CV, please</a>
       </div>
     </div>
   </section>
@@ -37,8 +55,9 @@
     <header class="topbar">
       <a class="brand" href="#" data-act="street"><span class="brand-mark" aria-hidden="true"></span>Café Minj</a>
       <nav class="topnav" aria-label="Café">
-        <button class="btn btn-small btn-line" type="button" data-act="bill">Your order <span class="count" id="tray-count">0</span></button>
+        <button class="btn btn-small btn-ghost hide-sm" type="button" data-act="board">Menu</button>
         <a class="btn btn-small btn-line" href="#cv">CV</a>
+        <button class="btn btn-small btn-gold" type="button" data-act="bill">Contact</button>
         <button class="btn btn-small btn-ghost" type="button" data-act="street">Step outside</button>
       </nav>
     </header>
@@ -61,7 +80,7 @@
 
     <section id="served" class="served" aria-live="polite" hidden></section>
 
-    <section class="board" aria-labelledby="board-title">
+    <section class="board" id="board" aria-labelledby="board-title">
       <div class="board-inner">
         <h2 id="board-title">The whole menu</h2>
         <p class="board-sub">Prefer to read the board yourself? Tap anything and I'll make it.</p>
@@ -72,8 +91,8 @@
 
     <section class="last-call">
       <h2>Last orders</h2>
-      <p>One coffee with the barista, on the house. Ask for the bill and leave me a note, and I'll get back to you.</p>
-      <button class="btn btn-gold" type="button" data-act="bill">Bring the bill</button>
+      <p>One coffee with the barista, on the house. Leave me a note with your bill, or reach me directly, and I'll get back to you.</p>
+      <button class="btn btn-gold" type="button" data-act="bill">Get in touch</button>
     </section>
 
     <footer class="foot">
