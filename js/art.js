@@ -92,6 +92,31 @@ window.ART = (function () {
       ${[[44, 62], [58, 54], [72, 60], [64, 68], [50, 70], [80, 66]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#3B2014"/>`).join("")}`,
   };
 
+  /* to-go paper cup: kraft sleeve, lid, and a slot for the visitor's name */
+  items.togo = (o = {}) => `<ellipse cx="60" cy="109" rx="26" ry="4" fill="#000" opacity=".18"/>
+      <path d="M33,34 L87,34 L81,108 L39,108 Z" fill="#FBFAF6"/>
+      <path d="M71,34 L87,34 L81,108 L73,108 Z" fill="#E9E5DC"/>
+      <path d="M36.3,96 L83.7,96 L83.2,101 L36.8,101 Z" fill="${o.accent || C.bottle}"/>
+      <path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#C49A6C"/>
+      <path d="M35.3,62 L84.7,62 M37.4,89 L82.6,89" stroke="#8E6A43" stroke-width="1.2"/>
+      ${[42, 50, 58, 66, 74].map(x => `<path d="M${x},64 l0,23" stroke="#B5895B" stroke-width="1"/>`).join("")}
+      <rect x="29" y="27" width="62" height="9" rx="4" fill="#EFEBE3"/>
+      <path d="M34,27 Q36,15 60,14 Q84,15 86,27 Z" fill="#F7F4EE"/>
+      <rect x="62" y="16" width="12" height="4" rx="2" fill="#D3CDC1"/>
+      <g class="cup-name-slot"></g>`;
+
+  const escT = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  /* the visitor's name in marker, letter by letter. If `wrong` is given, it is
+     written first, struck out, and the real name is written on the sleeve. */
+  function cupName(name, wrong) {
+    const line = (txt, y, start) => `<text x="60" y="${y}" text-anchor="middle" font-family="Kalam, cursive" font-size="15" fill="#2A2522"${txt.length > 7 ? ' textLength="46" lengthAdjust="spacingAndGlyphs"' : ""}>${[...txt].map((ch, i) => `<tspan class="ink" style="animation-delay:${start + i * 90}ms">${escT(ch)}</tspan>`).join("")}</text>`;
+    if (!wrong) return line(name, 54, 0);
+    const t1 = wrong.length * 90;
+    return line(wrong, 54, 0)
+      + `<path class="strike" style="animation-delay:${t1 + 200}ms" d="M39,49 Q60,46 81,50" stroke="#2A2522" stroke-width="2" fill="none" pathLength="44"/>`
+      + line(name, 81, t1 + 700);
+  }
+
   function item(art, opts = {}) {
     return (items[art] || items.espresso)(opts);
   }
@@ -270,6 +295,13 @@ window.ART = (function () {
         <rect class="receipt-tongue" x="1484" y="440" width="42" height="24" fill="#fff"/>
       </g>
 
+      <!-- pick-up counter sign -->
+      <g transform="translate(968,0)">
+        <rect x="-4" y="526" width="8" height="36" fill="${C.gold}"/><rect x="-26" y="556" width="52" height="6" rx="2" fill="${C.gold}"/>
+        <rect x="-66" y="494" width="132" height="36" rx="5" fill="${C.bottle}" stroke="${C.gold}" stroke-width="3"/>
+        <text x="0" y="518" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="17" fill="${C.goldSoft}">Pick up here</text>
+      </g>
+
       <!-- served items live here -->
       <g id="items-layer"></g>
     </svg>`;
@@ -363,5 +395,5 @@ window.ART = (function () {
     </svg>`;
   }
 
-  return { item, itemSVG, interior, street, colors: C };
+  return { item, itemSVG, cupName, interior, street, colors: C };
 })();

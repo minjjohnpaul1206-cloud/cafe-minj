@@ -13,11 +13,24 @@
   const shelfItems = id => D.items.filter(i => i.shelf === id);
   const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
 
+  /* remembered between visits (if the browser allows it) */
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("cafeminj." + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("cafeminj." + k, JSON.stringify(v)); } catch {} },
+  };
+
   const state = {
     view: null, greeted: false, busy: false,
     step: "greet", shelf: null, tray: [],
     bx: 800, by: 0, counter: null, hiddenJar: null, sayToken: 0,
+    name: store.get("name", null),          // null = not asked yet, "" = skipped
+    togo: store.get("togo", false),
+    stamps: store.get("stamps", []).filter(id => itemById(id)),
+    returning: store.get("name", null) !== null,
+    wroteOnce: false, pending: null,
   };
+  const short = item => item.name.replace(/^The /, "");
+  const usesCup = item => item.station === "machine" && state.togo;
 
   /* ---------- mount the illustrations ---------- */
   $("#street-art").innerHTML = A.street(P);
@@ -64,7 +77,7 @@
 
   function makeItem(item, x, y, s, opacity = 1) {
     const g = document.createElementNS(NS, "g");
-    g.innerHTML = A.item(item.art, item);
+    g.innerHTML = usesCup(item) ? A.item("togo", item) : A.item(item.art, item);
     g.style.transform = itemT(x, y, s);
     g.style.opacity = opacity;
     layer.appendChild(g);
@@ -205,6 +218,16 @@
     switch (state.step) {
       case "working":
         h = `<p class="working">Making your order…</p>`; break;
+      case "name":
+        h = `<form class="name-form" id="name-form">
+          <label for="name-input">Name for the order</label>
+          <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name" value="${esc(state.name || "")}">
+          <div class="name-btns">
+            <button type="submit" class="choice primary" value="here"><b>For here</b><small>In a proper cup</small></button>
+            <button type="submit" class="choice" value="togo"><b>To go</b><small>Paper cup, name on it</small></button>
+            <button type="button" class="choice" data-choice="skipname"><b>Skip</b></button>
+          </div></form>`;
+        break;
       case "shelf":
         h = shelfItems(state.shelf).map(i => choice(i.name + (had(i.id) ? " ✓" : ""), i.kind, "item:" + i.id)).join("")
           + choice("Something else", "", "greet");
@@ -222,9 +245,11 @@
       case "rules":
         h = choice("Show me the menu", "", "greet", "primary"); break;
       default:
-        h = D.shelves.map(s => choice(s.label, s.sub, "shelf:" + s.id)).join("")
+        h = (D.special ? choice("Today's special", short(itemById(D.special)) + ", what I do now", "item:" + D.special, "primary") : "")
+          + D.shelves.map(s => choice(s.label, s.sub, "shelf:" + s.id)).join("")
           + choice("Just here for the wifi", "Bold choice", "wifi")
-          + choice("I'm hiring, keep it short", "Straight to the CV", "cv");
+          + choice("I'm hiring, keep it short", "Straight to the CV", "cv")
+          + (state.name ? choice(`Not ${state.name}?`, "Change the name on the cup", "rename") : "");
     }
     choicesEl.innerHTML = h;
   }
@@ -236,9 +261,10 @@
   }
   function greet(first) {
     state.step = "greet"; renderChoices();
-    return say(first
-      ? `${greeting()}! I'm ${P.firstName}. I run this counter, and by day I'm a management trainee in sales and marketing here in Pune. Everything on the menu is a chapter of my work. What can I get you?`
-      : `What else can I get you?`);
+    if (!first) return say(`What else can I get you?`);
+    if (state.returning && state.name)
+      return say(`${greeting()}, ${state.name}! Welcome back to Café Minj. Your loyalty card has ${state.stamps.length} of ${D.items.length} stamps. What can I get you today?`);
+    return say(`${greeting()}! I'm ${P.firstName}. I run this counter, and by day I'm a management trainee in sales and marketing here in Pune. Everything on the menu is a chapter of my work. What can I get you?`);
   }
   function openShelf(id) {
     if (state.busy) return;
@@ -261,8 +287,31 @@
     order(list[Math.floor(Math.random() * list.length)].id);
   }
 
+  function askName(id) {
+    state.pending = id; state.step = "name"; renderChoices();
+    const st = $(".stage").getBoundingClientRect();
+    if (st.top < -80 || st.top > innerHeight * 0.4) $(".stage").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    say(`Great choice. Can I get a name for the order? And is it for here or to go?`);
+    setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
+  }
+  function setName(raw, togo) {
+    const n = (raw || "").trim().split(/\s+/)[0].replace(/[^\p{L}'-]/gu, "").slice(0, 14);
+    state.name = n ? n[0].toUpperCase() + n.slice(1) : "";
+    state.togo = !!togo;
+    store.set("name", state.name); store.set("togo", state.togo);
+    const id = state.pending; state.pending = null;
+    if (id) order(id);
+  }
+  /* the classic: get the name slightly wrong the first time */
+  function misspell(n) {
+    if (n.length < 3) return n + "h";
+    const i = [...n].findIndex((c, k) => k > 0 && /[aeiouy]/i.test(c));
+    return i > 0 ? n.slice(0, i) + n[i] + n.slice(i) : n.slice(0, -1) + n.slice(-1) + n.slice(-1);
+  }
+
   async function order(id) {
     if (state.busy) return;
+    if (state.name === null) return askName(id);
     const item = itemById(id);
     state.busy = true; state.shelf = item.shelf;
     state.step = "working"; renderChoices();
@@ -271,33 +320,54 @@
       $(".stage").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       await wait(550);
     }
-    say(`One ${item.name.replace(/^The /, "")}, coming right up.`);
+    say(`One ${short(item)}${state.name ? " for " + state.name : ""}, coming right up.`);
     await clearCounter();
     await make(item);
+    let wrong = null;
+    if (usesCup(item) && state.name) {
+      wrong = !state.wroteOnce && state.name.length >= 3 ? misspell(state.name) : null;
+      state.wroteOnce = true;
+      state.counter.querySelector(".cup-name-slot").innerHTML = A.cupName(state.name, wrong);
+    }
     if (!state.tray.includes(id)) state.tray.push(id);
+    const newStamp = !state.stamps.includes(id);
+    if (newStamp) { state.stamps.push(id); store.set("stamps", state.stamps); }
     updateTray();
-    renderServed(item);
+    renderServed(item, wrong);
     state.step = "served";
-    const done = state.tray.length === D.items.length;
-    await say(done ? `${item.line} And that's the whole menu, my entire career so far. Shall I bring the bill?` : item.line);
+    if (state.name) {
+      await say(wrong
+        ? `${wrong}! …sorry, ${state.name}. Fixed it. One ${short(item)}, at the pick-up counter.`
+        : `${state.name}! One ${short(item)}, at the pick-up counter.`);
+      await wait(1300);
+    }
+    const done = state.stamps.length === D.items.length;
+    await say(done && newStamp
+      ? `${item.line} And that's your loyalty card full: every chapter, my whole career so far. The reward is a coffee with me, for real. Shall I bring the bill?`
+      : item.line);
     renderChoices();
     state.busy = false;
   }
 
   function updateTray() {
     $("#tray-count").textContent = state.tray.length;
-    $$(".board-item").forEach(b => b.classList.toggle("had", state.tray.includes(b.dataset.item)));
+    $$(".board-item").forEach(b => b.classList.toggle("had", state.stamps.includes(b.dataset.item)));
+    const n = state.stamps.length, total = D.items.length;
+    $("#stamps").innerHTML = D.items.map((it, i) => `<span class="stamp-dot${i < n ? " on" : ""}"></span>`).join("");
+    $("#stamp-count").textContent = n === total ? "Card full: coffee with John Paul unlocked" : `${n} of ${total} stamps`;
   }
 
   /* ---------- the served story card ---------- */
-  function renderServed(item) {
+  function renderServed(item, wrong) {
     const s = shelfById(item.shelf);
     const facts = [["Role", item.role], ["Where", item.org], ["When", item.period], ["Based in", item.place]]
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
     const box = $("#served");
     box.hidden = false;
     box.innerHTML = `<article class="served-card">
-      <div class="served-art"><span class="served-shelf">${esc(s.label)}</span><div class="on-counter">${A.itemSVG(item.art, item)}<div class="marble"></div></div></div>
+      <div class="served-art"><span class="served-shelf">${esc(s.label)}</span><div class="on-counter">${usesCup(item) && state.name
+          ? `<svg viewBox="0 0 120 120" aria-hidden="true">${A.item("togo", item).replace('<g class="cup-name-slot"></g>', A.cupName(state.name, wrong))}</svg>`
+          : A.itemSVG(item.art, item)}<div class="marble"></div></div></div>
       <div class="served-body">
         <h3>${esc(item.name)}</h3>
         <p class="served-kind">${esc(item.kind)}</p>
@@ -332,6 +402,8 @@
       <hr>${lines}<hr>
       <div class="row total"><span>Total</span><span>0.00</span></div>
       <p class="c muted">Everything is on the house</p>
+      ${state.name ? `<p class="c">Order for <b>${esc(state.name)}</b> (${state.togo ? "to go" : "for here"})</p>` : ""}
+      <p class="c muted">Loyalty card: ${state.stamps.length} of ${D.items.length} stamps${state.stamps.length === D.items.length ? ". Full! Your coffee with John Paul is on me, leave a note below." : ""}</p>
       <hr>
       <p class="muted">Your barista</p>
       <p><b>${esc(P.name)}</b><br>${esc(P.role)}</p>
@@ -475,6 +547,8 @@
       if (k === "shelf") openShelf(v);
       else if (k === "item") order(v);
       else if (k === "greet") greet(false);
+      else if (k === "skipname") setName("", false);
+      else if (k === "rename") { state.name = null; state.returning = false; store.set("name", null); renderChoices(); say("No problem. I'll ask for your name when you order."); }
       else if (k === "wifi") wifi();
       else if (k === "surprise") surprise();
       else if (k === "receipt") openBill();
@@ -501,8 +575,15 @@
     else if (act === "counter") $(".stage").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   });
 
+  choicesEl.addEventListener("submit", e => {
+    if (e.target.id !== "name-form") return;
+    e.preventDefault();
+    setName($("#name-input").value, e.submitter?.value === "togo");
+  });
+
   ["#machine", "#pastry-case"].forEach(s => $(s).classList.add("hot"));
   $$(".shelf-jar").forEach(j => j.classList.add("hot"));
 
+  updateTray();
   route();
 })();

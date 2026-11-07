@@ -26,6 +26,9 @@ window.CAFE = {
     resumePdf: null,
   },
 
+  /* ---------- Today's special: the chip shown first at the counter ---------- */
+  special: "eckstein-espresso",
+
   /* ---------- Contact form ----------
      Leave empty and the form opens the visitor's email app, pre-filled.
      To receive messages directly, create a free form at https://formspree.io,
@@ -54,7 +57,7 @@ window.CAFE = {
      jarColor (jars only): label colour for the jar */
   items: [
     {
-      id: "eckstein-espresso", shelf: "signature-brews", station: "machine", art: "espresso",
+      id: "eckstein-espresso", shelf: "signature-brews", station: "machine", art: "espresso", accent: "#1F3B31",
       name: "The Eckstein Espresso",
       kind: "Double shot, dark roast, no filler",
       org: "Eckstein Engineering Business Solutions Pvt. Ltd.",
@@ -72,7 +75,7 @@ window.CAFE = {
       tags: ["B2B sales", "Market entry", "Cold outreach", "CRM & BRD"],
     },
     {
-      id: "periyar-latte", shelf: "signature-brews", station: "machine", art: "latte",
+      id: "periyar-latte", shelf: "signature-brews", station: "machine", art: "latte", accent: "#4E7A4A",
       name: "Periyar Farmhouse Latte",
       kind: "Steamed on the farm, silky and seasonal",
       org: "Periyar Dairy Farm LLP (AMG Group of Companies)",
@@ -89,7 +92,7 @@ window.CAFE = {
       tags: ["Digital marketing", "Content strategy", "SEO", "Growth"],
     },
     {
-      id: "edukon-macchiato", shelf: "signature-brews", station: "machine", art: "macchiato",
+      id: "edukon-macchiato", shelf: "signature-brews", station: "machine", art: "macchiato", accent: "#B5452E",
       name: "Edukon Macchiato",
       kind: "Espresso marked with results, six weeks flat",
       org: "Edukon Digital",
@@ -104,7 +107,7 @@ window.CAFE = {
       tags: ["Full sales cycle", "23% conversion", "Closing"],
     },
     {
-      id: "iim-double-shot", shelf: "brew-school", station: "machine", art: "doubleshot",
+      id: "iim-double-shot", shelf: "brew-school", station: "machine", art: "doubleshot", accent: "#2F5D8A",
       name: "IIM Jammu Double Shot",
       kind: "Two concentrated years of MBA",
       org: "Indian Institute of Management Jammu",
@@ -120,7 +123,7 @@ window.CAFE = {
       tags: ["MBA", "IIM Jammu", "2026"],
     },
     {
-      id: "nit-ristretto", shelf: "brew-school", station: "machine", art: "ristretto",
+      id: "nit-ristretto", shelf: "brew-school", station: "machine", art: "ristretto", accent: "#C98A1B",
       name: "NIT Puducherry Ristretto",
       kind: "Restricted pour, engineering strength",
       org: "National Institute of Technology Puducherry",

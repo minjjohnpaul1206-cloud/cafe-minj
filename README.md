@@ -98,3 +98,10 @@ DNS changes can take from a few minutes to a day to kick in.
 
 - `yoursite/#cv` goes straight to the plain CV page (good for job applications — recruiters skip the café).
 - `yoursite/#inside` skips the street and opens at the counter.
+
+## The coffee-chain rituals
+
+- **Name for the order.** On their first order, visitors are asked for a name and "for here or to go". To-go drinks come in a paper cup with their name in marker (the first one is misspelled, struck out and corrected, as tradition demands), and the barista calls it out at the pick-up counter.
+- **Loyalty card.** One stamp per chapter ordered; all 15 unlocks "a coffee with John Paul" on the bill.
+- **Today's special.** Set `special` in `js/data.js` to the item you want to push first (currently your Eckstein role).
+- Names and stamps are kept only in the visitor's own browser (localStorage); nothing is sent anywhere.

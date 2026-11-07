@@ -205,6 +205,33 @@ button { font: inherit; }
 .choice:disabled { opacity: .5; cursor: progress; }
 .choices .working { color: var(--gold-soft); font-style: italic; padding: 10px 2px; }
 
+/* name for the order */
+.name-form { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; width: 100%; }
+.name-form label { flex-basis: 100%; font-weight: 600; color: var(--gold-soft); }
+.name-form input {
+  font: inherit; font-family: var(--hand); font-size: 1.35rem; color: var(--ink);
+  padding: 8px 14px; border-radius: 10px; border: 2px solid var(--gold); background: var(--ivory); max-width: 320px;
+}
+.name-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* the visitor's name, written on the cup */
+.ink { opacity: 0; animation: ink .12s forwards; }
+@keyframes ink { to { opacity: 1; } }
+.strike { stroke-dasharray: 44; stroke-dashoffset: 44; animation: strike .35s forwards; }
+@keyframes strike { to { stroke-dashoffset: 0; } }
+
+/* loyalty card */
+.loyalty {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(227, 201, 138, .35);
+  font-size: .9rem;
+}
+.loyalty-label { font-family: var(--display); color: var(--gold-soft); font-size: 1.05rem; }
+.stamps { display: flex; flex-wrap: wrap; gap: 5px; }
+.stamp-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px dashed rgba(227, 201, 138, .55); }
+.stamp-dot.on { border: 0; background: var(--gold) radial-gradient(circle at 50% 50%, var(--teak) 0 3px, transparent 3.5px); animation: stamp .3s var(--ease) both; }
+.loyalty-n { opacity: .8; }
+
 /* ============ NOW SERVING ============ */
 .served { max-width: 1100px; margin: 56px auto 0; padding: 0 var(--gutter); scroll-margin-top: 80px; }
 .served-card {
