@@ -429,7 +429,7 @@ window.ART = (function () {
         <text x="800" y="252" text-anchor="middle" font-family="Rozha One, serif" font-size="92" letter-spacing="6" fill="${C.gold}">CAFÉ MINJ</text>
         <text x="460" y="236" text-anchor="middle" font-family="Rozha One, serif" font-size="26" fill="${C.goldSoft}">कॅफे</text>
         <text x="1140" y="236" text-anchor="middle" font-family="Rozha One, serif" font-size="26" fill="${C.goldSoft}">मिंज</text>
-        <text x="800" y="282" text-anchor="middle" font-family="Mukta, sans-serif" font-size="20" letter-spacing="3" fill="${C.ivory}" opacity=".85">Island-born in the Andamans. Brewed in Pune.</text>
+        <text x="800" y="282" text-anchor="middle" font-family="Mukta, sans-serif" font-size="20" letter-spacing="3" fill="${C.ivory}" opacity=".85">Andaman-grown. Pune-roasted.</text>
       </g>
       ${win(150)}${win(1030)}
       <!-- door -->

@@ -103,6 +103,7 @@ button { font: inherit; }
 }
 .street-intro h1 { font-size: var(--step-4); color: var(--gold-soft); }
 .intro-head { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 14px; }
+.tagline { font-family: var(--hand); font-size: 1.15rem; line-height: 1.35; color: var(--ivory); opacity: .9; margin-top: 6px; }
 .intro-face { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
 .street-intro p { color: var(--ivory); opacity: .92; max-width: 44ch; }
 .intro-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
