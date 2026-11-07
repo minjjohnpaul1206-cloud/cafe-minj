@@ -26,7 +26,7 @@
       <h1>John Paul Minj</h1>
       <p>Management trainee in sales &amp; marketing, MBA from IIM Jammu. This is my café: every item on the menu is a chapter of my work. Walk in, order anything, and I'll make it for you at the counter.</p>
       <div class="intro-actions">
-        <button class="btn btn-gold" type="button" data-action="enter">Walk in</button>
+        <button class="btn btn-gold" type="button" data-act="enter">Walk in</button>
         <a class="btn btn-line" href="#cv" id="cv-link-target">Just the CV, please</a>
       </div>
     </div>
@@ -35,11 +35,11 @@
   <!-- ============ INSIDE ============ -->
   <section id="view-inside" class="view" aria-label="Inside Café Minj" hidden>
     <header class="topbar">
-      <a class="brand" href="#" data-action="street"><span class="brand-mark" aria-hidden="true"></span>Café Minj</a>
+      <a class="brand" href="#" data-act="street"><span class="brand-mark" aria-hidden="true"></span>Café Minj</a>
       <nav class="topnav" aria-label="Café">
-        <button class="btn btn-small btn-line" type="button" data-action="receipt">Your order <span class="count" id="tray-count">0</span></button>
+        <button class="btn btn-small btn-line" type="button" data-act="bill">Your order <span class="count" id="tray-count">0</span></button>
         <a class="btn btn-small btn-line" href="#cv">CV</a>
-        <button class="btn btn-small btn-ghost" type="button" data-action="street">Step outside</button>
+        <button class="btn btn-small btn-ghost" type="button" data-act="street">Step outside</button>
       </nav>
     </header>
 
@@ -73,7 +73,7 @@
     <section class="last-call">
       <h2>Last orders</h2>
       <p>One coffee with the barista, on the house. Ask for the bill and leave me a note, and I'll get back to you.</p>
-      <button class="btn btn-gold" type="button" data-action="receipt">Bring the bill</button>
+      <button class="btn btn-gold" type="button" data-act="bill">Bring the bill</button>
     </section>
 
     <footer class="foot">
@@ -88,7 +88,7 @@
       <a class="btn btn-small btn-line" href="#inside">Back to the café</a>
       <div class="cv-bar-right">
         <a class="btn btn-small btn-line" id="cv-pdf" hidden download>Download PDF</a>
-        <button class="btn btn-small btn-gold" type="button" data-action="print">Print / save as PDF</button>
+        <button class="btn btn-small btn-gold" type="button" data-act="print">Print / save as PDF</button>
       </div>
     </div>
     <article class="cv-paper" id="cv-paper"></article>
@@ -99,8 +99,13 @@
     <div class="paper" id="paper"></div>
   </dialog>
 
+  <!-- order matters: content, drawings, shared core, then each part of the café -->
   <script src="js/data.js"></script>
   <script src="js/art.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/counter.js"></script>
+  <script src="js/pages.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

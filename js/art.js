@@ -233,7 +233,7 @@ window.ART = (function () {
       ${lamp(640)}${lamp(1080)}
 
       <!-- rules board -->
-      <g class="hot" id="rules-board" data-action="rules" transform="translate(0,-26)">
+      <g class="hot" id="rules-board" data-act="rules" transform="translate(0,-26)">
         <rect x="76" y="118" width="260" height="300" rx="6" fill="${C.teak}"/>
         <rect x="88" y="130" width="236" height="276" fill="${C.bottle}"/>
         <rect x="96" y="138" width="220" height="260" fill="none" stroke="${C.gold}" stroke-width="2"/>
@@ -246,7 +246,7 @@ window.ART = (function () {
       <g id="jar-shelf">
         <rect x="390" y="300" width="380" height="14" fill="${C.teak}"/><rect x="390" y="314" width="380" height="5" fill="${C.teakDark}"/>
         <path d="M420,319 l0,26 l22,-26 M740,319 l0,26 l-22,-26" stroke="${C.teakDark}" stroke-width="6" fill="none"/>
-        ${jarSlots.map((x, i) => `<g class="shelf-jar" data-jar="${i}" style="transform: translate(${x - 60 * 0.75}px, ${300 - 110 * 0.75}px) scale(.75)">${item("jar", { jarColor: ["#B5452E", "#2F5D8A", "#C98A1B", "#4E7A4A"][i] })}</g>`).join("")}
+        ${jarSlots.map((x, i) => `<g class="shelf-jar hot" data-jar="${i}" data-act="jar:${i}" style="transform: translate(${x - 60 * 0.75}px, ${300 - 110 * 0.75}px) scale(.75)">${item("jar", { jarColor: ["#B5452E", "#2F5D8A", "#C98A1B", "#4E7A4A"][i] })}</g>`).join("")}
       </g>
 
       <!-- clock -->
@@ -262,7 +262,7 @@ window.ART = (function () {
         <rect x="956" y="122" width="348" height="246" fill="${C.bottle}"/>
         <rect x="964" y="130" width="332" height="230" fill="none" stroke="${C.gold}" stroke-width="2"/>
         <text x="1130" y="172" text-anchor="middle" font-family="Rozha One, serif" font-size="32" fill="${C.gold}">Menu</text>
-        ${shelves.map((s, i) => `<g class="hot" data-action="shelf" data-shelf="${s.id}">
+        ${shelves.map((s, i) => `<g class="hot" data-act="shelf:${s.id}">
           <rect x="976" y="${188 + i * 34}" width="308" height="30" fill="transparent"/>
           <text x="990" y="${210 + i * 34}" font-family="Mukta, sans-serif" font-weight="600" font-size="19" fill="${C.ivory}">${s.label}</text>
           <text x="1270" y="${210 + i * 34}" text-anchor="end" font-family="Mukta, sans-serif" font-size="15" fill="${C.goldSoft}">0.00</text></g>`).join("")}
@@ -287,7 +287,7 @@ window.ART = (function () {
       <rect x="0" y="752" width="1600" height="7" rx="3" fill="${C.gold}"/>
 
       <!-- pastry case -->
-      <g id="pastry-case">
+      <g id="pastry-case" class="hot" data-act="shelf:pastry-case">
         <rect x="180" y="548" width="340" height="16" fill="${C.teak}"/>
         <path d="M184,548 L184,420 Q184,410 196,410 L504,410 Q516,410 516,420 L516,548" fill="#E9F3EE" fill-opacity=".32" stroke="#ffffff" stroke-opacity=".9" stroke-width="3"/>
         <rect x="188" y="476" width="324" height="5" fill="#ffffff" fill-opacity=".7"/>
@@ -297,7 +297,7 @@ window.ART = (function () {
       </g>
 
       <!-- espresso machine -->
-      <g id="machine">
+      <g id="machine" class="hot" data-act="shelf:signature-brews">
         <rect x="1150" y="392" width="250" height="160" rx="14" fill="url(#chrome)"/>
         <rect x="1150" y="392" width="250" height="34" rx="12" fill="${C.bottle}"/>
         <text x="1275" y="416" text-anchor="middle" font-family="Rozha One, serif" font-size="20" fill="${C.gold}">MINJ</text>
@@ -315,7 +315,7 @@ window.ART = (function () {
       </g>
 
       <!-- register -->
-      <g class="hot" id="register" data-action="receipt">
+      <g class="hot" id="register" data-act="bill">
         <path d="M1440,560 L1450,486 L1560,486 L1570,560 Z" fill="${C.gold}"/>
         <rect x="1462" y="460" width="86" height="32" rx="4" fill="${C.teakDark}"/>
         <text x="1505" y="483" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="18" fill="#9BE38F">0.00</text>
@@ -384,7 +384,7 @@ window.ART = (function () {
         <path d="M688,462 Q688,388 800,388 Q912,388 912,462 Z" fill="#FFE7AE"/>
         ${[-60, -30, 0, 30, 60].map(a => `<path d="M800,462 L${800 + Math.sin(a * Math.PI / 180) * 112},${462 - Math.cos(a * Math.PI / 180) * 74}" stroke="${C.bottle}" stroke-width="4"/>`).join("")}
         <rect x="688" y="456" width="224" height="10" fill="${C.bottle}"/>
-        <g id="door" class="hot" data-action="enter">
+        <g id="door" class="hot" data-act="enter">
           <rect x="690" y="466" width="220" height="314" fill="${C.bottle}"/>
           <rect x="708" y="482" width="184" height="150" rx="4" fill="url(#glow)" opacity=".95"/>
           <path d="M800,482 L800,632 M708,557 L892,557" stroke="${C.bottle}" stroke-width="8"/>

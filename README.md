@@ -6,13 +6,20 @@ Plain HTML, CSS and JavaScript. No build step, no framework, no server — which
 
 ```
 cafe-minj/
-├── index.html        the page
+├── index.html        the page skeleton (three views: street, inside, CV)
 ├── css/style.css     all styling
-├── js/data.js        ALL THE CONTENT — edit this to update your resume
-├── js/art.js         the illustrations (street, café, barista, menu items)
-├── js/app.js         how the café works (ordering, animations, bill, CV view)
-└── assets/           favicon, and your photo / PDF resume if you add them
+├── assets/           favicon and your photo
+└── js/
+    ├── data.js       ALL THE CONTENT. Edit this to update your resume
+    ├── art.js        the drawings: street, café, barista, menu items
+    ├── core.js       shared helpers + visitor state (name, stamps, tray)
+    ├── scene.js      the barista's movements at the counter
+    ├── counter.js    the conversation: choices, orders, story card, loyalty
+    ├── pages.js      the bill (contact form) and the CV view
+    └── main.js       street front, switching views, every button
 ```
+
+Every clickable thing carries a `data-act="verb"` or `data-act="verb:value"` attribute, and **one table in `main.js`** decides what each verb does. To add a new button anywhere, give it a `data-act` and add one line to that table.
 
 ---
 

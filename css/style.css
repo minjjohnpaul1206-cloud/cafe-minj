@@ -160,7 +160,7 @@ button { font: inherit; }
 .receipt-tongue { transform-box: fill-box; transform-origin: 50% 100%; }
 .printing .receipt-tongue { animation: tongue 1.2s var(--ease); }
 @keyframes tongue { 50% { transform: scaleY(2.6) translateY(-6px); } }
-.spark { animation: spark .9s var(--ease) forwards; }
+.spark { transform-box: fill-box; transform-origin: center; animation: spark .9s var(--ease) forwards; }
 @keyframes spark { from { opacity: 1; transform: scale(.4); } to { opacity: 0; transform: scale(1.5); } }
 
 /* the ledge: where the barista talks and you choose */
@@ -269,6 +269,8 @@ button { font: inherit; }
   background: var(--teak); box-shadow: inset -2px 0 0 #8E5A35; transform: rotate(25deg);
 }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.btn-dark { margin-top: 24px; color: var(--bottle); border-color: var(--bottle); }
+.rules-list { margin: .4em 0 0; padding-left: 1.3em; }
 .tags span { font-size: .85rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; background: rgba(20, 53, 74, .1); color: var(--bottle); }
 
 /* ============ THE BOARD ============ */

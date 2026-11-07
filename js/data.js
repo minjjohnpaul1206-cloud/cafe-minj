@@ -1,6 +1,6 @@
 /* =========================================================
    CAFÉ MINJ — all site content lives in this one file.
-   Edit text here; you never need to touch app.js to update
+   Edit text here; you never need to touch the other scripts to update
    your resume.
    ========================================================= */
 
