@@ -1,5 +1,7 @@
 # Café Minj
 
+**Live at [johnpaulminj.com](https://johnpaulminj.com)** (GitHub Pages, domain registered at Hostinger).
+
 The portfolio site of **John Paul Minj** — a Pune Irani café where every item on the menu is a chapter of my work. Visitors walk in through the door, order from the barista (me), and watch it get made at the counter: espresso from the machine, pastries from the case, skills in glass jars off the shelf, and the secret menu from under the counter.
 
 Plain HTML, CSS and JavaScript. No build step, no framework, no server — which is why it runs free on GitHub Pages.
@@ -124,3 +126,10 @@ Everything here is original or freely licensed, so the site can't be taken down 
 - **Barista voice** — all of his lines are original writing for this site; no film, TV or comic dialogue, and no franchise characters or costumes.
 - **Rituals** — writing a name on a cup, calling out orders and stamp cards are everyday café practices, written here in our own words.
 - **Content** — all text is John Paul's own resume and copy. No code, images or files from the earlier Emergent prototype are used; the site was rebuilt from scratch.
+
+## This site's live setup
+
+- **Domain:** `johnpaulminj.com`, registered at Hostinger. The `CNAME` file in this repository tells GitHub Pages to serve the site there.
+- **DNS at Hostinger:** four A records for `@` (185.199.108.153 / .109.153 / .110.153 / .111.153) and a CNAME for `www` to `minjjohnpaul1206-cloud.github.io`.
+- **Email:** Hostinger mail on the same domain. Never delete the MX, SPF/DMARC TXT or mail CNAME records when editing DNS.
+- **Renewal:** keep auto-renew on at Hostinger so the domain never lapses.
