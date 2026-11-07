@@ -449,7 +449,7 @@ window.ART = (function () {
             <path d="M-34,-36 L0,-56 L34,-36" stroke="${C.gold}" stroke-width="2" fill="none"/>
             <rect x="-66" y="-36" width="132" height="44" rx="5" fill="${C.ivory}"/>
             <text x="0" y="-16" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="16" fill="${C.chili}">OPEN</text>
-            <text x="0" y="2" text-anchor="middle" font-family="Mukta, sans-serif" font-size="12" fill="${C.bottleInk}">for opportunities</text>
+            <text x="0" y="2" text-anchor="middle" font-family="Mukta, sans-serif" font-size="12" fill="${C.bottleInk}">come in, it's free</text>
           </g>
         </g>
       </g>
