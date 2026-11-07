@@ -205,9 +205,10 @@ window.ART = (function () {
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
   function interior(person, shelves, rules) {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
-    const portrait = person.photo
-      ? `<clipPath id="pclip"><ellipse cx="1440" cy="226" rx="56" ry="72"/></clipPath>
-         <image href="${person.photo}" x="1384" y="154" width="112" height="144" preserveAspectRatio="xMidYMid slice" clip-path="url(#pclip)"/>`
+    const pic = person.illustration || person.photo;
+    const portrait = pic
+      ? `<ellipse cx="1440" cy="226" rx="56" ry="72" fill="#E8D5B0"/><clipPath id="pclip"><ellipse cx="1440" cy="226" rx="56" ry="72"/></clipPath>
+         <image href="${pic}" x="1384" y="150" width="112" height="148" preserveAspectRatio="xMidYMin slice" clip-path="url(#pclip)"/>`
       : `<ellipse cx="1440" cy="226" rx="56" ry="72" fill="#C9B48A"/>
          <circle cx="1440" cy="206" r="24" fill="#8C7350"/><path d="M1398,290 Q1400,248 1440,246 Q1480,248 1482,290 Z" fill="#8C7350"/>`;
 

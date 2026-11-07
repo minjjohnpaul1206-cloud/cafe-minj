@@ -21,6 +21,9 @@ window.CAFE = {
     /* Put a square photo at assets/john.jpg and set this to "assets/john.jpg".
        It appears in the framed portrait on the café wall and in the CV view. */
     photo: "assets/john.jpg",
+    /* Illustrated portrait (arch, transparent corners): used on the street card,
+       in the speech bubble and as the "Proprietor" portrait on the café wall. */
+    illustration: "assets/barista.webp",
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
     resumePdf: null,

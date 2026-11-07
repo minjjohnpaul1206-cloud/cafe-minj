@@ -99,7 +99,9 @@ button { font: inherit; }
   padding: 24px 26px 26px; border-radius: 6px;
   backdrop-filter: blur(4px);
 }
-.street-intro h1 { font-size: var(--step-4); color: var(--gold-soft); margin-bottom: .35em; }
+.street-intro h1 { font-size: var(--step-4); color: var(--gold-soft); }
+.intro-head { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 14px; }
+.intro-face { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
 .street-intro p { color: var(--ivory); opacity: .92; max-width: 44ch; }
 .intro-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 .text-link { margin-top: 14px; padding: 4px 0; background: none; border: 0; color: var(--gold-soft); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .95rem; }
@@ -199,6 +201,12 @@ button { font: inherit; }
 .speech::before {
   content: ""; position: absolute; left: 50%; top: -12px; margin-left: -12px;
   border: 12px solid transparent; border-top: 0; border-bottom-color: var(--ivory);
+}
+.speech { padding-left: 76px; }
+.speech-face {
+  position: absolute; left: 14px; top: 14px; width: 48px; height: 48px;
+  border-radius: 50%; object-fit: cover; object-position: 50% 16%;
+  background: #E8D5B0; border: 2px solid var(--gold);
 }
 .speech-who { font-family: var(--display); color: var(--chili); font-size: 1.05rem; line-height: 1; margin-bottom: 4px; }
 .speech-text { font-size: 1.1rem; line-height: 1.5; min-height: 1.5em; }
