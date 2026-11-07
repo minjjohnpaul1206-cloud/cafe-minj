@@ -108,7 +108,7 @@
     if (reduce) return;
     const g = document.createElementNS(NS, "g");
     g.innerHTML = [[-70, -60], [70, -70], [-90, 10], [86, 4], [0, -110]].map(([dx, dy]) =>
-      `<path class="spark" style="transform-box:fill-box;transform-origin:center" d="M${x + dx},${y + dy - 12} l4,8 8,4 -8,4 -4,8 -4,-8 -8,-4 8,-4z" fill="#E3C98A"/>`).join("");
+      `<path class="spark" style="transform-box:fill-box;transform-origin:center" d="M${x + dx},${y + dy - 12} l4,8 8,4 -8,4 -4,8 -4,-8 -8,-4 8,-4z" fill="#E8C48A"/>`).join("");
     layer.appendChild(g);
     setTimeout(() => g.remove(), 1000);
   }
@@ -184,6 +184,8 @@
     await Promise.all([tw(el, itemT(...SERVE), 480), rot(hand, hand === armR ? -12 : 12, 480)]);
     await Promise.all([rot(hand, 0, 380), tw(el, itemT(...PRESENT), 420, "cubic-bezier(.3,1.5,.5,1)")]);
     sparkle(800, 500);
+    barista.classList.add("wink");
+    setTimeout(() => barista.classList.remove("wink"), 650);
     state.counter = el;
   }
 

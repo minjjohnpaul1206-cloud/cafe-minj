@@ -34,7 +34,7 @@ Open **http://localhost:8000** in your browser. Stop it with `Ctrl + C`.
 Everything you'd want to change is in **`js/data.js`**:
 
 - **Your details** — name, role, email, phone, LinkedIn at the top.
-- **Your photo** — save a square photo as `assets/john.jpg`, then set `photo: "assets/john.jpg"`. It appears in the framed "Proprietor" portrait on the café wall and on the CV page.
+- **Your photo** — already in `assets/john.jpg`. It appears in the framed "Proprietor" portrait on the café wall and on the CV page. Set `photo: null` to remove it.
 - **PDF resume** — save it as `assets/John-Paul-Minj-Resume.pdf` and set `resumePdf` to that path. A download button appears on the CV page.
 - **Menu items** — each job, degree, skill set or certificate is one item. Copy an existing one to add a new chapter. The `station` decides where the barista goes to make it (`machine`, `case`, `shelf`, `under`) and `art` decides what gets served.
 - **Café rules** — the funny board on the wall.
@@ -105,3 +105,14 @@ DNS changes can take from a few minutes to a day to kick in.
 - **Loyalty card.** One stamp per chapter ordered; all 15 unlocks "a coffee with John Paul" on the bill.
 - **Today's special.** Set `special` in `js/data.js` to the item you want to push first (currently your Eckstein role).
 - Names and stamps are kept only in the visitor's own browser (localStorage); nothing is sent anywhere.
+
+## Credits & rights
+
+Everything here is original or freely licensed, so the site can't be taken down over someone else's design:
+
+- **Illustrations** — the street, café interior, barista (drawn from John Paul's own photo), cups, pastries and jars are all hand-coded SVG made for this site. No stock images, clip art or icons from other brands.
+- **Fonts** — Rozha One, Mukta and Kalam from Google Fonts, all under the SIL Open Font License (free for personal and commercial use).
+- **Name** — "Café Minj" is built on the owner's surname. It is a personal portfolio, not a trading café.
+- **No third-party brand assets** — no coffee-chain logos, wordmarks, size names or brand colours. The palette (Prussian blue, brass, mint) was checked to stay clear of well-known coffee-chain colours, and the apron is denim, not a branded green.
+- **Rituals** — writing a name on a cup, calling out orders and stamp cards are everyday café practices, written here in our own words.
+- **Content** — all text is John Paul's own resume and copy. No code, images or files from the earlier Emergent prototype are used; the site was rebuilt from scratch.

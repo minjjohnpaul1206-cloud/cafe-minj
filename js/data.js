@@ -20,7 +20,7 @@ window.CAFE = {
     linkedinLabel: "linkedin.com/in/johnpaulminj",
     /* Put a square photo at assets/john.jpg and set this to "assets/john.jpg".
        It appears in the framed portrait on the café wall and in the CV view. */
-    photo: null,
+    photo: "assets/john.jpg",
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
     resumePdf: null,
@@ -57,7 +57,7 @@ window.CAFE = {
      jarColor (jars only): label colour for the jar */
   items: [
     {
-      id: "eckstein-espresso", shelf: "signature-brews", station: "machine", art: "espresso", accent: "#1F3B31",
+      id: "eckstein-espresso", shelf: "signature-brews", station: "machine", art: "espresso", accent: "#14354A",
       name: "The Eckstein Espresso",
       kind: "Double shot, dark roast, no filler",
       org: "Eckstein Engineering Business Solutions Pvt. Ltd.",

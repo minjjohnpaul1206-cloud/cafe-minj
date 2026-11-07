@@ -5,10 +5,11 @@
 
 window.ART = (function () {
   const C = {
-    bottle: "#1F3B31", bottleInk: "#13261F", gold: "#C9A24B", goldSoft: "#E3C98A",
+    bottle: "#14354A", bottleInk: "#0C2131", gold: "#BF8B3B", goldSoft: "#E8C48A",
     ivory: "#F3EEE3", mint: "#A8CBB7", mintDeep: "#86AE9B", teak: "#6A3A22",
-    teakDark: "#4A2717", coffee: "#3B2014", crema: "#A0612F", skin: "#8A5536",
-    skinShade: "#6F4129", hair: "#1C1410", shirt: "#ECE9E1", chili: "#B5452E",
+    teakDark: "#4A2717", coffee: "#3B2014", crema: "#A0612F", skin: "#8A5638",
+    skinShade: "#683C24", hair: "#15100D", shirt: "#2B2C31", chili: "#B5452E",
+    denim: "#33506F", denimDark: "#253B54", leather: "#A86B3C",
   };
 
   /* ---------- the menu items ---------- */
@@ -125,43 +126,70 @@ window.ART = (function () {
   }
 
   /* ---------- the barista (local coords, centred on x = 0) ---------- */
-  function arm(id, x) {
+  /* the barista: drawn from John Paul's photo — swept-up curly hair, thick brows,
+     moustache into a goatee — in a charcoal shirt and denim apron */
+  function arm(id, x, watch = false) {
     return `<g transform="translate(${x},398)"><g id="${id}" class="arm">
-      <path d="M-18,6 Q-18,-6 0,-6 Q18,-6 18,6 L16,82 L-16,82 Z" fill="${C.shirt}"/>
-      <rect x="-17" y="74" width="34" height="12" rx="5" fill="#D9D5CB"/>
-      <path d="M-13,84 L13,84 L11,146 L-11,146 Z" fill="${C.skin}"/>
+      <path d="M-18,6 Q-18,-6 0,-6 Q18,-6 18,6 L16,72 L-16,72 Z" fill="${C.shirt}"/>
+      <rect x="-17" y="64" width="34" height="16" rx="5" fill="#45464D"/>
+      <path d="M-17,70 L17,70" stroke="#2B2C31" stroke-width="1.5"/>
+      <path d="M-13,78 L13,78 L11,146 L-11,146 Z" fill="${C.skin}"/>
+      <path d="M-6,92 q-2,22 1,40" stroke="${C.skinShade}" stroke-width="2" fill="none" opacity=".5"/>
+      ${watch ? `<rect x="-13" y="128" width="26" height="9" rx="2" fill="#2A2A26"/><rect x="-6" y="126" width="12" height="13" rx="3" fill="#D9DDE0" stroke="#8E979C" stroke-width="1.5"/>` : ""}
       <circle cx="0" cy="152" r="14" fill="${C.skin}"/>
       <path d="M-9,146 q9,8 18,0" stroke="${C.skinShade}" stroke-width="2" fill="none"/>
     </g></g>`;
   }
 
   function barista(initials = "JPM") {
+    const H = C.hair;
     return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
-      <ellipse cx="0" cy="640" rx="120" ry="16" fill="#000" opacity=".12"/>
       <g id="b-torso">
         <path d="M-98,430 Q-98,392 -62,388 L62,388 Q98,392 98,430 L104,640 L-104,640 Z" fill="${C.shirt}"/>
-        <path d="M-30,388 L0,416 L30,388" fill="#fff" stroke="#D2CEC4" stroke-width="2"/>
-        <rect x="-16" y="350" width="32" height="44" fill="${C.skin}"/>
-        <path d="M-16,380 Q0,392 16,380 L16,394 L-16,394 Z" fill="${C.skinShade}"/>
-        <path d="M-64,420 L64,420 L74,640 L-74,640 Z" fill="${C.bottle}"/>
-        <path d="M-64,420 L-34,392 M64,420 L34,392" stroke="${C.bottle}" stroke-width="7" stroke-linecap="round"/>
-        <path d="M-64,420 L64,420" stroke="${C.gold}" stroke-width="2.5"/>
-        <rect x="-34" y="456" width="68" height="46" rx="4" fill="none" stroke="${C.gold}" stroke-width="2"/>
-        <text x="0" y="487" text-anchor="middle" font-family="Rozha One, serif" font-size="21" fill="${C.gold}">${initials}</text>
+        <rect x="-16" y="346" width="32" height="48" fill="${C.skin}"/>
+        <path d="M-16,378 Q0,392 16,378 L16,394 L-16,394 Z" fill="${C.skinShade}"/>
+        <path d="M-24,388 L0,420 L24,388" fill="${C.skin}" stroke="#1F2024" stroke-width="3"/>
+        <circle cx="0" cy="430" r="2.4" fill="#5A5B62"/>
+        <path d="M-66,424 L66,424 L76,640 L-76,640 Z" fill="${C.denim}"/>
+        <path d="M-66,424 L66,424 L76,640 M-66,424 L-76,640" stroke="#E8DCC4" stroke-width="1.6" stroke-dasharray="5 4" fill="none" opacity=".75"/>
+        <path d="M-64,426 L-34,390 M64,426 L34,390" stroke="${C.leather}" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="-60" cy="430" r="4" fill="${C.gold}"/><circle cx="60" cy="430" r="4" fill="${C.gold}"/>
+        <rect x="-40" y="456" width="80" height="50" rx="5" fill="${C.denimDark}"/>
+        <rect x="-40" y="456" width="80" height="50" rx="5" fill="none" stroke="#E8DCC4" stroke-width="1.4" stroke-dasharray="4 3" opacity=".75"/>
+        <text x="0" y="489" text-anchor="middle" font-family="Rozha One, serif" font-size="21" fill="#E8DCC4">${initials}</text>
+        <rect x="26" y="446" width="5" height="20" rx="2" fill="${C.chili}"/>
       </g>
-      ${arm("armL", -94)}
+      ${arm("armL", -94, true)}
       ${arm("armR", 94)}
       <g id="b-head">
-        <circle cx="-49" cy="306" r="11" fill="${C.skin}"/><circle cx="49" cy="306" r="11" fill="${C.skin}"/>
-        <ellipse cx="0" cy="300" rx="48" ry="58" fill="${C.skin}"/>
+        <g transform="translate(50,282) rotate(24)"><rect x="-3.6" y="-22" width="7.2" height="40" rx="3" fill="${C.chili}"/><rect x="-3.6" y="12" width="7.2" height="8" rx="1" fill="#F3EEE3"/></g>
+        <ellipse cx="-46" cy="308" rx="9" ry="13" fill="${C.skin}"/><ellipse cx="46" cy="308" rx="9" ry="13" fill="${C.skin}"/>
+        <path d="M-44,288 Q-46,344 -25,365 Q0,384 25,365 Q46,344 44,288 Q44,246 0,242 Q-44,246 -44,288 Z" fill="${C.skin}"/>
+        <path d="M-44,316 Q-41,350 -24,366 Q0,384 24,366 Q41,350 44,316 Q38,344 22,354 Q0,364 -22,354 Q-38,344 -44,316 Z" fill="${H}" opacity=".32"/>
         <g id="b-face">
-          <path d="M-50,298 Q-58,232 0,228 Q58,232 51,294 Q46,262 22,256 Q-4,270 -38,260 Q-48,272 -50,298 Z" fill="${C.hair}"/>
-          <path d="M-30,286 q12,-7 22,-1 M8,285 q11,-6 22,1" stroke="${C.hair}" stroke-width="4" fill="none" stroke-linecap="round"/>
-          <g id="b-eyes"><ellipse cx="-18" cy="302" rx="4.6" ry="5.6" fill="${C.hair}"/><ellipse cx="18" cy="302" rx="4.6" ry="5.6" fill="${C.hair}"/>
-            <circle cx="-16.5" cy="300" r="1.4" fill="#fff"/><circle cx="19.5" cy="300" r="1.4" fill="#fff"/></g>
-          <path d="M0,306 q-6,14 0,18 q4,1 6,-1" stroke="${C.skinShade}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-          <path id="b-mouth" d="M-17,333 Q0,346 17,333" stroke="#4A2312" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-          <ellipse cx="-28" cy="324" rx="7" ry="4" fill="#B5452E" opacity=".18"/><ellipse cx="28" cy="324" rx="7" ry="4" fill="#B5452E" opacity=".18"/>
+          <path d="M-46,300 Q-50,264 -38,248 L-37,278 Q-42,286 -44,300 Z" fill="${H}" opacity=".85"/>
+          <path d="M46,300 Q50,264 38,248 L37,278 Q42,286 44,300 Z" fill="${H}" opacity=".85"/>
+          <path d="M-45,280 Q-56,238 -30,222 Q-24,200 -2,204 Q14,190 34,204 Q58,208 52,240 Q58,258 45,280 Q42,256 30,252 Q18,262 4,254 Q-10,264 -24,254 Q-36,262 -45,280 Z" fill="${H}"/>
+          <g stroke="#3A2C24" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".9">
+            <path d="M-34,236 q6,-9 13,0"/><path d="M-16,222 q7,-10 14,0"/><path d="M4,214 q7,-9 14,1"/><path d="M22,222 q7,-8 13,2"/>
+            <path d="M34,238 q6,-7 11,3"/><path d="M-26,248 q6,-7 12,0"/><path d="M-4,238 q6,-8 13,0"/><path d="M16,240 q6,-7 12,1"/>
+          </g>
+          <path d="M-8,254 q-9,10 -1,19" stroke="${H}" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M-34,284 Q-21,274 -7,281 L-8,286 Q-21,281 -33,290 Z" fill="${H}"/>
+          <g id="b-browR"><path d="M34,284 Q21,274 7,281 L8,286 Q21,281 33,290 Z" fill="${H}"/></g>
+          <g id="b-eyes">
+            <g><path d="M-29,301 Q-18,292 -7,301 Q-18,307 -29,301 Z" fill="#F4EFE6"/><circle cx="-18" cy="300.5" r="4.6" fill="#24150E"/><circle cx="-16.6" cy="299" r="1.4" fill="#fff"/>
+              <path d="M-29,301 Q-18,291 -7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
+            <g id="b-eyeR"><path d="M29,301 Q18,292 7,301 Q18,307 29,301 Z" fill="#F4EFE6"/><circle cx="18" cy="300.5" r="4.6" fill="#24150E"/><circle cx="19.4" cy="299" r="1.4" fill="#fff"/>
+              <path d="M29,301 Q18,291 7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
+          </g>
+          <path d="M-2,302 Q-4,318 -10,325 Q-12,331 -5,332 Q0,335 5,332 Q12,331 10,325 Q4,318 2,302" fill="${C.skinShade}" opacity=".45"/>
+          <path d="M-10,325 Q-12,331 -5,332 M10,325 Q12,331 5,332" stroke="${C.skinShade}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M-24,346 Q-12,334 0,339 Q12,334 24,346 Q15,344 8,348 Q0,343 -8,348 Q-15,344 -24,346 Z" fill="${H}"/>
+          <path d="M-23,346 Q-26,354 -19,362 M23,346 Q26,354 19,362" stroke="${H}" stroke-width="4.5" fill="none" stroke-linecap="round" opacity=".85"/>
+          <path id="b-mouth" d="M-12,353 Q2,359 15,350" stroke="#3E1E10" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M-19,361 Q-15,381 0,385 Q15,381 19,361 Q10,368 0,367 Q-10,368 -19,361 Z" fill="${H}"/>
+          <path d="M-4,357 Q0,363 4,357 Z" fill="${H}"/>
         </g>
       </g>
     </g></g>`;
@@ -188,7 +216,7 @@ window.ART = (function () {
         <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DC2AE"/><stop offset="1" stop-color="#B4D3C1"/></linearGradient>
         <linearGradient id="marble" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#EEEAE2"/><stop offset=".5" stop-color="#F7F4EE"/><stop offset="1" stop-color="#E6E1D7"/></linearGradient>
         <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E979C"/><stop offset=".35" stop-color="#E8ECEE"/><stop offset=".6" stop-color="#B9C1C5"/><stop offset="1" stop-color="#7C858A"/></linearGradient>
-        <pattern id="checker" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#EDE8DD"/><rect width="40" height="40" fill="#22302B"/><rect x="40" y="40" width="40" height="40" fill="#22302B"/></pattern>
+        <pattern id="checker" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#EDE8DD"/><rect width="40" height="40" fill="#1B2A36"/><rect x="40" y="40" width="40" height="40" fill="#1B2A36"/></pattern>
       </defs>
 
       <!-- wall -->

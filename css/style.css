@@ -2,11 +2,11 @@
    CAFÉ MINJ — a Pune Irani café
    ========================================================= */
 :root {
-  --bottle: #1F3B31;
-  --bottle-ink: #13261F;
-  --bottle-soft: #2A4C40;
-  --gold: #C9A24B;
-  --gold-soft: #E3C98A;
+  --bottle: #14354A;
+  --bottle-ink: #0C2131;
+  --bottle-soft: #1F4A63;
+  --gold: #BF8B3B;
+  --gold-soft: #E8C48A;
   --ivory: #F3EEE3;
   --mint: #A8CBB7;
   --teak: #6A3A22;
@@ -65,8 +65,8 @@ button { font: inherit; }
 .btn:active { transform: translateY(1px); }
 .btn-gold { background: var(--gold); color: var(--bottle-ink); }
 .btn-gold:hover { background: var(--gold-soft); }
-.btn-line { border-color: rgba(227, 201, 138, .55); color: var(--ivory); background: transparent; }
-.btn-line:hover { border-color: var(--gold-soft); background: rgba(227, 201, 138, .08); }
+.btn-line { border-color: rgba(232, 196, 138, .55); color: var(--ivory); background: transparent; }
+.btn-line:hover { border-color: var(--gold-soft); background: rgba(232, 196, 138, .08); }
 .btn-ghost { color: var(--ivory); background: transparent; opacity: .8; }
 .btn-ghost:hover { opacity: 1; }
 .btn-small { min-height: 38px; padding: 0 1em; font-size: .92rem; }
@@ -92,9 +92,9 @@ button { font: inherit; }
 .street-intro {
   position: absolute; left: var(--gutter); bottom: clamp(20px, 6vh, 64px);
   width: min(430px, calc(100% - 2 * var(--gutter)));
-  background: rgba(19, 38, 31, .9);
+  background: rgba(12, 33, 49, .9);
   border: 2px solid var(--gold);
-  outline: 1px solid rgba(201, 162, 75, .5); outline-offset: 5px;
+  outline: 1px solid rgba(191, 139, 59, .5); outline-offset: 5px;
   padding: 24px 26px 26px; border-radius: 6px;
   backdrop-filter: blur(4px);
 }
@@ -114,8 +114,8 @@ button { font: inherit; }
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: 10px var(--gutter);
-  background: rgba(19, 38, 31, .94); backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(201, 162, 75, .25);
+  background: rgba(12, 33, 49, .94); backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(191, 139, 59, .25);
 }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 1.45rem; color: var(--gold-soft); text-decoration: none; }
 .brand-mark { width: 30px; height: 30px; background: url("../assets/favicon.svg") center/contain no-repeat; }
@@ -148,6 +148,9 @@ button { font: inherit; }
 #b-face { transition: transform .25s var(--ease); }
 #barista[data-face="right"] #b-face { transform: translateX(6px); }
 #barista[data-face="left"] #b-face { transform: translateX(-6px); }
+#b-eyeR, #b-browR { transform-box: fill-box; transform-origin: center; transition: transform .15s; }
+#barista.wink #b-eyeR { transform: scaleY(.12); }
+#barista.wink #b-browR { transform: translateY(3px); }
 #steam, #pour { transition: opacity .35s; }
 #steam.on, #pour.on { opacity: 1 !important; }
 .puff { animation: puff 1.4s ease-out infinite; }
@@ -190,13 +193,13 @@ button { font: inherit; }
 .choice {
   display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0;
   min-height: 48px; padding: 9px 16px 10px;
-  border-radius: 10px; border: 2px solid rgba(227, 201, 138, .45);
-  background: rgba(19, 38, 31, .55); color: var(--ivory);
+  border-radius: 10px; border: 2px solid rgba(232, 196, 138, .45);
+  background: rgba(12, 33, 49, .55); color: var(--ivory);
   text-align: left; cursor: pointer; line-height: 1.25;
   transition: border-color .2s, background .2s, transform .15s;
   animation: rise .45s var(--ease) both;
 }
-.choice:hover { border-color: var(--gold-soft); background: rgba(227, 201, 138, .1); }
+.choice:hover { border-color: var(--gold-soft); background: rgba(232, 196, 138, .1); }
 .choice:active { transform: translateY(1px); }
 .choice b { font-weight: 600; }
 .choice small { font-size: .82rem; opacity: .72; }
@@ -223,12 +226,12 @@ button { font: inherit; }
 /* loyalty card */
 .loyalty {
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
-  margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(227, 201, 138, .35);
+  margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(232, 196, 138, .35);
   font-size: .9rem;
 }
 .loyalty-label { font-family: var(--display); color: var(--gold-soft); font-size: 1.05rem; }
 .stamps { display: flex; flex-wrap: wrap; gap: 5px; }
-.stamp-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px dashed rgba(227, 201, 138, .55); }
+.stamp-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px dashed rgba(232, 196, 138, .55); }
 .stamp-dot.on { border: 0; background: var(--gold) radial-gradient(circle at 50% 50%, var(--teak) 0 3px, transparent 3.5px); animation: stamp .3s var(--ease) both; }
 .loyalty-n { opacity: .8; }
 
@@ -266,7 +269,7 @@ button { font: inherit; }
   background: var(--teak); box-shadow: inset -2px 0 0 #8E5A35; transform: rotate(25deg);
 }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
-.tags span { font-size: .85rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; background: rgba(31, 59, 49, .1); color: var(--bottle); }
+.tags span { font-size: .85rem; font-weight: 600; padding: 3px 12px; border-radius: 999px; background: rgba(20, 53, 74, .1); color: var(--bottle); }
 
 /* ============ THE BOARD ============ */
 .board { max-width: 1100px; margin: 72px auto 0; padding: 0 var(--gutter); }
@@ -285,7 +288,7 @@ button { font: inherit; }
   width: 100%; padding: 8px 0; background: none; border: 0; color: var(--ivory); text-align: left; cursor: pointer;
 }
 .board-item .n { font-weight: 600; }
-.board-item .dots { border-bottom: 2px dotted rgba(227, 201, 138, .45); transform: translateY(-4px); }
+.board-item .dots { border-bottom: 2px dotted rgba(232, 196, 138, .45); transform: translateY(-4px); }
 .board-item .p { color: var(--gold-soft); font-variant-numeric: tabular-nums; }
 .board-item .k { grid-column: 1 / -1; font-size: .88rem; opacity: .65; margin-top: -2px; }
 .board-item:hover .n { color: var(--gold-soft); }
@@ -296,7 +299,7 @@ button { font: inherit; }
 .last-call { max-width: 640px; margin: 80px auto 0; padding: 0 var(--gutter); text-align: center; }
 .last-call h2 { font-size: var(--step-4); color: var(--gold-soft); }
 .last-call p { margin: 10px auto 24px; opacity: .88; max-width: 48ch; }
-.foot { margin-top: 90px; padding: 28px var(--gutter) 40px; border-top: 1px solid rgba(201, 162, 75, .25); text-align: center; font-size: .92rem; opacity: .7; }
+.foot { margin-top: 90px; padding: 28px var(--gutter) 40px; border-top: 1px solid rgba(191, 139, 59, .25); text-align: center; font-size: .92rem; opacity: .7; }
 .foot p + p { margin-top: 4px; }
 
 /* ============ THE BILL ============ */
