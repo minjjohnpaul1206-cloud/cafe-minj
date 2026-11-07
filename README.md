@@ -117,9 +117,10 @@ DNS changes can take from a few minutes to a day to kick in.
 
 Everything here is original or freely licensed, so the site can't be taken down over someone else's design:
 
-- **Illustrations** — the street, café interior, barista (drawn from John Paul's own photo), cups, pastries and jars are all hand-coded SVG made for this site. No stock images, clip art or icons from other brands.
+- **Illustrations** — the street, café interior, barista (drawn from John Paul's own photos), cups, pastries and jars are all hand-coded SVG made for this site. No stock images, clip art or icons from other brands.
 - **Fonts** — Rozha One, Mukta and Kalam from Google Fonts, all under the SIL Open Font License (free for personal and commercial use).
 - **Name** — "Café Minj" is built on the owner's surname. It is a personal portfolio, not a trading café.
 - **No third-party brand assets** — no coffee-chain logos, wordmarks, size names or brand colours. The palette (Prussian blue, brass, mint) was checked to stay clear of well-known coffee-chain colours, and the apron is denim, not a branded green.
+- **Barista voice** — all of his lines are original writing for this site; no film, TV or comic dialogue, and no franchise characters or costumes.
 - **Rituals** — writing a name on a cup, calling out orders and stamp cards are everyday café practices, written here in our own words.
 - **Content** — all text is John Paul's own resume and copy. No code, images or files from the earlier Emergent prototype are used; the site was rebuilt from scratch.

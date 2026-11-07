@@ -52,7 +52,7 @@
           <button type="submit" class="choice" value="togo"><b>To go</b><small>Paper cup, name on it</small></button>
           ${btn("Skip", "", "skipname")}
         </div></form>`,
-    working: () => `<p class="working">Making your order…</p>`,
+    working: () => `<p class="working">Making your order… keep your eyes on the counter.</p>`,
     back: () => btn("Show me the menu", "", "greet", "primary"),
   };
   function step(name) { state.step = name; choicesEl.innerHTML = layouts[name](); }
@@ -61,24 +61,24 @@
   function greet(first) {
     step("greet");
     const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-    if (!first) return say("What else can I get you?");
+    if (!first) return say("What else can I tempt you with?");
     if (state.returning && state.name)
-      return say(`${hi}, ${state.name}! Welcome back to Café Minj. Your loyalty card has ${state.stamps.length} of ${D.items.length} stamps. What can I get you today?`);
-    return say(`${hi}! I'm ${P.firstName}. I run this counter, and by day I'm a management trainee in sales and marketing here in Pune. Everything on the menu is a chapter of my work. What can I get you?`);
+      return say(`${hi}, ${state.name}. Back again? I had a feeling you would be. Your loyalty card stands at ${state.stamps.length} of ${D.items.length}. What shall I make appear today?`);
+    return say(`${hi}, and welcome. You've wandered into Café Minj, where every cup comes with a plot twist. I'm ${P.firstName}: barista by night, management trainee in sales and marketing by day. Everything on the menu is a chapter of my work, and all of it is on the house. Choose well.`);
   }
   function openShelf(id) {
     const s = shelf(id);
     state.shelf = id; step("shelf");
     scrollToEl(".stage", true);
-    say(`${s.label}. ${s.blurb} What'll it be?`);
+    say(`${s.label}. ${s.blurb} Go on, pick one. I promise nothing explodes.`);
   }
   function wifi() {
     step("back");
-    say(`Ha. The password is "breweddaily". Honestly, nobody comes to Café Minj for the wifi. Can I tempt you with the menu?`);
+    say(`The password is "breweddaily". But you didn't come all this way for the wifi. Nobody ever does. Shall I show you the menu?`);
   }
   function rules() {
     step("back");
-    sayHTML(`The house rules, as every Irani café has them:<ol class="rules-list">${D.rules.map(r => `<li>${esc(r.full)}</li>`).join("")}</ol>`);
+    sayHTML(`The house rules. I follow most of them:<ol class="rules-list">${D.rules.map(r => `<li>${esc(r.full)}</li>`).join("")}</ol>`);
   }
   function surprise() {
     const left = D.items.filter(i => !state.tray.includes(i.id)), pool = left.length ? left : D.items;
@@ -89,7 +89,7 @@
   function askName(id) {
     state.pending = id; step("name");
     scrollToEl(".stage", true);
-    say("Great choice. Can I get a name for the order? And is it for here or to go?");
+    say("Excellent taste. Now, a name for the cup, your real one ideally. And is it for here or to go?");
     setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
   }
   function setName(raw, togo) {
@@ -102,7 +102,7 @@
   }
   function rename() {
     state.name = null; state.returning = false; store.set("name", null);
-    step("greet"); say("No problem. I'll ask for your name when you order.");
+    step("greet"); say("A new name? I admire that. I'll ask for it when you order.");
   }
   /* the classic: get the name a little wrong on the first cup */
   function misspell(n) {
@@ -117,7 +117,7 @@
     const it = item(id);
     state.busy = true; state.shelf = it.shelf; step("working");
     if (scrollToEl(".stage", true)) await wait(550);
-    say(`One ${short(it)}${state.name ? " for " + state.name : ""}, coming right up.`);
+    say(`One ${short(it)}${state.name ? " for " + state.name : ""}. Watch closely.`);
 
     const el = await Cafe.scene.serve(it);
     let wrong = null;
@@ -134,12 +134,12 @@
     renderStory(it, wrong);
 
     if (state.name) {
-      await say(wrong ? `${wrong}! …sorry, ${state.name}. Fixed it. One ${short(it)}, at the pick-up counter.`
+      await say(wrong ? `${wrong}! …a small trick of the pen. ${state.name}, of course. One ${short(it)}, at the pick-up counter.`
                       : `${state.name}! One ${short(it)}, at the pick-up counter.`);
       await wait(1300);
     }
     const full = newStamp && state.stamps.length === D.items.length;
-    await say(full ? `${it.line} And that's your loyalty card full: every chapter, my whole career so far. The reward is a coffee with me, for real. Shall I bring the bill?` : it.line);
+    await say(full ? `${it.line} And with that, your loyalty card is full: every chapter, my whole career so far. The prize is a real coffee with me, no tricks. Shall I bring the bill?` : it.line);
     step("served");
     state.busy = false;
     await wait(900);

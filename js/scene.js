@@ -138,7 +138,7 @@
     await Promise.all([rot(hand, 0, 380), tw(el, itemAt(800, 604, 1.5), 420, "cubic-bezier(.3,1.5,.5,1)")]);
     sparkle(800, 500);
     barista.classList.add("wink");
-    setTimeout(() => barista.classList.remove("wink"), 650);
+    setTimeout(() => barista.classList.remove("wink"), 1300); // peek over the shades, wink
     return (counterItem = el);
   }
 

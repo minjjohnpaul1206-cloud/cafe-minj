@@ -8,7 +8,7 @@ window.ART = (function () {
     bottle: "#14354A", bottleInk: "#0C2131", gold: "#BF8B3B", goldSoft: "#E8C48A",
     ivory: "#F3EEE3", mint: "#A8CBB7", mintDeep: "#86AE9B", teak: "#6A3A22",
     teakDark: "#4A2717", coffee: "#3B2014", crema: "#A0612F", skin: "#8A5638",
-    skinShade: "#683C24", hair: "#15100D", shirt: "#2B2C31", chili: "#B5452E",
+    skinShade: "#683C24", hair: "#15100D", shirt: "#C7CBD4", chili: "#B5452E",
     denim: "#33506F", denimDark: "#253B54", leather: "#A86B3C",
   };
 
@@ -126,13 +126,13 @@ window.ART = (function () {
   }
 
   /* ---------- the barista (local coords, centred on x = 0) ---------- */
-  /* the barista: drawn from John Paul's photo — swept-up curly hair, thick brows,
-     moustache into a goatee — in a charcoal shirt and denim apron */
+  /* the barista: drawn from John Paul's photos — wavy swept-back hair, beard,
+     purple-tinted aviators, light grey shirt with rolled sleeves, denim apron */
   function arm(id, x, watch = false) {
     return `<g transform="translate(${x},398)"><g id="${id}" class="arm">
       <path d="M-18,6 Q-18,-6 0,-6 Q18,-6 18,6 L16,72 L-16,72 Z" fill="${C.shirt}"/>
-      <rect x="-17" y="64" width="34" height="16" rx="5" fill="#45464D"/>
-      <path d="M-17,70 L17,70" stroke="#2B2C31" stroke-width="1.5"/>
+      <rect x="-17" y="64" width="34" height="16" rx="5" fill="#AEB3BE"/>
+      <path d="M-17,70 L17,70" stroke="#9AA0AC" stroke-width="1.5"/>
       <path d="M-13,78 L13,78 L11,146 L-11,146 Z" fill="${C.skin}"/>
       <path d="M-6,92 q-2,22 1,40" stroke="${C.skinShade}" stroke-width="2" fill="none" opacity=".5"/>
       ${watch ? `<rect x="-13" y="128" width="26" height="9" rx="2" fill="#2A2A26"/><rect x="-6" y="126" width="12" height="13" rx="3" fill="#D9DDE0" stroke="#8E979C" stroke-width="1.5"/>` : ""}
@@ -148,8 +148,9 @@ window.ART = (function () {
         <path d="M-98,430 Q-98,392 -62,388 L62,388 Q98,392 98,430 L104,640 L-104,640 Z" fill="${C.shirt}"/>
         <rect x="-16" y="346" width="32" height="48" fill="${C.skin}"/>
         <path d="M-16,378 Q0,392 16,378 L16,394 L-16,394 Z" fill="${C.skinShade}"/>
-        <path d="M-24,388 L0,420 L24,388" fill="${C.skin}" stroke="#1F2024" stroke-width="3"/>
-        <circle cx="0" cy="430" r="2.4" fill="#5A5B62"/>
+        <path d="M-26,384 L0,418 L26,384" fill="${C.skin}"/>
+        <path d="M-31,382 L-4,414 L-20,421 L-41,392 Z" fill="#DADDE4" stroke="#9AA0AC" stroke-width="1.5"/>
+        <path d="M31,382 L4,414 L20,421 L41,392 Z" fill="#DADDE4" stroke="#9AA0AC" stroke-width="1.5"/>
         <path d="M-66,424 L66,424 L76,640 L-76,640 Z" fill="${C.denim}"/>
         <path d="M-66,424 L66,424 L76,640 M-66,424 L-76,640" stroke="#E8DCC4" stroke-width="1.6" stroke-dasharray="5 4" fill="none" opacity=".75"/>
         <path d="M-64,426 L-34,390 M64,426 L34,390" stroke="${C.leather}" stroke-width="9" stroke-linecap="round"/>
@@ -182,6 +183,13 @@ window.ART = (function () {
               <path d="M-29,301 Q-18,291 -7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
             <g id="b-eyeR"><path d="M29,301 Q18,292 7,301 Q18,307 29,301 Z" fill="#F4EFE6"/><circle cx="18" cy="300.5" r="4.6" fill="#24150E"/><circle cx="19.4" cy="299" r="1.4" fill="#fff"/>
               <path d="M29,301 Q18,291 7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
+          </g>
+          <g id="b-shades">
+            <defs><linearGradient id="lens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A5CE0"/><stop offset="1" stop-color="#2B2F7A"/></linearGradient></defs>
+            <path d="M-40,293 L-4,293 Q-2,306 -8,314 Q-20,322 -32,316 Q-41,308 -40,293 Z" fill="url(#lens)" fill-opacity=".92" stroke="#C9CED3" stroke-width="2.4"/>
+            <path d="M40,293 L4,293 Q2,306 8,314 Q20,322 32,316 Q41,308 40,293 Z" fill="url(#lens)" fill-opacity=".92" stroke="#C9CED3" stroke-width="2.4"/>
+            <path d="M-4,296 Q0,292 4,296 M-30,289 L30,289 M-40,294 L-48,299 M40,294 L48,299" stroke="#C9CED3" stroke-width="2.4" fill="none"/>
+            <path d="M-35,298 l9,0 M9,298 l9,0" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/>
           </g>
           <path d="M-2,302 Q-4,318 -10,325 Q-12,331 -5,332 Q0,335 5,332 Q12,331 10,325 Q4,318 2,302" fill="${C.skinShade}" opacity=".45"/>
           <path d="M-10,325 Q-12,331 -5,332 M10,325 Q12,331 5,332" stroke="${C.skinShade}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
