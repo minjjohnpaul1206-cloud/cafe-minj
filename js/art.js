@@ -145,7 +145,12 @@ window.ART = (function () {
     </g></g>`;
   }
 
-  function barista(initials = "JPM") {
+  function barista(initials = "JPM", img = null) {
+    /* the illustration version: one picture that walks, bobs and crouches */
+    if (img) return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
+      <image href="${img}" x="-179" y="205" width="350" height="411"/>
+      <g id="armL" class="arm"></g><g id="armR" class="arm"></g>
+    </g></g>`;
     return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
       <g id="b-torso">
         <path d="M-18,348 L18,348 L19,394 Q0,404 -19,394 Z" fill="${SK}" ${line()}/>
@@ -270,7 +275,7 @@ window.ART = (function () {
       </g>
 
       <!-- the barista (behind the counter) -->
-      ${barista(initials)}
+      ${barista(initials, person.baristaImage)}
 
       <!-- counter -->
       <rect x="0" y="560" width="1600" height="30" fill="url(#marble)"/>

@@ -23,6 +23,9 @@ window.CAFE = {
     /* Illustrated portrait (arch, transparent corners): used on the street card
        and in the speech bubble. */
     illustration: "assets/barista.webp",
+    /* The barista behind the counter: your illustration, cut out.
+       Set to null to use the hand-drawn animated barista instead. */
+    baristaImage: "assets/barista-cut.webp",
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
     resumePdf: null,
