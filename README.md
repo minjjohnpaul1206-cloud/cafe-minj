@@ -41,7 +41,7 @@ Open **http://localhost:8000** in your browser. Stop it with `Ctrl + C`.
 Everything you'd want to change is in **`js/data.js`**:
 
 - **Your details** — name, role, email, phone, LinkedIn at the top.
-- **Your photo** — already in `assets/john.jpg`. It appears in the framed "Proprietor" portrait on the café wall and on the CV page. Set `photo: null` to remove it.
+- **Your photo** — already in `assets/john.jpg`. It appears on the CV page. Set `photo: null` to remove it. The illustrated portrait (`assets/barista.webp`) shows on the street card and in the speech bubble.
 - **PDF resume** — save it as `assets/John-Paul-Minj-Resume.pdf` and set `resumePdf` to that path. A download button appears on the CV page.
 - **Menu items** — each job, degree, skill set or certificate is one item. Copy an existing one to add a new chapter. The `station` decides where the barista goes to make it (`machine`, `case`, `shelf`, `under`) and `art` decides what gets served.
 - **Café rules** — the funny board on the wall.
