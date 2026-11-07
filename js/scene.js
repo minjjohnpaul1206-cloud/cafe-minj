@@ -101,7 +101,7 @@
       return [el, armL];
     },
     async shelf(it) {
-      const i = it.jarIndex || 0, jx = 440 + i * 92, x = jx - 133;
+      const i = it.jarIndex || 0, jx = 420 + i * 74, x = jx - 133;
       await walk(x);
       await rot(armR, -165, 480);
       $(`.shelf-jar[data-jar="${i}"]`).style.opacity = 0;

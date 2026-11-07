@@ -101,7 +101,7 @@
       </header>
       ${section("Experience", shelfItems("signature-brews").map(it => entry(it)).join(""))}
       ${section("Education", shelfItems("brew-school").map(it => entry(it, it.cvNotes || it.notes)).join(""))}
-      ${section("Skills", `<dl class="cv-skills">${shelfItems("bean-shelf").map(it => `<dt>${esc(it.cvTitle || it.name)}</dt><dd>${esc(it.notes.join(" "))}</dd>`).join("")}</dl>`)}
+      ${section("Skills", `<dl class="cv-skills">${shelfItems("bean-shelf").map(it => `<dt>${esc(it.cvTitle || it.name)}</dt><dd>${esc((it.cvNotes || it.notes).join(" "))}</dd>`).join("")}</dl>`)}
       ${section("Academic project", shelfItems("secret-menu").map(it => entry({ ...it, role: it.cvTitle || it.org, org: "", period: "" })).join(""))}
       ${section("Leadership & certifications", `<div class="cv-entry"><ul>${shelfItems("pastry-case").map(leadership).join("")}</ul></div>`)}`;
 

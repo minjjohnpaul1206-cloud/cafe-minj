@@ -229,7 +229,7 @@ window.ART = (function () {
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
   function interior(person, shelves, rules) {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
-    const jarSlots = [0, 1, 2, 3].map(i => 440 + i * 92);
+    const jarSlots = [0, 1, 2, 3, 4].map(i => 420 + i * 74);
     const lamp = x => `<g class="lamp"><path d="M${x},0 L${x},118" stroke="#2A2A26" stroke-width="2"/>
       <circle cx="${x}" cy="170" r="120" fill="url(#lampGlow)"/>
       <path d="M${x - 34},150 Q${x},104 ${x + 34},150 Z" fill="${C.bottle}"/><path d="M${x - 34},150 L${x + 34},150" stroke="${C.gold}" stroke-width="3"/>
@@ -272,7 +272,7 @@ window.ART = (function () {
       <g id="jar-shelf">
         <rect x="390" y="300" width="380" height="14" fill="${C.teak}"/><rect x="390" y="314" width="380" height="5" fill="${C.teakDark}"/>
         <path d="M420,319 l0,26 l22,-26 M740,319 l0,26 l-22,-26" stroke="${C.teakDark}" stroke-width="6" fill="none"/>
-        ${jarSlots.map((x, i) => `<g class="shelf-jar hot" data-jar="${i}" data-act="jar:${i}" style="transform: translate(${x - 60 * 0.75}px, ${300 - 110 * 0.75}px) scale(.75)">${item("jar", { jarColor: ["#B5452E", "#2F5D8A", "#C98A1B", "#4E7A4A"][i] })}</g>`).join("")}
+        ${jarSlots.map((x, i) => `<g class="shelf-jar hot" data-jar="${i}" data-act="jar:${i}" style="transform: translate(${x - 60 * 0.75}px, ${300 - 110 * 0.75}px) scale(.75)">${item("jar", { jarColor: ["#B5452E", "#2F5D8A", "#C98A1B", "#4E7A4A", "#6B4FD8"][i] })}</g>`).join("")}
       </g>
 
       <!-- clock -->
@@ -472,7 +472,7 @@ window.ART = (function () {
         <path d="M-80,160 L-60,0 L60,0 L80,160" stroke="${C.teak}" stroke-width="10" fill="none"/>
         <rect x="-62" y="6" width="124" height="120" fill="#24302C" stroke="${C.teak}" stroke-width="6"/>
         <text x="0" y="36" text-anchor="middle" font-family="Kalam, cursive" font-size="17" fill="${C.ivory}">Today</text>
-        <text x="0" y="66" text-anchor="middle" font-family="Kalam, cursive" font-size="24" fill="${C.goldSoft}">15 chapters</text>
+        <text x="0" y="66" text-anchor="middle" font-family="Kalam, cursive" font-size="24" fill="${C.goldSoft}">16 chapters</text>
         <text x="0" y="92" text-anchor="middle" font-family="Kalam, cursive" font-size="15" fill="${C.ivory}">all on the house</text>
         <path d="M-40,106 q40,10 80,0" stroke="${C.ivory}" stroke-width="2" fill="none" opacity=".6"/>
       </g>
