@@ -165,8 +165,6 @@ button { font: inherit; }
 #barista[data-face="right"] #b-face { transform: translateX(6px); }
 #barista[data-face="left"] #b-face { transform: translateX(-6px); }
 #b-eyeR, #b-browR { transform-box: fill-box; transform-origin: center; transition: transform .15s; }
-#b-shades { transition: transform .25s var(--ease); }
-#barista.wink #b-shades { transform: translateY(11px); }
 #barista.wink #b-eyeR { transform: scaleY(.12); }
 #barista.wink #b-browR { transform: translateY(3px); }
 #steam, #pour { transition: opacity .35s; }

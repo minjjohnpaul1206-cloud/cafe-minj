@@ -126,78 +126,77 @@ window.ART = (function () {
   }
 
   /* ---------- the barista (local coords, centred on x = 0) ---------- */
-  /* the barista: drawn from John Paul's photos — wavy swept-back hair, beard,
-     purple-tinted aviators, light grey shirt with rolled sleeves, denim apron */
-  function arm(id, x, watch = false) {
+  /* the barista: John Paul in bold line-art — curly hair, big smile, beard,
+     cream shirt with rolled sleeves, caramel apron, aviators parked in his hair */
+  const K = "#2A1A12", SK = "#A4673F", CREAM = "#F1E8D6", CARAMEL = "#B87B3A";
+  const line = (w = 4) => `stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+
+  function arm(id, x) {
+    const fingers = [-11, -4, 3, 10].map((fx, i) =>
+      `<rect x="${fx - 3.5}" y="152" width="7.5" height="${20 + (i === 1 || i === 2 ? 4 : 0)}" rx="3.7" fill="${SK}" ${line(2.6)}/>`).join("");
     return `<g transform="translate(${x},398)"><g id="${id}" class="arm">
-      <path d="M-18,6 Q-18,-6 0,-6 Q18,-6 18,6 L16,72 L-16,72 Z" fill="${C.shirt}"/>
-      <rect x="-17" y="64" width="34" height="16" rx="5" fill="#AEB3BE"/>
-      <path d="M-17,70 L17,70" stroke="#9AA0AC" stroke-width="1.5"/>
-      <path d="M-13,78 L13,78 L11,146 L-11,146 Z" fill="${C.skin}"/>
-      <path d="M-6,92 q-2,22 1,40" stroke="${C.skinShade}" stroke-width="2" fill="none" opacity=".5"/>
-      ${watch ? `<rect x="-13" y="128" width="26" height="9" rx="2" fill="#2A2A26"/><rect x="-6" y="126" width="12" height="13" rx="3" fill="#D9DDE0" stroke="#8E979C" stroke-width="1.5"/>` : ""}
-      <circle cx="0" cy="152" r="14" fill="${C.skin}"/>
-      <path d="M-9,146 q9,8 18,0" stroke="${C.skinShade}" stroke-width="2" fill="none"/>
+      <path d="M-19,6 Q-19,-8 0,-8 Q19,-8 19,6 L17,70 L-17,70 Z" fill="${CREAM}" ${line()}/>
+      <path d="M-8,20 q-3,18 0,36" fill="none" ${line(2)} opacity=".5"/>
+      <path d="M-12,76 L12,76 L12,144 L-12,144 Z" fill="${SK}" ${line()}/>
+      <rect x="-20" y="62" width="40" height="18" rx="8" fill="#F7F0E2" ${line()}/>
+      ${fingers}
+      <ellipse cx="13" cy="146" rx="5" ry="11" transform="rotate(-28 13 146)" fill="${SK}" ${line(2.6)}/>
+      <ellipse cx="0" cy="150" rx="15" ry="13" fill="${SK}" ${line(3)}/>
     </g></g>`;
   }
 
   function barista(initials = "JPM") {
-    const H = C.hair;
     return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
       <g id="b-torso">
-        <path d="M-98,430 Q-98,392 -62,388 L62,388 Q98,392 98,430 L104,640 L-104,640 Z" fill="${C.shirt}"/>
-        <rect x="-16" y="346" width="32" height="48" fill="${C.skin}"/>
-        <path d="M-16,378 Q0,392 16,378 L16,394 L-16,394 Z" fill="${C.skinShade}"/>
-        <path d="M-26,384 L0,418 L26,384" fill="${C.skin}"/>
-        <path d="M-31,382 L-4,414 L-20,421 L-41,392 Z" fill="#DADDE4" stroke="#9AA0AC" stroke-width="1.5"/>
-        <path d="M31,382 L4,414 L20,421 L41,392 Z" fill="#DADDE4" stroke="#9AA0AC" stroke-width="1.5"/>
-        <path d="M-66,424 L66,424 L76,640 L-76,640 Z" fill="${C.denim}"/>
-        <path d="M-66,424 L66,424 L76,640 M-66,424 L-76,640" stroke="#E8DCC4" stroke-width="1.6" stroke-dasharray="5 4" fill="none" opacity=".75"/>
-        <path d="M-64,426 L-34,390 M64,426 L34,390" stroke="${C.leather}" stroke-width="9" stroke-linecap="round"/>
-        <circle cx="-60" cy="430" r="4" fill="${C.gold}"/><circle cx="60" cy="430" r="4" fill="${C.gold}"/>
-        <rect x="-40" y="456" width="80" height="50" rx="5" fill="${C.denimDark}"/>
-        <rect x="-40" y="456" width="80" height="50" rx="5" fill="none" stroke="#E8DCC4" stroke-width="1.4" stroke-dasharray="4 3" opacity=".75"/>
-        <text x="0" y="489" text-anchor="middle" font-family="Rozha One, serif" font-size="21" fill="#E8DCC4">${initials}</text>
-        <rect x="26" y="446" width="5" height="20" rx="2" fill="${C.chili}"/>
+        <path d="M-18,348 L18,348 L19,394 Q0,404 -19,394 Z" fill="${SK}" ${line()}/>
+        <path d="M-98,430 Q-98,392 -62,388 L62,388 Q98,392 98,430 L104,640 L-104,640 Z" fill="${CREAM}" ${line()}/>
+        <path d="M-82,440 q6,22 2,44 M82,440 q-6,22 -2,44" fill="none" ${line(2.4)} opacity=".55"/>
+        <path d="M-22,386 L0,416 L22,386" fill="${SK}"/>
+        <path d="M-32,382 L-5,416 L-24,428 L-44,394 Z" fill="#F7F0E2" ${line(3.4)}/>
+        <path d="M32,382 L5,416 L24,428 L44,394 Z" fill="#F7F0E2" ${line(3.4)}/>
+        <circle cx="0" cy="430" r="3" fill="${K}"/>
+        <path d="M-60,444 L-44,394 M60,444 L44,394" stroke="${K}" stroke-width="14" stroke-linecap="round"/>
+        <path d="M-60,444 L-44,394 M60,444 L44,394" stroke="${CARAMEL}" stroke-width="8" stroke-linecap="round"/>
+        <path d="M-64,442 L64,442 L74,640 L-74,640 Z" fill="${CARAMEL}" ${line()}/>
+        <circle cx="-44" cy="460" r="7" fill="#D1A54E" ${line(3)}/><circle cx="-24" cy="476" r="9.5" fill="#D1A54E" ${line(3)}/>
+        <ellipse cx="26" cy="484" rx="8" ry="12" fill="#8B4A2B" ${line(3)}/>
+        <path d="M26,496 L26,512" ${line(5)}/><path d="M26,496 L26,512" stroke="#8B4A2B" stroke-width="2"/>
+        <path d="M-26,502 L48,502 L48,546 L38,556 L-16,556 L-26,546 Z" fill="${CARAMEL}" ${line(3.4)}/>
+        <path d="M-20,511 L42,511" fill="none" ${line(2)} stroke-dasharray="5 4"/>
+        <text x="11" y="540" text-anchor="middle" font-family="Rozha One, serif" font-size="15" fill="${CREAM}">${initials}</text>
       </g>
-      ${arm("armL", -94, true)}
+      ${arm("armL", -94)}
       ${arm("armR", 94)}
       <g id="b-head">
-        <g transform="translate(50,282) rotate(24)"><rect x="-3.6" y="-22" width="7.2" height="40" rx="3" fill="${C.chili}"/><rect x="-3.6" y="12" width="7.2" height="8" rx="1" fill="#F3EEE3"/></g>
-        <ellipse cx="-46" cy="308" rx="9" ry="13" fill="${C.skin}"/><ellipse cx="46" cy="308" rx="9" ry="13" fill="${C.skin}"/>
-        <path d="M-44,288 Q-46,344 -25,365 Q0,384 25,365 Q46,344 44,288 Q44,246 0,242 Q-44,246 -44,288 Z" fill="${C.skin}"/>
-        <path d="M-44,316 Q-41,350 -24,366 Q0,384 24,366 Q41,350 44,316 Q38,344 22,354 Q0,364 -22,354 Q-38,344 -44,316 Z" fill="${H}" opacity=".32"/>
+        <ellipse cx="-46" cy="306" rx="10" ry="14" fill="${SK}" ${line()}/><path d="M-48,300 q5,6 0,12" fill="none" ${line(2.2)}/>
+        <ellipse cx="46" cy="306" rx="10" ry="14" fill="${SK}" ${line()}/><path d="M48,300 q-5,6 0,12" fill="none" ${line(2.2)}/>
+        <path d="M-44,288 Q-46,342 -26,362 Q0,382 26,362 Q46,342 44,288 Q44,246 0,242 Q-44,246 -44,288 Z" fill="${SK}" ${line()}/>
         <g id="b-face">
-          <path d="M-46,300 Q-50,264 -38,248 L-37,278 Q-42,286 -44,300 Z" fill="${H}" opacity=".85"/>
-          <path d="M46,300 Q50,264 38,248 L37,278 Q42,286 44,300 Z" fill="${H}" opacity=".85"/>
-          <path d="M-45,280 Q-56,238 -30,222 Q-24,200 -2,204 Q14,190 34,204 Q58,208 52,240 Q58,258 45,280 Q42,256 30,252 Q18,262 4,254 Q-10,264 -24,254 Q-36,262 -45,280 Z" fill="${H}"/>
-          <g stroke="#3A2C24" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".9">
-            <path d="M-34,236 q6,-9 13,0"/><path d="M-16,222 q7,-10 14,0"/><path d="M4,214 q7,-9 14,1"/><path d="M22,222 q7,-8 13,2"/>
-            <path d="M34,238 q6,-7 11,3"/><path d="M-26,248 q6,-7 12,0"/><path d="M-4,238 q6,-8 13,0"/><path d="M16,240 q6,-7 12,1"/>
+          <path d="M-48,294 Q-58,252 -42,236 Q-48,212 -24,210 Q-18,192 2,198 Q20,186 36,200 Q58,202 52,226 Q62,242 49,264 Q50,280 46,294 Q42,262 26,256 Q12,264 -4,256 Q-22,266 -36,258 Q-44,270 -48,294 Z" fill="#241712" ${line()}/>
+          <g fill="none" stroke="#6B4A38" stroke-width="2.6" stroke-linecap="round">
+            <path d="M-36,232 q7,-10 15,-1"/><path d="M-14,214 q8,-10 16,0"/><path d="M10,208 q8,-9 15,2"/><path d="M28,222 q8,-7 13,4"/>
+            <path d="M-24,246 q6,-7 13,0"/><path d="M0,232 q7,-8 14,1"/><path d="M38,244 q5,-6 9,3"/>
           </g>
-          <path d="M-8,254 q-9,10 -1,19" stroke="${H}" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M-34,284 Q-21,274 -7,281 L-8,286 Q-21,281 -33,290 Z" fill="${H}"/>
-          <g id="b-browR"><path d="M34,284 Q21,274 7,281 L8,286 Q21,281 33,290 Z" fill="${H}"/></g>
+          <path d="M-6,256 q-12,4 -10,16 q2,8 10,3" fill="none" stroke="#241712" stroke-width="5" stroke-linecap="round"/>
+          <g id="b-shades" transform="translate(0,-14)">
+            <path d="M-34,220 L-6,220 Q-5,231 -10,236 Q-20,242 -29,237 Q-35,231 -34,220 Z" fill="#6B4FD8" ${line(2.4)}/>
+            <path d="M34,220 L6,220 Q5,231 10,236 Q20,242 29,237 Q35,231 34,220 Z" fill="#6B4FD8" ${line(2.4)}/>
+            <path d="M-6,222 Q0,217 6,222 M-34,221 L-42,226 M34,221 L42,226" fill="none" ${line(2.4)}/>
+            <path d="M-29,225 l7,0 M11,225 l7,0" stroke="#fff" stroke-width="2" opacity=".6" stroke-linecap="round"/>
+          </g>
+          <path d="M-34,282 Q-21,273 -8,280" fill="none" ${line(5)}/>
+          <g id="b-browR"><path d="M8,280 Q21,273 34,282" fill="none" ${line(5)}/></g>
           <g id="b-eyes">
-            <g><path d="M-29,301 Q-18,292 -7,301 Q-18,307 -29,301 Z" fill="#F4EFE6"/><circle cx="-18" cy="300.5" r="4.6" fill="#24150E"/><circle cx="-16.6" cy="299" r="1.4" fill="#fff"/>
-              <path d="M-29,301 Q-18,291 -7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
-            <g id="b-eyeR"><path d="M29,301 Q18,292 7,301 Q18,307 29,301 Z" fill="#F4EFE6"/><circle cx="18" cy="300.5" r="4.6" fill="#24150E"/><circle cx="19.4" cy="299" r="1.4" fill="#fff"/>
-              <path d="M29,301 Q18,291 7,301" stroke="${H}" stroke-width="2.2" fill="none"/></g>
+            <g><path d="M-29,300 Q-18,291 -7,300 Q-18,306 -29,300 Z" fill="#FBF6EC" ${line(2.6)}/><circle cx="-18" cy="299.5" r="4.4" fill="${K}"/><circle cx="-16.6" cy="298" r="1.4" fill="#fff"/></g>
+            <g id="b-eyeR"><path d="M29,300 Q18,291 7,300 Q18,306 29,300 Z" fill="#FBF6EC" ${line(2.6)}/><circle cx="18" cy="299.5" r="4.4" fill="${K}"/><circle cx="19.4" cy="298" r="1.4" fill="#fff"/></g>
           </g>
-          <g id="b-shades">
-            <defs><linearGradient id="lens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A5CE0"/><stop offset="1" stop-color="#2B2F7A"/></linearGradient></defs>
-            <path d="M-40,293 L-4,293 Q-2,306 -8,314 Q-20,322 -32,316 Q-41,308 -40,293 Z" fill="url(#lens)" fill-opacity=".92" stroke="#C9CED3" stroke-width="2.4"/>
-            <path d="M40,293 L4,293 Q2,306 8,314 Q20,322 32,316 Q41,308 40,293 Z" fill="url(#lens)" fill-opacity=".92" stroke="#C9CED3" stroke-width="2.4"/>
-            <path d="M-4,296 Q0,292 4,296 M-30,289 L30,289 M-40,294 L-48,299 M40,294 L48,299" stroke="#C9CED3" stroke-width="2.4" fill="none"/>
-            <path d="M-35,298 l9,0 M9,298 l9,0" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/>
-          </g>
-          <path d="M-2,302 Q-4,318 -10,325 Q-12,331 -5,332 Q0,335 5,332 Q12,331 10,325 Q4,318 2,302" fill="${C.skinShade}" opacity=".45"/>
-          <path d="M-10,325 Q-12,331 -5,332 M10,325 Q12,331 5,332" stroke="${C.skinShade}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <path d="M-24,346 Q-12,334 0,339 Q12,334 24,346 Q15,344 8,348 Q0,343 -8,348 Q-15,344 -24,346 Z" fill="${H}"/>
-          <path d="M-23,346 Q-26,354 -19,362 M23,346 Q26,354 19,362" stroke="${H}" stroke-width="4.5" fill="none" stroke-linecap="round" opacity=".85"/>
-          <path id="b-mouth" d="M-12,353 Q2,359 15,350" stroke="#3E1E10" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M-19,361 Q-15,381 0,385 Q15,381 19,361 Q10,368 0,367 Q-10,368 -19,361 Z" fill="${H}"/>
-          <path d="M-4,357 Q0,363 4,357 Z" fill="${H}"/>
+          <path d="M-29,309 q9,4 19,0 M29,309 q-9,4 -19,0" fill="none" ${line(1.8)} opacity=".45"/>
+          <path d="M-3,300 Q-6,316 -9,322 Q-4,328 0,326 Q4,328 9,322" fill="none" ${line(3)}/>
+          <path d="M-25,337 Q-12,328 0,333 Q12,328 25,337 Q14,339 0,336 Q-14,339 -25,337 Z" fill="${K}" ${line(2.4)}/>
+          <path id="b-mouth" d="M-20,340 Q0,366 20,340 Z" fill="#5A1E14" ${line(3)}/>
+          <path d="M-17,341 Q0,348 17,341 L15,346 Q0,352 -15,346 Z" fill="#FFFFFF"/>
+          <path d="M-12,363 Q0,384 12,363 Q6,368 0,367 Q-6,368 -12,363 Z" fill="${K}"/>
+          <path d="M-40,326 Q-34,352 -18,364 M40,326 Q34,352 18,364" fill="none" ${line(2)} stroke-dasharray="1 4" opacity=".7"/>
         </g>
       </g>
     </g></g>`;
