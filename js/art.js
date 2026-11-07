@@ -205,13 +205,6 @@ window.ART = (function () {
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
   function interior(person, shelves, rules) {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
-    const pic = person.illustration || person.photo;
-    const portrait = pic
-      ? `<ellipse cx="1440" cy="226" rx="56" ry="72" fill="#E8D5B0"/><clipPath id="pclip"><ellipse cx="1440" cy="226" rx="56" ry="72"/></clipPath>
-         <image href="${pic}" x="1384" y="150" width="112" height="148" preserveAspectRatio="xMidYMin slice" clip-path="url(#pclip)"/>`
-      : `<ellipse cx="1440" cy="226" rx="56" ry="72" fill="#C9B48A"/>
-         <circle cx="1440" cy="206" r="24" fill="#8C7350"/><path d="M1398,290 Q1400,248 1440,246 Q1480,248 1482,290 Z" fill="#8C7350"/>`;
-
     const jarSlots = [0, 1, 2, 3].map(i => 440 + i * 92);
     const lamp = x => `<g class="lamp"><path d="M${x},0 L${x},118" stroke="#2A2A26" stroke-width="2"/>
       <circle cx="${x}" cy="170" r="120" fill="url(#lampGlow)"/>
@@ -275,12 +268,6 @@ window.ART = (function () {
           <text x="990" y="${210 + i * 34}" font-family="Mukta, sans-serif" font-weight="600" font-size="19" fill="${C.ivory}">${s.label}</text>
           <text x="1270" y="${210 + i * 34}" text-anchor="end" font-family="Mukta, sans-serif" font-size="15" fill="${C.goldSoft}">0.00</text></g>`).join("")}
       </g>
-
-      <!-- proprietor portrait -->
-      <g><ellipse cx="1440" cy="226" rx="70" ry="88" fill="${C.gold}"/><ellipse cx="1440" cy="226" rx="62" ry="80" fill="${C.teakDark}"/>
-        ${portrait}
-        <rect x="1390" y="324" width="100" height="26" rx="3" fill="${C.gold}"/>
-        <text x="1440" y="343" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="15" fill="${C.bottleInk}">Proprietor</text></g>
 
       <!-- the barista (behind the counter) -->
       ${barista(initials)}
