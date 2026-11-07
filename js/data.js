@@ -280,4 +280,5 @@ window.CAFE = {
     { short: "Don't ask about printers", full: "Do not ask the barista to fix your printer. He studied electronics, not miracles." },
     { short: "Wifi: breweddaily", full: "Wifi password: breweddaily" },
     { short: "Tip with a connection", full: "Tip your barista with a LinkedIn connection." },
+    { short: "Island time: off", full: "Island time does not apply to replies. Expect one within a day." },
   ],};

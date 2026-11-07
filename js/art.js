@@ -118,6 +118,25 @@ window.ART = (function () {
       + line(name, 81, t1 + 700);
   }
 
+  /* ---------- island bits: palms, sea, shells ---------- */
+  function palm(x, dir, top = 330, scale = 1) {
+    const tx = x + dir * 80, ty = top;
+    const pt = t => [(1 - t) ** 2 * x + 2 * (1 - t) * t * (x + dir * 6) + t * t * tx, (1 - t) ** 2 * 905 + 2 * (1 - t) * t * 620 + t * t * ty];
+    const rings = Array.from({ length: 11 }, (_, i) => { const [px, py] = pt(0.08 + i * 0.085); return `<path d="M${px - 13},${py} q13,7 26,0" stroke="#4E3420" stroke-width="3" fill="none"/>`; }).join("");
+    const frond = (a, len, col) => `<g transform="translate(${tx},${ty}) rotate(${a}) scale(${scale})">
+        <path d="M0,0 Q${len * .45},-34 ${len},26 Q${len * .5},-6 0,8 Z" fill="${col}"/>
+        <path d="M2,4 Q${len * .45},-22 ${len - 6},22" stroke="#2D5A34" stroke-width="2.5" fill="none"/></g>`;
+    return `<g class="palm">
+      <path d="M${x},905 Q${x + dir * 6},620 ${tx},${ty}" stroke="#7A5634" stroke-width="24" fill="none" stroke-linecap="round"/>${rings}
+      ${[[-175, 175, "#3E7A47"], [-140, 190, "#4F8F55"], [-100, 160, "#3E7A47"], [-62, 175, "#4F8F55"], [-25, 185, "#3E7A47"], [8, 160, "#4F8F55"], [-205, 150, "#4F8F55"]]
+        .map(([a, l, c]) => frond(a, l, c)).join("")}
+      <circle cx="${tx - 10}" cy="${ty + 14}" r="12" fill="#6B4A2E"/><circle cx="${tx + 10}" cy="${ty + 16}" r="12" fill="#5A3C24"/><circle cx="${tx}" cy="${ty + 30}" r="12" fill="#6B4A2E"/>
+    </g>`;
+  }
+  const starfish = (x, y, r = 12, rot = 0) => `<path transform="translate(${x},${y}) rotate(${rot})" d="${Array.from({ length: 10 }, (_, i) => {
+    const a = (i * 36 - 90) * Math.PI / 180, rr = i % 2 ? r * .42 : r; return `${i ? "L" : "M"}${(Math.cos(a) * rr).toFixed(1)},${(Math.sin(a) * rr).toFixed(1)}`; }).join(" ")}Z" fill="#E07A4F"/>`;
+  const shell = (x, y, s = 1) => `<g transform="translate(${x},${y}) scale(${s})"><path d="M-12,0 Q-14,-16 0,-18 Q14,-16 12,0 Z" fill="#F4E1CF"/>${[-8, -3, 2, 7].map(dx => `<path d="M0,-17 L${dx},0" stroke="#D9B9A0" stroke-width="1.5"/>`).join("")}<rect x="-5" y="-1" width="10" height="4" rx="2" fill="#E8CDB7"/></g>`;
+
   function item(art, opts = {}) {
     return (items[art] || items.espresso)(opts);
   }
@@ -222,6 +241,7 @@ window.ART = (function () {
         <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DC2AE"/><stop offset="1" stop-color="#B4D3C1"/></linearGradient>
         <linearGradient id="marble" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#EEEAE2"/><stop offset=".5" stop-color="#F7F4EE"/><stop offset="1" stop-color="#E6E1D7"/></linearGradient>
         <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E979C"/><stop offset=".35" stop-color="#E8ECEE"/><stop offset=".6" stop-color="#B9C1C5"/><stop offset="1" stop-color="#7C858A"/></linearGradient>
+        <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7C9A0"/><stop offset="1" stop-color="#F0956F"/></linearGradient>
         <pattern id="checker" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#EDE8DD"/><rect width="40" height="40" fill="#1B2A36"/><rect x="40" y="40" width="40" height="40" fill="#1B2A36"/></pattern>
       </defs>
 
@@ -274,6 +294,27 @@ window.ART = (function () {
           <text x="1270" y="${210 + i * 34}" text-anchor="end" font-family="Mukta, sans-serif" font-size="15" fill="${C.goldSoft}">0.00</text></g>`).join("")}
       </g>
 
+      <!-- window onto the Andaman sea -->
+      <g id="sea-window">
+        <clipPath id="seaclip"><path d="M1364,346 L1364,196 Q1364,136 1445,136 Q1526,136 1526,196 L1526,346 Z"/></clipPath>
+        <path d="M1350,358 L1350,192 Q1350,120 1445,120 Q1540,120 1540,192 L1540,358 Z" fill="${C.teak}"/>
+        <g clip-path="url(#seaclip)">
+          <rect x="1360" y="130" width="170" height="220" fill="url(#dusk)"/>
+          <circle cx="1478" cy="262" r="24" fill="#FFE2A0"/>
+          <rect x="1360" y="262" width="170" height="90" fill="#2F8FA0"/>
+          <path d="M1458,272 l40,0 M1466,284 l24,0 M1472,296 l12,0" stroke="#FFE2A0" stroke-width="3" opacity=".8"/>
+          <path d="M1360,300 q20,-6 40,0 t40,0 t40,0 t40,0 t40,0" stroke="#7CC4CC" stroke-width="2" fill="none" opacity=".7"/>
+          <path d="M1400,258 l26,0 l-5,7 l-17,0 Z M1412,258 l0,-22 l11,20 Z" fill="#1B2A36"/>
+          <path d="M1370,350 Q1378,260 1408,214" stroke="#1B2A36" stroke-width="7" fill="none"/>
+          ${[-60, -20, 15, 160, 200].map(a => `<path transform="translate(1408,214) rotate(${a})" d="M0,0 Q30,-12 58,10 Q30,-2 0,4 Z" fill="#1B2A36"/>`).join("")}
+        </g>
+        <path d="M1445,136 L1445,346 M1364,262 L1526,262" stroke="${C.teak}" stroke-width="7"/>
+        <rect x="1340" y="352" width="210" height="10" rx="3" fill="${C.ivory}"/>
+        ${shell(1372, 352, .7)}${starfish(1520, 344, 9, 14)}
+        <rect x="1366" y="370" width="158" height="26" rx="4" fill="${C.gold}"/>
+        <text x="1445" y="389" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="14" fill="${C.bottleInk}">Port Blair, Andamans</text>
+      </g>
+
       <!-- the barista (behind the counter) -->
       ${barista(initials, person.baristaImage)}
 
@@ -285,6 +326,19 @@ window.ART = (function () {
       <rect x="0" y="590" width="1600" height="6" fill="#000" opacity=".25"/>
       <rect x="0" y="740" width="1600" height="60" fill="url(#checker)"/>
       <rect x="0" y="752" width="1600" height="7" rx="3" fill="${C.gold}"/>
+
+      <!-- island things on the counter: a conch and a coconut -->
+      <g transform="translate(80,560)">
+        <path d="M-34,0 Q-44,-22 -20,-34 Q6,-44 28,-30 Q40,-20 34,-6 Q30,2 18,0 Z" fill="#F2D6C4"/>
+        <path d="M-20,-34 l-6,-12 M-4,-40 l0,-13 M12,-38 l6,-11" stroke="#E6BFA8" stroke-width="5" stroke-linecap="round"/>
+        <path d="M-2,-4 Q14,-22 30,-12 Q24,-2 14,0 Z" fill="#E59A8A"/>
+        <path d="M-30,-6 Q-16,-20 -2,-14" stroke="#D9B39C" stroke-width="2" fill="none"/>
+      </g>
+      <g transform="translate(140,560)">
+        <ellipse cx="0" cy="-18" rx="22" ry="20" fill="#6B4A2E"/><ellipse cx="0" cy="-34" rx="17" ry="5" fill="#F3EEE3"/>
+        <path d="M-7,-36 L6,-66" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/><path d="M6,-66 l9,-4" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/>
+        <path d="M-12,-24 q4,8 0,16" stroke="#4E3420" stroke-width="2" fill="none"/>
+      </g>
 
       <!-- pastry case -->
       <g id="pastry-case" class="hot" data-act="shelf:pastry-case">
@@ -360,6 +414,7 @@ window.ART = (function () {
         <radialGradient id="lampHalo"><stop offset="0" stop-color="#FFE3A3" stop-opacity=".8"/><stop offset="1" stop-color="#FFE3A3" stop-opacity="0"/></radialGradient>
       </defs>
       <rect width="1600" height="900" fill="url(#sky)"/>
+      <circle cx="1440" cy="56" r="30" fill="#F6EBC8" opacity=".95"/><circle cx="1452" cy="48" r="26" fill="#22324A" opacity=".35"/>
       ${[[120, 60], [300, 120], [520, 40], [1180, 70], [1350, 30], [1500, 110], [860, 24]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.8" fill="#fff" opacity=".7"/>`).join("")}
       <!-- building -->
       <rect x="80" y="110" width="1440" height="680" fill="url(#lime)"/>
@@ -374,7 +429,7 @@ window.ART = (function () {
         <text x="800" y="252" text-anchor="middle" font-family="Rozha One, serif" font-size="92" letter-spacing="6" fill="${C.gold}">CAFÉ MINJ</text>
         <text x="460" y="236" text-anchor="middle" font-family="Rozha One, serif" font-size="26" fill="${C.goldSoft}">कॅफे</text>
         <text x="1140" y="236" text-anchor="middle" font-family="Rozha One, serif" font-size="26" fill="${C.goldSoft}">मिंज</text>
-        <text x="800" y="282" text-anchor="middle" font-family="Mukta, sans-serif" font-size="20" letter-spacing="3" fill="${C.ivory}" opacity=".85">Sales, marketing and strong coffee. Since 2026, Pune.</text>
+        <text x="800" y="282" text-anchor="middle" font-family="Mukta, sans-serif" font-size="20" letter-spacing="3" fill="${C.ivory}" opacity=".85">Island-born in the Andamans. Brewed in Pune.</text>
       </g>
       ${win(150)}${win(1030)}
       <!-- door -->
@@ -400,11 +455,15 @@ window.ART = (function () {
       </g>
       <!-- lamps -->
       ${[640, 960].map(x => `<circle cx="${x}" cy="430" r="70" fill="url(#lampHalo)" class="halo"/><rect x="${x - 3}" y="404" width="6" height="16" fill="#2A2A26"/><path d="M${x - 14},420 L${x + 14},420 L${x + 10},452 L${x - 10},452 Z" fill="#FFE3A3" stroke="#2A2A26" stroke-width="3"/>`).join("")}
-      <!-- steps and pavement -->
-      <rect x="650" y="780" width="300" height="20" fill="#B9AFA0"/><rect x="630" y="798" width="340" height="16" fill="#A79D8E"/>
-      <rect x="0" y="790" width="1600" height="110" fill="#6C665D"/>
-      <rect x="0" y="790" width="1600" height="8" fill="#837C71"/>
-      ${Array.from({ length: 16 }, (_, i) => `<path d="M${i * 110},800 L${i * 110 - 30},900" stroke="#5E5850" stroke-width="2"/>`).join("")}
+      <!-- the beach in front of the café, and the sea -->
+      <rect x="0" y="790" width="1600" height="110" fill="#E6CE98"/>
+      <rect x="0" y="790" width="1600" height="7" fill="#D4B67D"/>
+      ${Array.from({ length: 40 }, (_, i) => `<circle cx="${(i * 97) % 1600}" cy="${800 + (i * 37) % 52}" r="1.6" fill="#C9A86E"/>`).join("")}
+      <rect x="650" y="780" width="300" height="20" fill="#C7A877"/><rect x="630" y="798" width="340" height="14" fill="#B8976A"/>
+      ${starfish(520, 832, 13, 10)}${starfish(1430, 820, 11, -18)}${shell(380, 838, 1)}${shell(1080, 846, .9)}
+      <path d="M-20,860 Q60,850 140,858 T300,858 T460,858 T620,858 T780,858 T940,858 T1100,858 T1260,858 T1420,858 T1580,858 T1740,858 L1740,900 L-20,900 Z" fill="#2F8FA0"/>
+      <g class="surf"><path d="M-20,860 Q60,850 140,858 T300,858 T460,858 T620,858 T780,858 T940,858 T1100,858 T1260,858 T1420,858 T1580,858 T1740,858" stroke="#F3EEE3" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+        <path d="M40,878 q30,-6 60,0 M380,884 q30,-6 60,0 M760,878 q30,-6 60,0 M1140,884 q30,-6 60,0 M1480,878 q30,-6 60,0" stroke="#7CC4CC" stroke-width="3" fill="none"/></g>
       <!-- plants -->
       ${[610, 990].map(x => `<g transform="translate(${x},790)"><path d="M-26,0 L26,0 L20,-46 L-20,-46 Z" fill="${C.chili}"/><rect x="-24" y="-52" width="48" height="8" fill="#8E3020"/>
         ${[-30, -12, 6, 22].map((a, i) => `<path d="M0,-52 q${a},-${50 + i * 8} ${a * 1.6},-${70 + i * 6}" stroke="#3E6B45" stroke-width="9" fill="none" stroke-linecap="round"/>`).join("")}</g>`).join("")}
@@ -417,9 +476,8 @@ window.ART = (function () {
         <text x="0" y="92" text-anchor="middle" font-family="Kalam, cursive" font-size="15" fill="${C.ivory}">all on the house</text>
         <path d="M-40,106 q40,10 80,0" stroke="${C.ivory}" stroke-width="2" fill="none" opacity=".6"/>
       </g>
-      <!-- street lamp -->
-      <g transform="translate(60,0)"><rect x="-5" y="300" width="10" height="500" fill="#20252B"/>
-        <circle cx="0" cy="300" r="90" fill="url(#lampHalo)" class="halo"/><path d="M-18,290 L18,290 L12,320 L-12,320 Z" fill="#FFE3A3" stroke="#20252B" stroke-width="4"/></g>
+      <!-- coconut palms framing the café -->
+      ${palm(40, 1, 300)}${palm(1560, -1, 320)}
     </svg>`;
   }
 
