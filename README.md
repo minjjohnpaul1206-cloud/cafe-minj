@@ -2,7 +2,7 @@
 
 **Live at [johnpaulminj.com](https://johnpaulminj.com)** (GitHub Pages, domain registered at Hostinger).
 
-The portfolio site of **John Paul Minj** — a Pune Irani café where every item on the menu is a chapter of my work. Visitors walk in through the door, order from the barista (me), and watch it get made at the counter: espresso from the machine, pastries from the case, skills in glass jars off the shelf, and the secret menu from under the counter.
+The portfolio site of **John Paul Minj** — an island-style beach café where every item on the menu is a chapter of my work. Visitors walk in through the door, order from the barista (me), and watch it get made at the counter: espresso from the machine, pastries from the case, skills in glass jars off the shelf, and the secret menu from under the counter.
 
 Plain HTML, CSS and JavaScript. No build step, no framework, no server — which is why it runs free on GitHub Pages.
 

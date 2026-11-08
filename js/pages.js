@@ -18,7 +18,7 @@
     paper.innerHTML = `
       <button class="x" type="button" data-act="close-bill" aria-label="Close the bill">×</button>
       <h2 id="bill-title">Café Minj</h2>
-      <p class="c muted">Irani café and portfolio, Pune</p>
+      <p class="c muted">Beach café and portfolio, Pune</p>
       <p class="c muted">Bill JPM-1206 &nbsp; ${esc(when)}</p>
       <hr>${lines}<hr>
       <div class="row total"><span>Total</span><span>0.00</span></div>

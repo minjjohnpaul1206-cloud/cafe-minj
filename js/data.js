@@ -49,7 +49,7 @@ window.CAFE = {
     { id: "brew-school", label: "Brew School", sub: "Education",
       blurb: "Where the craft was learned." },
     { id: "bean-shelf", label: "The Jar Shelf", sub: "Core skills",
-      blurb: "Kept in glass jars on the wall, like any good Irani café." },
+      blurb: "Kept in glass jars on the wall, sealed tight against the sea air." },
     { id: "secret-menu", label: "Secret Menu", sub: "Academic projects",
       blurb: "Not on the printed board. Ask the barista." },
     { id: "pastry-case", label: "Pastry Case", sub: "Leadership & certifications",
@@ -287,7 +287,7 @@ window.CAFE = {
     },
   ],
 
-  /* ---------- The café rules board (Irani café tradition) ---------- */
+  /* ---------- The café rules board ---------- */
   rules: [
     { short: "No bargaining", full: "No bargaining. Everything costs 0.00." },
     { short: "Recruiters skip the queue", full: "Recruiters may skip the queue." },
