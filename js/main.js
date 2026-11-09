@@ -79,6 +79,7 @@
     visit: id => { state.queued = id; enter(); },
     streetmenu: () => scrollToEl("#street-menu"),
     board: () => scrollToEl("#board"),
+    books: () => scrollToEl("#reading"),
     shelf: counter.openShelf, item: counter.order, greet: () => counter.greet(false),
     wifi: counter.wifi, rules: counter.rules, surprise: counter.surprise,
     skipname: () => counter.setName("", false), rename: counter.rename,
@@ -87,7 +88,7 @@
     cv: () => (location.hash = "cv"),
     story: () => scrollToEl("#served"), counter: () => scrollToEl(".stage"),
   };
-  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story", "board"];
+  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story", "board", "books"];
 
   document.addEventListener("click", e => {
     const el = e.target.closest("[data-act]");

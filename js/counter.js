@@ -181,6 +181,18 @@
         <span class="n">${esc(i.name)}</span><span class="dots"></span><span class="p">0.00</span><span class="k">${esc(i.kind)}</span></button>`).join("")}
     </div>`).join("");
 
+  /* ---------- the reading corner: my posts, each opens on LinkedIn ---------- */
+  $("#books").innerHTML = (D.writing || []).map(b => `<a class="book" href="${esc(b.url)}" target="_blank" rel="noopener">
+      <span class="book-cover">${A.bookCover(b)}</span>
+      <span class="book-body">
+        <span class="book-meta">${esc(b.date)} · ${esc(b.platform)}</span>
+        <span class="book-title">${esc(b.title)}</span>
+        <span class="book-kicker">${esc(b.kicker)}</span>
+        <span class="book-summary">${esc(b.summary)}</span>
+        <span class="book-link">Read the full post on ${esc(b.platform)}</span>
+      </span></a>`).join("");
+  $("#learning").innerHTML = (D.learning || []).map(c => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a><span>${esc(c.by)}, ${esc(c.date)}</span></li>`).join("");
+
   function updateStamps() {
     const n = state.stamps.length, total = D.items.length;
     $$(".board-item").forEach(b => b.classList.toggle("had", state.stamps.includes(b.dataset.act.slice(5))));

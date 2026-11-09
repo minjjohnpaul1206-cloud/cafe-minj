@@ -137,6 +137,32 @@ window.ART = (function () {
     const a = (i * 36 - 90) * Math.PI / 180, rr = i % 2 ? r * .42 : r; return `${i ? "L" : "M"}${(Math.cos(a) * rr).toFixed(1)},${(Math.sin(a) * rr).toFixed(1)}`; }).join(" ")}Z" fill="#E07A4F"/>`;
   const shell = (x, y, s = 1) => `<g transform="translate(${x},${y}) scale(${s})"><path d="M-12,0 Q-14,-16 0,-18 Q14,-16 12,0 Z" fill="#F4E1CF"/>${[-8, -3, 2, 7].map(dx => `<path d="M0,-17 L${dx},0" stroke="#D9B9A0" stroke-width="1.5"/>`).join("")}<rect x="-5" y="-1" width="10" height="4" rx="2" fill="#E8CDB7"/></g>`;
 
+  /* ---------- book covers for the reading corner (viewBox 0 0 120 170) ---------- */
+  const motifs = {
+    mithai: `<rect x="24" y="96" width="72" height="40" rx="4" fill="#F3D9A8"/><rect x="24" y="96" width="72" height="9" fill="#E3B65C"/>
+      ${[[38, 118], [54, 118], [70, 118], [86, 118], [46, 129], [62, 129], [78, 129]].map(([x, y], i) => `<circle cx="${x}" cy="${y}" r="6" fill="${["#F0A23A", "#F6E3B0", "#E0663E", "#C98A1B"][i % 4]}"/>`).join("")}
+      <path d="M60,96 L60,70 L84,58" stroke="#E8DCC4" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="60" cy="70" r="5" fill="#E8DCC4"/>
+      <path d="M84,52 l8,6 -8,6" stroke="#E8DCC4" stroke-width="4" fill="none"/>`,
+    journey: `<path d="M14,112 L44,70 L60,92 L78,62 L106,112 Z" fill="#E8DCC4" opacity=".9"/><path d="M70,74 l8,-12 8,12 Z" fill="#FFFFFF"/>
+      <path d="M14,122 q12,-6 24,0 t24,0 t24,0 t24,0 L106,140 L14,140 Z" fill="#3A93A6"/>
+      <path d="M22,104 q20,-30 40,-12 t40,-26" stroke="#E8C48A" stroke-width="2.5" fill="none" stroke-dasharray="4 4"/>
+      ${[[22, 104], [52, 94], [74, 82], [100, 66]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.5" fill="#E8C48A"/>`).join("")}`,
+    fridge: `<rect x="38" y="56" width="44" height="82" rx="6" fill="#E8DCC4"/><path d="M38,84 L82,84" stroke="#B07A1E" stroke-width="3"/>
+      <rect x="74" y="64" width="3" height="12" rx="1.5" fill="#B07A1E"/><rect x="74" y="92" width="3" height="16" rx="1.5" fill="#B07A1E"/>
+      <circle cx="50" cy="120" r="6" fill="#E0663E"/><path d="M60,126 q4,-14 12,-12" stroke="#4E7A4A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M86,62 l6,-4 M88,70 l8,0 M86,78 l6,4" stroke="#E8DCC4" stroke-width="2.5" stroke-linecap="round"/>`,
+    waves: `<path d="M14,110 q12,-8 24,0 t24,0 t24,0 t24,0" stroke="#E8DCC4" stroke-width="4" fill="none"/>`,
+  };
+  function bookCover(b) {
+    return `<svg viewBox="0 0 120 170" aria-hidden="true">
+      <rect width="120" height="170" rx="4" fill="${b.color}"/>
+      <rect x="0" y="0" width="10" height="170" fill="#000" opacity=".22"/>
+      <rect x="16" y="12" width="96" height="146" rx="2" fill="none" stroke="#E8C48A" stroke-width="1.5" opacity=".75"/>
+      ${motifs[b.motif] || motifs.waves}
+      <text x="64" y="150" text-anchor="middle" font-family="Mukta, sans-serif" font-size="9" letter-spacing="1.5" fill="#E8C48A">${b.platform.toUpperCase()}</text>
+    </svg>`;
+  }
+
   function item(art, opts = {}) {
     return (items[art] || items.espresso)(opts);
   }
@@ -327,14 +353,21 @@ window.ART = (function () {
       <rect x="0" y="740" width="1600" height="60" fill="url(#checker)"/>
       <rect x="0" y="752" width="1600" height="7" rx="3" fill="${C.gold}"/>
 
+      <!-- a stack of books on the counter: opens the reading corner -->
+      <g class="hot" data-act="books" transform="translate(12,0)">
+        <rect x="0" y="530" width="48" height="12" rx="2" fill="#7A2E2E"/><rect x="4" y="518" width="44" height="12" rx="2" fill="${C.bottle}"/>
+        <rect x="2" y="506" width="46" height="12" rx="2" fill="#B07A1E"/><rect x="0" y="542" width="50" height="18" rx="2" fill="#4E7A4A"/>
+        <path d="M6,536 l36,0 M10,524 l32,0 M8,512 l34,0 M6,551 l38,0" stroke="#E8C48A" stroke-width="1.5" opacity=".8"/>
+      </g>
+
       <!-- island things on the counter: a conch and a coconut -->
-      <g transform="translate(80,560)">
+      <g transform="translate(104,560)">
         <path d="M-34,0 Q-44,-22 -20,-34 Q6,-44 28,-30 Q40,-20 34,-6 Q30,2 18,0 Z" fill="#F2D6C4"/>
         <path d="M-20,-34 l-6,-12 M-4,-40 l0,-13 M12,-38 l6,-11" stroke="#E6BFA8" stroke-width="5" stroke-linecap="round"/>
         <path d="M-2,-4 Q14,-22 30,-12 Q24,-2 14,0 Z" fill="#E59A8A"/>
         <path d="M-30,-6 Q-16,-20 -2,-14" stroke="#D9B39C" stroke-width="2" fill="none"/>
       </g>
-      <g transform="translate(140,560)">
+      <g transform="translate(158,560)">
         <ellipse cx="0" cy="-18" rx="22" ry="20" fill="#6B4A2E"/><ellipse cx="0" cy="-34" rx="17" ry="5" fill="#F3EEE3"/>
         <path d="M-7,-36 L6,-66" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/><path d="M6,-66 l9,-4" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/>
         <path d="M-12,-24 q4,8 0,16" stroke="#4E3420" stroke-width="2" fill="none"/>
@@ -481,5 +514,5 @@ window.ART = (function () {
     </svg>`;
   }
 
-  return { item, itemSVG, cupName, interior, street, colors: C };
+  return { item, itemSVG, cupName, bookCover, interior, street, colors: C };
 })();

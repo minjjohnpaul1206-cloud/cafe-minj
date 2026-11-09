@@ -293,6 +293,43 @@ window.CAFE = {
     },
   ],
 
+  /* ---------- The bookshelf: my own writing ----------
+     Add a post: copy one block, paste the link from LinkedIn (⋯ → Copy link to post).
+     motif (cover drawing): mithai | journey | fridge | waves */
+  writing: [
+    {
+      title: "Mithai, meet the machine",
+      kicker: "What India's festive sweet rush can learn from European packing lines",
+      date: "Nov 2026", platform: "LinkedIn", color: "#7A2E2E", motif: "mithai",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7525168368354549760/",
+      summary: "My first Diwali in Pune: long queues at the sweet shops, and on the other side of the counter, festive volumes still packed by hand. European confectioners solved the same peak with robotic lines. The recipe never changed, only the packing did.",
+    },
+    {
+      title: "From the sea to the mountains",
+      kicker: "Port Blair, Karaikal, Jammu, Pune",
+      date: "Nov 2026", platform: "LinkedIn", color: "#14354A", motif: "journey",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7522745172477255680/",
+      summary: "Why I left the calm island loop, what engineering and the MBA taught me, and how the quiet boy from Port Blair ended up talking to European companies every week. Confidence is built one uncomfortable step at a time.",
+    },
+    {
+      title: "The 'kuch bhi bana do' fridge",
+      kicker: "A product idea for Indian kitchens",
+      date: "Sep 2025", platform: "LinkedIn", color: "#B07A1E", motif: "fridge",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7371494865907445760/",
+      summary: "A campus product concept: a smart refrigerator that tracks freshness and suggests what to cook, built around the everyday Indian question of what to make tonight.",
+    },
+  ],
+
+  /* ---------- Courses and certificates (shown under the bookshelf) ---------- */
+  learning: [
+    { title: "The Pre-Sales Engineer's Guide to Whiteboarding: Engaging Executives to Close Deals", by: "LinkedIn Learning", date: "May 2026",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7460285457487122432/" },
+    { title: "Building Interpersonal Communication and Relationships with Generative AI", by: "LinkedIn Learning", date: "May 2026",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7460303322395291648/" },
+    { title: "Foundations of Project Management", by: "Google", date: "Feb 2025",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7299021663155671040/" },
+  ],
+
   /* ---------- The café rules board ---------- */
   rules: [
     { short: "No bargaining", full: "No bargaining. Everything costs 0.00." },
