@@ -6,12 +6,12 @@
   const { A, D, P, $, reduce, PACE, wait, usesCup } = Cafe;
   const NS = "http://www.w3.org/2000/svg";
 
-  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules);
+  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || []);
   const svg = $("#scene"), barista = $("#barista"), inner = $("#barista-inner");
   const armL = $("#armL"), armR = $("#armR"), layer = $("#items-layer");
   armL.style.transform = armR.style.transform = "rotate(0deg)";
 
-  let bx = 800, by = 0, counterItem = null, hiddenJar = null;
+  let bx = 800, by = 0, counterItem = null, hiddenEl = null; // hiddenEl: a jar or book taken off the wall
 
   /* ---------- setup: phone crop + live wall clock ---------- */
   const fit = () => svg.setAttribute("viewBox", innerWidth < 700 ? "170 0 1260 800" : "0 0 1600 800");
@@ -104,10 +104,21 @@
       const i = it.jarIndex || 0, jx = 420 + i * 74, x = jx - 133;
       await walk(x);
       await rot(armR, -165, 480);
-      $(`.shelf-jar[data-jar="${i}"]`).style.opacity = 0;
-      hiddenJar = i;
+      hiddenEl = $(`.shelf-jar[data-jar="${i}"]`);
+      hiddenEl.style.opacity = 0;
       const el = makeItem(it, jx, 300, 0.75);
       await Promise.all([rot(armR, -35, 650), tw(el, itemAt(x + HAND, 548, CARRY), 650)]);
+      await walk(800, { el, dx: HAND });
+      return [el, armR];
+    },
+    async books(it) {
+      const i = it.bookIndex, sx = 145 + i * 32, x = sx + 40;
+      await walk(x);
+      await wait(250);
+      hiddenEl = $(`.shelf-book[data-book="${i}"]`);
+      hiddenEl.style.opacity = 0;
+      const el = makeItem(it, sx, 390, 0.45);
+      await tw(el, itemAt(x + HAND, 548, CARRY), 650);
       await walk(800, { el, dx: HAND });
       return [el, armR];
     },
@@ -127,7 +138,7 @@
     const el = counterItem;
     counterItem = null;
     if (el) { await Promise.all([tw(el, itemAt(1560, 40, 0.15), 600), fade(el, 0, 600)]); el.remove(); }
-    if (hiddenJar !== null) { fade($(`.shelf-jar[data-jar="${hiddenJar}"]`), 1, 400); hiddenJar = null; }
+    if (hiddenEl) { fade(hiddenEl, 1, 400); hiddenEl = null; }
   }
 
   /* make an item at its station and present it at the pick-up counter */
@@ -148,5 +159,5 @@
     await rot(armR, 0, 420);
   }
 
-  Cafe.scene = { serve, wave, tw };
+  Cafe.scene = { serve, wave, tw, clear: clearCounter };
 })();

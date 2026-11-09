@@ -163,6 +163,15 @@ window.ART = (function () {
     </svg>`;
   }
 
+  /* a book standing on the counter (for serving), cover facing the visitor */
+  items.book = (o = {}) => `<ellipse cx="60" cy="109" rx="30" ry="4" fill="#000" opacity=".18"/>
+      <rect x="30" y="22" width="62" height="88" rx="3" fill="#F3EEE3"/>
+      <rect x="28" y="20" width="62" height="88" rx="3" fill="${o.color || C.bottle}"/>
+      <rect x="28" y="20" width="7" height="88" fill="#000" opacity=".22"/>
+      <rect x="40" y="28" width="44" height="72" rx="1" fill="none" stroke="${C.goldSoft}" stroke-width="1.4" opacity=".8"/>
+      <path d="M48,44 l28,0 M52,52 l20,0" stroke="${C.goldSoft}" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="62" cy="76" r="9" fill="none" stroke="${C.goldSoft}" stroke-width="2"/>`;
+
   function item(art, opts = {}) {
     return (items[art] || items.espresso)(opts);
   }
@@ -253,7 +262,7 @@ window.ART = (function () {
   }
 
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
-  function interior(person, shelves, rules) {
+  function interior(person, shelves, rules, books = []) {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
     const jarSlots = [0, 1, 2, 3, 4].map(i => 420 + i * 74);
     const lamp = x => `<g class="lamp"><path d="M${x},0 L${x},118" stroke="#2A2A26" stroke-width="2"/>
@@ -286,12 +295,22 @@ window.ART = (function () {
 
       <!-- rules board -->
       <g class="hot" id="rules-board" data-act="rules" transform="translate(0,-26)">
-        <rect x="76" y="118" width="260" height="300" rx="6" fill="${C.teak}"/>
-        <rect x="88" y="130" width="236" height="276" fill="${C.bottle}"/>
-        <rect x="96" y="138" width="220" height="260" fill="none" stroke="${C.gold}" stroke-width="2"/>
-        <text x="206" y="182" text-anchor="middle" font-family="Rozha One, serif" font-size="30" fill="${C.gold}">Café Rules</text>
-        <path d="M150,196 L262,196" stroke="${C.gold}" stroke-width="1.5"/>
-        ${rules.slice(0, 6).map((r, i) => `<text x="110" y="${230 + i * 29}" font-family="Kalam, cursive" font-size="16" fill="${C.ivory}" opacity=".92">${i + 1}. ${r.short}</text>`).join("")}
+        <rect x="76" y="118" width="260" height="238" rx="6" fill="${C.teak}"/>
+        <rect x="88" y="130" width="236" height="214" fill="${C.bottle}"/>
+        <rect x="96" y="138" width="220" height="198" fill="none" stroke="${C.gold}" stroke-width="2"/>
+        <text x="206" y="174" text-anchor="middle" font-family="Rozha One, serif" font-size="26" fill="${C.gold}">Café Rules</text>
+        <path d="M156,186 L256,186" stroke="${C.gold}" stroke-width="1.5"/>
+        ${rules.slice(0, 6).map((r, i) => `<text x="110" y="${210 + i * 21}" font-family="Kalam, cursive" font-size="14" fill="${C.ivory}" opacity=".92">${i + 1}. ${r.short}</text>`).join("")}
+      </g>
+
+      <!-- wall bookshelf: one spine per post in the reading corner -->
+      <g id="book-shelf">
+        <rect x="84" y="390" width="250" height="9" fill="${C.teak}"/><rect x="84" y="399" width="250" height="4" fill="${C.teakDark}"/>
+        <rect x="96" y="356" width="14" height="34" rx="2" fill="#5C6B5E"/><rect x="112" y="350" width="12" height="40" rx="2" fill="#8A6A4A"/>
+        ${books.slice(0, 6).map((b, i) => { const x = 132 + i * 32, h = 48 - (i % 2) * 6; return `<g class="shelf-book hot" data-book="${i}" data-act="book:${i}">
+          <rect x="${x}" y="${390 - h}" width="26" height="${h}" rx="2" fill="${b.color}"/>
+          <rect x="${x + 4}" y="${390 - h + 6}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/><rect x="${x + 4}" y="${390 - 12}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/></g>`; }).join("")}
+        <path d="M${132 + Math.min(books.length, 6) * 32 + 4},390 l0,-30 l14,0 l0,30" fill="${C.gold}" opacity=".9"/>
       </g>
 
       <!-- jar shelf -->

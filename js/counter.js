@@ -33,6 +33,7 @@
   const layouts = {
     greet: () => (D.special ? btn("Today's special", short(item(D.special)) + ", what I do now", "item:" + D.special, "primary") : "")
       + D.shelves.map(s => btn(s.label, s.sub, "shelf:" + s.id)).join("")
+      + ((D.writing || []).length ? btn("Something to read?", "From my bookshelf", "books") : "")
       + btn("Just here for the wifi", "Bold choice", "wifi")
       + btn("I'm hiring, keep it short", "Straight to the CV", "cv")
       + (state.name ? btn(`Not ${state.name}?`, "Change the name on the cup", "rename") : ""),
@@ -52,6 +53,8 @@
           <button type="submit" class="choice" value="togo"><b>To go</b><small>Paper cup, name on it</small></button>
           ${btn("Skip", "", "skipname")}
         </div></form>`,
+    books: () => (D.writing || []).map((b, i) => btn(b.title, b.kicker, "book:" + i)).join("") + btn("Something else", "", "greet"),
+    bookserved: () => btn("Open the book", "", "openbook", "primary") + btn("Another book", "", "books") + btn("Back to the menu", "", "greet"),
     working: () => `<p class="working">Making your order… keep your eyes on the counter.</p>`,
     back: () => btn("Show me the menu", "", "greet", "primary"),
   };
@@ -80,6 +83,28 @@
     step("back");
     sayHTML(`The house rules. I follow most of them:<ol class="rules-list">${D.rules.map(r => `<li>${esc(r.full)}</li>`).join("")}</ol>`);
   }
+  function openBooks() {
+    step("books"); scrollToEl(".stage", true);
+    say("Ah, a reader. These are a few things I've written. Pick one and I'll fetch it off the shelf.");
+  }
+  let lastBook = null;
+  async function serveBook(i) {
+    if (state.busy) return;
+    const b = D.writing[+i];
+    if (!b) return;
+    state.busy = true; step("working");
+    if (scrollToEl(".stage", true)) await wait(550);
+    say(`"${b.title}". One of my favourites. Give me a second.`);
+    await Cafe.scene.serve({ ...b, station: "books", art: "book", bookIndex: +i });
+    await say("Here you go. Careful, it's still warm.");
+    lastBook = b;
+    step("bookserved");
+    state.busy = false;
+    await wait(500);
+    Cafe.pages.openBook(b);
+  }
+  const reopenBook = () => lastBook && Cafe.pages.openBook(lastBook);
+
   function surprise() {
     const left = D.items.filter(i => !state.tray.includes(i.id)), pool = left.length ? left : D.items;
     order(pool[Math.floor(Math.random() * pool.length)].id);
@@ -205,5 +230,5 @@
     setName($("#name-input").value, e.submitter?.value === "togo");
   });
 
-  Cafe.counter = { greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps };
+  Cafe.counter = { greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
 })();

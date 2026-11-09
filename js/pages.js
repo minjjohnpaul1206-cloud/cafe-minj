@@ -3,7 +3,7 @@
    plain CV view for recruiters.
    ========================================================= */
 (() => {
-  const { D, P, $, esc, item, shelfItems, state } = Cafe;
+  const { D, P, A, $, esc, item, shelfItems, state } = Cafe;
   const bill = $("#bill"), paper = $("#paper");
 
   /* ---------- the bill ---------- */
@@ -81,6 +81,27 @@
     }
   });
 
+  /* ---------- the book: opens with a page flip ---------- */
+  const bookDlg = $("#book-dialog");
+  function openBook(b) {
+    const head = `<p class="bk-meta">${esc(b.date)} · ${esc(b.platform)}</p><h2 class="bk-title">${esc(b.title)}</h2><p class="bk-kicker">${esc(b.kicker)}</p>`;
+    const words = (b.excerpt || [b.summary]).map(p => `<p>${esc(p)}</p>`).join("");
+    $("#flipbook").innerHTML = `
+      <button class="x" type="button" data-act="close-book" aria-label="Close the book">×</button>
+      <div class="bk-page bk-right">
+        <div class="bk-mhead">${head}</div>
+        <div class="bk-words">${words}</div>
+        <a class="btn btn-gold bk-link" href="${esc(b.url)}" target="_blank" rel="noopener">Read the full post on ${esc(b.platform)}</a>
+      </div>
+      <div class="bk-flap">
+        <div class="bk-front">${A.bookCover(b)}</div>
+        <div class="bk-back"><div class="bk-art">${A.bookCover(b)}</div>${head}</div>
+      </div>`;
+    bookDlg.showModal();
+  }
+  const closeBook = () => bookDlg.open && bookDlg.close();
+  bookDlg.addEventListener("click", e => { if (e.target === bookDlg) closeBook(); });
+
   /* ---------- CV ---------- */
   function renderCV() {
     const section = (title, html) => `<h2>${title}</h2>${html}`;
@@ -109,5 +130,5 @@
   }
   renderCV();
 
-  Cafe.pages = { openBill, closeBill };
+  Cafe.pages = { openBill, closeBill, openBook, closeBook };
 })();

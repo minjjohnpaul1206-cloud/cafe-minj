@@ -302,6 +302,7 @@ window.CAFE = {
       kicker: "What India's festive sweet rush can learn from European packing lines",
       date: "Nov 2026", platform: "LinkedIn", color: "#7A2E2E", motif: "mithai",
       url: "https://www.linkedin.com/feed/update/urn:li:activity:7525168368354549760/",
+      excerpt: ["To meet Diwali demand, these companies produce a huge part of their year's volume in just a few weeks. And in most plants, a lot of it is still packed by hand.", "The interesting part is the recipe never changed. The taste never changed. Only the packing did."],
       summary: "My first Diwali in Pune: long queues at the sweet shops, and on the other side of the counter, festive volumes still packed by hand. European confectioners solved the same peak with robotic lines. The recipe never changed, only the packing did.",
     },
     {
@@ -309,6 +310,7 @@ window.CAFE = {
       kicker: "Port Blair, Karaikal, Jammu, Pune",
       date: "Nov 2026", platform: "LinkedIn", color: "#14354A", motif: "journey",
       url: "https://www.linkedin.com/feed/update/urn:li:activity:7522745172477255680/",
+      excerpt: ["I grew up in Port Blair, in the Andaman and Nicobar Islands. Life on the islands is beautiful, and it has a pattern. I just felt a pull to see what was outside that loop.", "Confidence isn't something you're born with. You build it, one uncomfortable step at a time."],
       summary: "Why I left the calm island loop, what engineering and the MBA taught me, and how the quiet boy from Port Blair ended up talking to European companies every week. Confidence is built one uncomfortable step at a time.",
     },
     {
@@ -316,6 +318,7 @@ window.CAFE = {
       kicker: "A product idea for Indian kitchens",
       date: "Sep 2025", platform: "LinkedIn", color: "#B07A1E", motif: "fridge",
       url: "https://www.linkedin.com/feed/update/urn:li:activity:7371494865907445760/",
+      excerpt: ["Introducing our Smart Refrigerator with AI-powered Vegetable Shuffler, transforming the daily \"Kuch bhi bana do\" dilemma into effortless meal planning.", "Freshness tracking, recipe suggestions and smart inventory management, all designed for Indian families."],
       summary: "A campus product concept: a smart refrigerator that tracks freshness and suggests what to cook, built around the everyday Indian question of what to make tonight.",
     },
   ],
