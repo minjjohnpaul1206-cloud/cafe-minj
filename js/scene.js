@@ -92,6 +92,7 @@
       pose("espresso");                         // locks the portafilter into the machine
       await rot(armR, -70);
       $("#steam").classList.add("on"); $("#pour").classList.add("on");
+      sfx("Ssshh!", 1300, 360);
       const el = makeItem(it, 1230, 546, 0.55, 0);
       await fade(el, 1, 1100);
       await wait(250);
@@ -116,6 +117,7 @@
       await walk(x);
       pose("reach");
       await rot(armR, -165, 480);
+      sfx("Clink!", jx - 10, 190);
       hiddenEl = $(`.shelf-jar[data-jar="${i}"]`);
       hiddenEl.style.opacity = 0;
       const el = makeItem(it, jx, 300, 0.75);
@@ -128,6 +130,7 @@
       await walk(x);
       pose("reach", true);                      // reach up with the arm on the shelf side
       await wait(450);
+      sfx("Fwip!", sx - 10, 300);
       hiddenEl = $(`.shelf-book[data-book="${i}"]`);
       hiddenEl.style.opacity = 0;
       const el = makeItem(it, sx, 390, 0.45);
@@ -183,6 +186,7 @@
         fade(el, 0, 150);
         if (give === "togo" && hasPose("write")) { pose("write"); await wait(1300); } // name on the cup first
         pose(give);                             // offers it to the visitor
+        if (give === "cloche") sfx("Ta-da!", 980, 240);
         await wait(1300);
         pose("idle");
         el.style.transform = itemAt(800, 604, 1.5);
@@ -205,5 +209,52 @@
     await rot(armR, 0, 420);
   }
 
-  Cafe.scene = { serve, wave, tw, clear: clearCounter };
+  /* ---------- comic speech bubble + sound effects, drawn over the scene ---------- */
+  const host = $("#scene-host");
+  const bubbleEl = document.createElement("div");
+  bubbleEl.className = "bubble";
+  bubbleEl.setAttribute("aria-hidden", "true"); // the full text is read out in the panel below
+  host.appendChild(bubbleEl);
+  let bubbleOn = false, hideT = 0;
+
+  function toHost(el, x, y) { // a point in an element's own coordinates → pixels inside the scene box
+    const m = el.getScreenCTM(); if (!m) return [0, 0];
+    const p = new DOMPoint(x, y).matrixTransform(m), r = host.getBoundingClientRect();
+    return [p.x - r.left, p.y - r.top];
+  }
+  function placeBubble() {
+    if (!bubbleOn) return;
+    const [x, y] = toHost(barista, 0, 196);     // just above his hair
+    const w = bubbleEl.offsetWidth, hw = host.clientWidth;
+    const left = Math.max(8, Math.min(hw - w - 8, x - w * 0.3));
+    bubbleEl.style.left = left + "px";
+    bubbleEl.style.top = Math.max(6, y - bubbleEl.offsetHeight - 18) + "px";
+    bubbleEl.style.setProperty("--tail", Math.max(18, Math.min(w - 18, x - left)) + "px");
+    requestAnimationFrame(placeBubble);         // follow him while he walks
+  }
+  function shorten(t) { // the bubble gets the first sentence; the panel below keeps every word
+    const max = host.clientWidth < 600 ? 60 : 92;
+    const first = (t.match(/^.*?[.!?](\s|$)/) || [t])[0].trim();
+    let s = first.length >= 12 ? first : t;
+    if (s.length > max) s = s.slice(0, s.lastIndexOf(" ", max)) + "…";
+    return s;
+  }
+  function bubble(text) {
+    bubbleEl.textContent = shorten(text);
+    bubbleEl.classList.remove("show"); void bubbleEl.offsetWidth; bubbleEl.classList.add("show");
+    if (!bubbleOn) { bubbleOn = true; placeBubble(); }
+    clearTimeout(hideT);
+    hideT = setTimeout(() => { bubbleOn = false; bubbleEl.classList.remove("show"); }, 2600 + bubbleEl.textContent.length * 45);
+  }
+  function sfx(word, x, y) { // a comic sound word that pops and fades
+    if (reduce) return;
+    const [hx, hy] = toHost(svg, x, y);
+    const s = document.createElement("span");
+    s.className = "sfx"; s.textContent = word; s.setAttribute("aria-hidden", "true");
+    s.style.left = hx + "px"; s.style.top = hy + "px";
+    host.appendChild(s);
+    setTimeout(() => s.remove(), 1100);
+  }
+
+  Cafe.scene = { serve, wave, tw, clear: clearCounter, bubble, sfx };
 })();

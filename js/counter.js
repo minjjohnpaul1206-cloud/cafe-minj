@@ -11,6 +11,7 @@
   /* ---------- speech bubble (typewriter) ---------- */
   function say(text) {
     const token = ++sayToken;
+    Cafe.scene.bubble(text);
     if (reduce) { speech.textContent = text; return Promise.resolve(); }
     speech.innerHTML = '<span></span><span class="caret">|</span>';
     const t = speech.firstChild;
@@ -24,7 +25,7 @@
       })();
     });
   }
-  const sayHTML = html => { sayToken++; speech.innerHTML = html; };
+  const sayHTML = (html, short = "") => { sayToken++; speech.innerHTML = html; if (short) Cafe.scene.bubble(short); };
 
   /* ---------- choices under the counter, one layout per step ---------- */
   const btn = (title, sub, act, cls = "") =>
@@ -81,7 +82,7 @@
   }
   function rules() {
     step("back");
-    sayHTML(`The house rules. I follow most of them:<ol class="rules-list">${D.rules.map(r => `<li>${esc(r.full)}</li>`).join("")}</ol>`);
+    sayHTML(`The house rules. I follow most of them:<ol class="rules-list">${D.rules.map(r => `<li>${esc(r.full)}</li>`).join("")}</ol>`, "The house rules. I follow most of them.");
   }
   function openBooks() {
     step("books"); scrollToEl(".stage", true);
