@@ -169,7 +169,13 @@ button { font: inherit; }
 #barista[data-pose="idle"] .pose[data-pose="idle"],
 #barista[data-pose="walk"] .pose[data-pose="walk"],
 #barista[data-pose="reach"] .pose[data-pose="reach"],
-#barista[data-pose="serve"] .pose[data-pose="serve"] { opacity: 1; }
+#barista[data-pose="serve"] .pose[data-pose="serve"],
+#barista[data-pose="plate"] .pose[data-pose="plate"],
+#barista[data-pose="togo"] .pose[data-pose="togo"],
+#barista[data-pose="write"] .pose[data-pose="write"],
+#barista[data-pose="book"] .pose[data-pose="book"],
+#barista[data-pose="cloche"] .pose[data-pose="cloche"],
+#barista[data-pose="espresso"] .pose[data-pose="espresso"] { opacity: 1; }
 #barista[data-mirror="1"] #b-poses { transform: scaleX(-1); }
 #b-lean { transform-origin: 0px 616px; transition: transform .35s cubic-bezier(.45,0,.3,1); }
 #barista[data-lean="r"] #b-lean { transform: rotate(2.5deg); }

@@ -89,6 +89,7 @@
   const stations = {
     async machine(it) {
       await walk(1040);
+      pose("espresso");                         // locks the portafilter into the machine
       await rot(armR, -70);
       $("#steam").classList.add("on"); $("#pour").classList.add("on");
       const el = makeItem(it, 1230, 546, 0.55, 0);
@@ -155,19 +156,38 @@
   }
 
   /* make an item at its station and present it at the pick-up counter */
-  /* ceramic-cup drinks get handed over in the "holding a cup" pose, then set down */
+  /* which hand-over pose fits each order (null = just set it down) */
   const HANDED = ["espresso", "macchiato", "ristretto", "doubleshot"];
+  function handover(it) {
+    if (it.station === "books") return "book";
+    if (it.art === "cloche") return "cloche";
+    if (it.station === "case") return "plate";
+    if (usesCup(it)) return "togo";
+    if (HANDED.includes(it.art)) return "serve";
+    return null;
+  }
+  const PLATE_TOP = [803, 522];                 // where the plate sits in the plate pose
 
   async function serve(it) {
     await clearCounter();
     const [el, hand] = await stations[it.station](it);
-    if (hasPose("serve") && HANDED.includes(it.art) && !usesCup(it)) {
-      fade(el, 0, 150);
-      pose("serve");                            // offers the cup to the visitor
-      await wait(1300);
-      pose("idle");
-      el.style.transform = itemAt(800, 604, 1.5);
-      await fade(el, 1, 250);                   // and sets it down on the counter
+    const give = handover(it);
+    if (give && hasPose(give)) {
+      if (give === "plate") {
+        pose("plate");                          // the pastry rides on the plate in his hands
+        await tw(el, itemAt(...PLATE_TOP, 0.8), 200);
+        await wait(1200);
+        pose("idle");
+        await tw(el, itemAt(800, 604, 1.5), 380, "cubic-bezier(.3,1.5,.5,1)");
+      } else {
+        fade(el, 0, 150);
+        if (give === "togo" && hasPose("write")) { pose("write"); await wait(1300); } // name on the cup first
+        pose(give);                             // offers it to the visitor
+        await wait(1300);
+        pose("idle");
+        el.style.transform = itemAt(800, 604, 1.5);
+        await fade(el, 1, 250);                 // and sets it down on the counter
+      }
     } else {
       pose("idle");
       await Promise.all([tw(el, itemAt(800, 568, 1), 480), rot(hand, hand === armR ? -12 : 12, 480)]);

@@ -205,6 +205,12 @@ window.ART = (function () {
     walk: [-262, 152, 488, 600],
     serve: [-205, 143, 384, 472],
     reach: [-182, 118, 418, 514],
+    plate: [-205, 143, 384, 472],
+    togo: [-205, 143, 384, 472],
+    write: [-205, 143, 384, 472],
+    book: [-205, 143, 384, 472],
+    cloche: [-414, 153, 812, 453],
+    espresso: [-411, 153, 806, 450],
   };
   function barista(initials = "JPM", img = null, poses = null) {
     /* the illustration version: picture poses that walk, lean, reach and serve */

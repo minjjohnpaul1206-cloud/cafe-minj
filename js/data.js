@@ -32,6 +32,12 @@ window.CAFE = {
       walk: "assets/pose-walk.webp",
       reach: "assets/pose-reach.webp",
       serve: "assets/pose-serve.webp",
+      plate: "assets/pose-plate.webp",
+      togo: "assets/pose-togo.webp",
+      write: "assets/pose-write.webp",
+      book: "assets/pose-book.webp",
+      cloche: "assets/pose-cloche.webp",
+      espresso: "assets/pose-espresso.webp",
     },
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
