@@ -26,6 +26,13 @@ window.CAFE = {
     /* The barista behind the counter: your illustration, cut out.
        Set to null to use the hand-drawn animated barista instead. */
     baristaImage: "assets/barista-cut.webp",
+    /* Extra poses, switched automatically: walking between stations, reaching
+       up to a shelf, and handing over a cup. Same style as the idle image. */
+    baristaPoses: {
+      walk: "assets/pose-walk.webp",
+      reach: "assets/pose-reach.webp",
+      serve: "assets/pose-serve.webp",
+    },
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
     resumePdf: null,

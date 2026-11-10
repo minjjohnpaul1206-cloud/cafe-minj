@@ -50,11 +50,20 @@
     return g;
   }
 
+  /* switch between the picture poses (idle, walk, reach, serve); mirror = face the other way */
+  const hasPose = name => !!svg.querySelector(`.pose[data-pose="${name}"]`);
+  function pose(name, mirror = false) {
+    barista.dataset.pose = hasPose(name) ? name : "idle";
+    barista.dataset.mirror = mirror ? "1" : "";
+  }
+
   async function walk(x, carry) {
     const dx = x - bx;
     if (Math.abs(dx) < 4) return;
-    const dur = Math.min(1100, Math.max(320, Math.abs(dx) * 1.6));
+    const dur = Math.min(1250, Math.max(380, Math.abs(dx) * 1.7));
     barista.dataset.face = dx > 0 ? "right" : "left";
+    pose("walk", dx < 0);                       // the walking picture faces right; mirror it for left
+    barista.dataset.lean = dx > 0 ? "r" : "l";  // lean into the step
     inner.classList.add("walking");
     await Promise.all([
       tw(barista, at(x, by), dur, "ease-in-out"),
@@ -62,6 +71,7 @@
     ]);
     bx = x;
     inner.classList.remove("walking");
+    barista.dataset.lean = "";
     barista.dataset.face = "";
   }
 
@@ -101,8 +111,9 @@
       return [el, armL];
     },
     async shelf(it) {
-      const i = it.jarIndex || 0, jx = 420 + i * 74, x = jx - 133;
+      const i = it.jarIndex || 0, jx = 420 + i * 74, x = jx - 180;
       await walk(x);
+      pose("reach");
       await rot(armR, -165, 480);
       hiddenEl = $(`.shelf-jar[data-jar="${i}"]`);
       hiddenEl.style.opacity = 0;
@@ -112,9 +123,10 @@
       return [el, armR];
     },
     async books(it) {
-      const i = it.bookIndex, sx = 145 + i * 32, x = sx + 40;
+      const i = it.bookIndex, sx = 145 + i * 32, x = sx + 180;
       await walk(x);
-      await wait(250);
+      pose("reach", true);                      // reach up with the arm on the shelf side
+      await wait(450);
       hiddenEl = $(`.shelf-book[data-book="${i}"]`);
       hiddenEl.style.opacity = 0;
       const el = makeItem(it, sx, 390, 0.45);
@@ -124,6 +136,7 @@
     },
     async under(it) {
       await walk(800);
+      pose("idle");
       await tw(barista, at(800, by = 300), 450); // crouch
       const el = makeItem(it, 800 + HAND, 690, CARRY, 0);
       armR.style.transform = "rotate(-35deg)";
@@ -142,11 +155,24 @@
   }
 
   /* make an item at its station and present it at the pick-up counter */
+  /* ceramic-cup drinks get handed over in the "holding a cup" pose, then set down */
+  const HANDED = ["espresso", "macchiato", "ristretto", "doubleshot"];
+
   async function serve(it) {
     await clearCounter();
     const [el, hand] = await stations[it.station](it);
-    await Promise.all([tw(el, itemAt(800, 568, 1), 480), rot(hand, hand === armR ? -12 : 12, 480)]);
-    await Promise.all([rot(hand, 0, 380), tw(el, itemAt(800, 604, 1.5), 420, "cubic-bezier(.3,1.5,.5,1)")]);
+    if (hasPose("serve") && HANDED.includes(it.art) && !usesCup(it)) {
+      fade(el, 0, 150);
+      pose("serve");                            // offers the cup to the visitor
+      await wait(1300);
+      pose("idle");
+      el.style.transform = itemAt(800, 604, 1.5);
+      await fade(el, 1, 250);                   // and sets it down on the counter
+    } else {
+      pose("idle");
+      await Promise.all([tw(el, itemAt(800, 568, 1), 480), rot(hand, hand === armR ? -12 : 12, 480)]);
+      await Promise.all([rot(hand, 0, 380), tw(el, itemAt(800, 604, 1.5), 420, "cubic-bezier(.3,1.5,.5,1)")]);
+    }
     sparkle(800, 500);
     barista.classList.add("wink");
     setTimeout(() => barista.classList.remove("wink"), 1300); // peek over the shades, wink

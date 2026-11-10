@@ -163,9 +163,19 @@ button { font: inherit; }
 #b-eyes { transform-box: fill-box; transform-origin: center; animation: blink 4.6s infinite; }
 @keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
 #barista-inner { animation: breathe 3.4s ease-in-out infinite; }
-#barista-inner.walking { animation: bob .3s ease-in-out infinite alternate; }
+#barista-inner.walking { animation: bob .28s cubic-bezier(.45,0,.55,1) infinite alternate; }
+/* picture poses: only the current one shows; mirror flips him to face left */
+#barista .pose { opacity: 0; transition: opacity .12s; }
+#barista[data-pose="idle"] .pose[data-pose="idle"],
+#barista[data-pose="walk"] .pose[data-pose="walk"],
+#barista[data-pose="reach"] .pose[data-pose="reach"],
+#barista[data-pose="serve"] .pose[data-pose="serve"] { opacity: 1; }
+#barista[data-mirror="1"] #b-poses { transform: scaleX(-1); }
+#b-lean { transform-origin: 0px 616px; transition: transform .35s cubic-bezier(.45,0,.3,1); }
+#barista[data-lean="r"] #b-lean { transform: rotate(2.5deg); }
+#barista[data-lean="l"] #b-lean { transform: rotate(-2.5deg); }
 @keyframes breathe { 50% { transform: translateY(2px); } }
-@keyframes bob { to { transform: translateY(-7px); } }
+@keyframes bob { 0% { transform: translateY(0) scaleY(1); } 100% { transform: translateY(-8px) scaleY(1.01); } }
 #b-face { transition: transform .25s var(--ease); }
 #barista[data-face="right"] #b-face { transform: translateX(6px); }
 #barista[data-face="left"] #b-face { transform: translateX(-6px); }

@@ -199,12 +199,26 @@ window.ART = (function () {
     </g></g>`;
   }
 
-  function barista(initials = "JPM", img = null) {
-    /* the illustration version: one picture that walks, bobs and crouches */
-    if (img) return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
-      <image href="${img}" x="-179" y="205" width="350" height="411"/>
-      <g id="armL" class="arm"></g><g id="armR" class="arm"></g>
-    </g></g>`;
+  /* where each pose image sits so the heads line up (head centred on x = 0, hair top at y = 205) */
+  const POSE_BOX = {
+    idle: [-179, 205, 350, 411],
+    walk: [-262, 152, 488, 600],
+    serve: [-205, 143, 384, 472],
+    reach: [-182, 118, 418, 514],
+  };
+  function barista(initials = "JPM", img = null, poses = null) {
+    /* the illustration version: picture poses that walk, lean, reach and serve */
+    if (img) {
+      const all = { idle: img, ...(poses || {}) };
+      const layers = Object.entries(all).map(([name, href]) => {
+        const [x, y, w, h] = POSE_BOX[name] || POSE_BOX.idle;
+        return `<image class="pose" data-pose="${name}" href="${href}" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+      }).join("");
+      return `<g id="barista" data-pose="idle" style="transform: translate(800px, 0px)"><g id="barista-inner">
+        <g id="b-lean"><g id="b-poses">${layers}</g></g>
+        <g id="armL" class="arm"></g><g id="armR" class="arm"></g>
+      </g></g>`;
+    }
     return `<g id="barista" style="transform: translate(800px, 0px)"><g id="barista-inner">
       <g id="b-torso">
         <path d="M-18,348 L18,348 L19,394 Q0,404 -19,394 Z" fill="${SK}" ${line()}/>
@@ -361,7 +375,7 @@ window.ART = (function () {
       </g>
 
       <!-- the barista (behind the counter) -->
-      ${barista(initials, person.baristaImage)}
+      ${barista(initials, person.baristaImage, person.baristaPoses)}
 
       <!-- counter -->
       <rect x="0" y="560" width="1600" height="30" fill="url(#marble)"/>
