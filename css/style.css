@@ -235,21 +235,43 @@ button { font: inherit; }
 .speech { border: 3px solid var(--comic-ink); box-shadow: 5px 5px 0 var(--comic-ink); }
 .speech::before { border-bottom-color: var(--comic-ink); top: -15px; }
 .speech-text { font-family: "Comic Neue", "Comic Sans MS", var(--body); font-weight: 700; }
+.stage { position: relative; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .bubble {
-  position: absolute; z-index: 3; top: 0; left: 0;
-  max-width: min(320px, 62%); padding: 9px 14px 10px;
+  position: relative; z-index: 6; display: none;
+  max-width: 68ch; margin: 14px auto 0; padding: 12px 16px 13px;
   background: #fff; color: var(--comic-ink);
-  border: 3px solid var(--comic-ink); border-radius: 20px; box-shadow: 4px 4px 0 var(--comic-ink);
+  border: 3px solid var(--comic-ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--comic-ink);
   font-family: "Comic Neue", "Comic Sans MS", var(--body); font-weight: 700;
-  font-size: clamp(12px, 1.25vw, 17px); line-height: 1.25;
-  opacity: 0; transform: scale(.6); transform-origin: var(--tail, 40px) 100%;
-  pointer-events: none; transition: opacity .18s;
+  font-size: 1.02rem; line-height: 1.38;
 }
-.bubble.show { opacity: 1; animation: bubble-pop .34s cubic-bezier(.3,1.7,.5,1) forwards; }
-.bubble::before, .bubble::after { content: ""; position: absolute; top: 100%; border-style: solid; border-color: transparent; }
-.bubble::before { left: calc(var(--tail, 40px) - 12px); border-width: 18px 12px 0 8px; border-top-color: var(--comic-ink); }
-.bubble::after { left: calc(var(--tail, 40px) - 7px); margin-top: -4px; border-width: 12px 7px 0 5px; border-top-color: #fff; }
-@keyframes bubble-pop { from { transform: scale(.6); } to { transform: scale(1); } }
+.bubble.show { display: block; }
+.bubble.float { position: absolute; margin: 0; width: min(380px, 34vw); max-width: none; }
+.bubble.pop { animation: bubble-pop .34s cubic-bezier(.3,1.7,.5,1); }
+.bubble-text .caret { display: inline-block; width: .5ch; animation: caret 1s steps(1) infinite; }
+.bubble-text .rules-list { margin: .4em 0 0; padding-left: 1.3em; font-weight: 700; }
+@keyframes bubble-pop { from { transform: scale(.7); opacity: .2; } to { transform: scale(1); opacity: 1; } }
+/* the tail: ink triangle + white triangle on top */
+.bubble::before, .bubble::after { content: ""; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent; }
+.bubble[data-side="top"]::before { top: -20px; left: calc(var(--tx, 50%) - 12px); border-width: 0 12px 20px 6px; border-bottom-color: var(--comic-ink); }
+.bubble[data-side="top"]::after { top: -13px; left: calc(var(--tx, 50%) - 7px); border-width: 0 7px 14px 4px; border-bottom-color: #fff; }
+.bubble[data-side="left"]::before { left: -22px; top: calc(var(--ty, 40px) - 11px); border-width: 6px 22px 12px 0; border-right-color: var(--comic-ink); }
+.bubble[data-side="left"]::after { left: -14px; top: calc(var(--ty, 40px) - 6px); border-width: 4px 15px 7px 0; border-right-color: #fff; }
+.bubble[data-side="right"]::before { right: -22px; top: calc(var(--ty, 40px) - 11px); border-width: 6px 0 12px 22px; border-left-color: var(--comic-ink); }
+.bubble[data-side="right"]::after { right: -14px; top: calc(var(--ty, 40px) - 6px); border-width: 4px 0 7px 15px; border-left-color: #fff; }
+
+/* every clickable choice breathes in and out, staggered like a ripple */
+.choice { animation: rise .45s var(--ease) both, breathe-btn 2.6s ease-in-out .6s infinite; }
+.choice:nth-child(2n) { animation-delay: 0s, .95s; }
+.choice:nth-child(3n) { animation-delay: 0s, 1.3s; }
+.choice.primary { animation-name: rise, breathe-btn-strong; }
+.choice:hover, .choice:focus-visible, .btn-gold:hover { animation-play-state: paused; }
+.btn-gold { animation: breathe-btn 2.6s ease-in-out 1s infinite; }
+@keyframes breathe-btn { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.04); } }
+@keyframes breathe-btn-strong { 0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 0 0 rgba(232, 196, 138, .55); } 50% { transform: translateY(-4px) scale(1.06); box-shadow: 0 0 0 7px rgba(232, 196, 138, 0); } }
+/* things you can click inside the café glow softly */
+#scene .shelf-jar, #scene .shelf-book, #scene [data-act="books"], #scene #register { animation: glow 2.8s ease-in-out infinite; }
+@keyframes glow { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 6px rgba(255, 226, 150, .95)); } }
 .sfx {
   position: absolute; z-index: 3; transform: translate(-50%, -50%) rotate(-8deg);
   font-family: Bangers, Impact, sans-serif; font-size: clamp(20px, 2.6vw, 36px); letter-spacing: 1.5px;
@@ -273,7 +295,6 @@ button { font: inherit; }
   background: rgba(12, 33, 49, .55); color: var(--ivory);
   text-align: left; cursor: pointer; line-height: 1.25;
   transition: border-color .2s, background .2s, transform .15s;
-  animation: rise .45s var(--ease) both;
 }
 .choice:hover { border-color: var(--gold-soft); background: rgba(232, 196, 138, .1); }
 .choice:active { transform: translateY(1px); }

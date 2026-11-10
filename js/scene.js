@@ -209,43 +209,49 @@
     await rot(armR, 0, 420);
   }
 
-  /* ---------- comic speech bubble + sound effects, drawn over the scene ---------- */
-  const host = $("#scene-host");
-  const bubbleEl = document.createElement("div");
-  bubbleEl.className = "bubble";
-  bubbleEl.setAttribute("aria-hidden", "true"); // the full text is read out in the panel below
-  host.appendChild(bubbleEl);
-  let bubbleOn = false, hideT = 0;
+  /* ---------- comic speech bubble + sound effects ---------- */
+  const host = $("#scene-host"), stage = $(".stage"), bubbleEl = $("#bubble");
 
-  function toHost(el, x, y) { // a point in an element's own coordinates → pixels inside the scene box
+  function toBox(box, el, x, y) { // a point in an SVG element's coordinates → pixels inside a box
     const m = el.getScreenCTM(); if (!m) return [0, 0];
-    const p = new DOMPoint(x, y).matrixTransform(m), r = host.getBoundingClientRect();
+    const p = new DOMPoint(x, y).matrixTransform(m), r = box.getBoundingClientRect();
     return [p.x - r.left, p.y - r.top];
   }
+  const toHost = (el, x, y) => toBox(host, el, x, y);
+
+  /* wide screens: the bubble floats beside his head and follows him.
+     phones: it sits right under the scene, tail pointing up at him. */
   function placeBubble() {
-    if (!bubbleOn) return;
-    const [x, y] = toHost(barista, 0, 196);     // just above his hair
-    const w = bubbleEl.offsetWidth, hw = host.clientWidth;
-    const left = Math.max(8, Math.min(hw - w - 8, x - w * 0.3));
-    bubbleEl.style.left = left + "px";
-    bubbleEl.style.top = Math.max(6, y - bubbleEl.offsetHeight - 18) + "px";
-    bubbleEl.style.setProperty("--tail", Math.max(18, Math.min(w - 18, x - left)) + "px");
-    requestAnimationFrame(placeBubble);         // follow him while he walks
+    if (bubbleEl.classList.contains("show")) {
+      const wide = host.clientWidth >= 700;
+      bubbleEl.classList.toggle("float", wide);
+      if (wide) {
+        const sw = stage.clientWidth, w = bubbleEl.offsetWidth, h = bubbleEl.offsetHeight;
+        const [cx] = toBox(stage, barista, 0, 260);
+        const right = cx < sw * 0.58;                      // open on the side with more room
+        const [ex, ey] = toBox(stage, barista, right ? 78 : -78, 262);
+        const left = right ? ex + 18 : ex - 18 - w;
+        const top = Math.max(10, ey - Math.min(70, h * 0.35));
+        bubbleEl.style.left = Math.max(8, Math.min(sw - w - 8, left)) + "px";
+        bubbleEl.style.top = top + "px";
+        bubbleEl.dataset.side = right ? "left" : "right";  // which side the tail is on
+        bubbleEl.style.setProperty("--ty", Math.max(18, Math.min(h - 22, ey - top)) + "px");
+      } else {
+        bubbleEl.style.left = bubbleEl.style.top = "";
+        bubbleEl.dataset.side = "top";
+        const [cx] = toBox(bubbleEl, barista, 0, 0);
+        bubbleEl.style.setProperty("--tx", Math.max(22, Math.min(bubbleEl.offsetWidth - 22, cx)) + "px");
+      }
+    }
+    requestAnimationFrame(placeBubble);
   }
-  function shorten(t) { // the bubble gets the first sentence; the panel below keeps every word
-    const max = host.clientWidth < 600 ? 60 : 92;
-    const first = (t.match(/^.*?[.!?](\s|$)/) || [t])[0].trim();
-    let s = first.length >= 12 ? first : t;
-    if (s.length > max) s = s.slice(0, s.lastIndexOf(" ", max)) + "…";
-    return s;
+  requestAnimationFrame(placeBubble);
+
+  function bubble() { // pop it in (or re-pop for a new line)
+    bubbleEl.classList.remove("pop"); void bubbleEl.offsetWidth;
+    bubbleEl.classList.add("show", "pop");
   }
-  function bubble(text) {
-    bubbleEl.textContent = shorten(text);
-    bubbleEl.classList.remove("show"); void bubbleEl.offsetWidth; bubbleEl.classList.add("show");
-    if (!bubbleOn) { bubbleOn = true; placeBubble(); }
-    clearTimeout(hideT);
-    hideT = setTimeout(() => { bubbleOn = false; bubbleEl.classList.remove("show"); }, 2600 + bubbleEl.textContent.length * 45);
-  }
+
   function sfx(word, x, y) { // a comic sound word that pops and fades
     if (reduce) return;
     const [hx, hy] = toHost(svg, x, y);

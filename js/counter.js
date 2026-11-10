@@ -5,13 +5,14 @@
    ========================================================= */
 (() => {
   const { D, P, A, $, $$, esc, reduce, wait, store, item, shelf, shelfItems, short, state, usesCup, scrollToEl } = Cafe;
-  const speech = $("#speech-text"), choicesEl = $("#choices");
+  const speech = $("#bubble-text"), srSay = $("#sr-say"), choicesEl = $("#choices");
   let sayToken = 0;
 
-  /* ---------- speech bubble (typewriter) ---------- */
+  /* ---------- the comic speech bubble (typewriter) ---------- */
   function say(text) {
     const token = ++sayToken;
-    Cafe.scene.bubble(text);
+    Cafe.scene.bubble();
+    srSay.textContent = text;                   // screen readers get the whole line at once
     if (reduce) { speech.textContent = text; return Promise.resolve(); }
     speech.innerHTML = '<span></span><span class="caret">|</span>';
     const t = speech.firstChild;
@@ -25,7 +26,10 @@
       })();
     });
   }
-  const sayHTML = (html, short = "") => { sayToken++; speech.innerHTML = html; if (short) Cafe.scene.bubble(short); };
+  const sayHTML = (html, short = "") => {
+    sayToken++; Cafe.scene.bubble(); speech.innerHTML = html;
+    const tmp = document.createElement("div"); tmp.innerHTML = html; srSay.textContent = tmp.textContent;
+  };
 
   /* ---------- choices under the counter, one layout per step ---------- */
   const btn = (title, sub, act, cls = "") =>
