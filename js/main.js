@@ -23,6 +23,12 @@
       <ul>${shelfItems(s.id).map(i => `<li><button type="button" data-act="visit:${i.id}">${esc(i.name)}</button></li>`).join("")}</ul>
     </div>`).join("");
 
+  /* on touch screens people tap, they don't click */
+  if (matchMedia("(pointer: coarse)").matches) {
+    $("#door-hint-text").textContent = "Tap the door!";
+    $("#howto-door").textContent = "Tap the door";
+  }
+
   let entering = false;
   async function enter() { // the door swings open and we walk into the light
     if (entering) return;
@@ -80,6 +86,7 @@
     streetmenu: () => scrollToEl("#street-menu"),
     board: () => scrollToEl("#board"),
     reading: () => scrollToEl("#reading"),
+    skip: counter.skip,
     books: counter.openBooks, book: counter.serveBook, openbook: counter.reopenBook,
     "close-book": pages.closeBook,
     shelf: counter.openShelf, item: counter.order, greet: () => counter.greet(false),
@@ -90,7 +97,7 @@
     cv: () => (location.hash = "cv"),
     story: () => scrollToEl("#served"), counter: () => scrollToEl(".stage"),
   };
-  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story", "board", "reading", "close-book"];
+  const allowedWhileBusy = ["cv", "bill", "close-bill", "print", "story", "board", "reading", "close-book", "skip"];
 
   document.addEventListener("click", e => {
     const el = e.target.closest("[data-act]");

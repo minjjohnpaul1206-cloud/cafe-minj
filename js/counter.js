@@ -4,7 +4,7 @@
    the menu board and the loyalty card.
    ========================================================= */
 (() => {
-  const { D, P, A, $, $$, esc, reduce, wait, store, item, shelf, shelfItems, short, state, usesCup, scrollToEl } = Cafe;
+  const { D, P, A, $, $$, esc, reduce, speed, wait, store, item, shelf, shelfItems, short, state, usesCup, scrollToEl } = Cafe;
   const speech = $("#bubble-text"), srSay = $("#sr-say"), choicesEl = $("#choices");
   let sayToken = 0;
 
@@ -16,13 +16,14 @@
     if (reduce) { speech.textContent = text; return Promise.resolve(); }
     speech.innerHTML = '<span></span><span class="caret">|</span>';
     const t = speech.firstChild;
+    Cafe.scene.talk(true);                      // he bobs a little while he speaks
     return new Promise(done => {
       let i = 0;
       (function type() {
         if (token !== sayToken) return done();
         t.textContent = text.slice(0, (i += 3));
         if (i < text.length) setTimeout(type, 16);
-        else { speech.textContent = text; done(); }
+        else { speech.textContent = text; Cafe.scene.talk(false); done(); }
       })();
     });
   }
@@ -60,10 +61,13 @@
         </div></form>`,
     books: () => (D.writing || []).map((b, i) => btn(b.title, b.kicker, "book:" + i)).join("") + btn("Something else", "", "greet"),
     bookserved: () => btn("Open the book", "", "openbook", "primary") + btn("Another book", "", "books") + btn("Back to the menu", "", "greet"),
-    working: () => `<p class="working">Making your order… keep your eyes on the counter.</p>`,
+    working: () => `<p class="working">Making your order… keep your eyes on the counter.</p>${btn("Skip the show", "Serve it right away", "skip")}`,
     back: () => btn("Show me the menu", "", "greet", "primary"),
   };
-  function step(name) { state.step = name; choicesEl.innerHTML = layouts[name](); }
+  function step(name) {
+    state.step = name; choicesEl.innerHTML = layouts[name]();
+    $("#hint").hidden = name !== "greet" || state.stamps.length > 0; // first-visit tip, only at the start
+  }
 
   /* ---------- conversation ---------- */
   function greet(first) {
@@ -105,6 +109,7 @@
     lastBook = b;
     step("bookserved");
     state.busy = false;
+    speed.k = speed.normal;
     await wait(500);
     Cafe.pages.openBook(b);
   }
@@ -172,6 +177,7 @@
     await say(full ? `${it.line} And with that, your loyalty card is full: every chapter, my whole career so far. The prize is a real coffee with me, no tricks. Shall I bring the bill?` : it.line);
     step("served");
     state.busy = false;
+    speed.k = speed.normal;                     // back to normal after a "Skip"
     await wait(900);
     if (state.step === "served") scrollToEl("#served"); // open the story, unless they've already moved on
   }
@@ -235,5 +241,6 @@
     setName($("#name-input").value, e.submitter?.value === "togo");
   });
 
-  Cafe.counter = { greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
+  const skip = () => { speed.k = 0.08; };       // fast-forward the making of this order
+  Cafe.counter = { skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
 })();

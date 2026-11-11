@@ -12,98 +12,110 @@ window.ART = (function () {
     denim: "#33506F", denimDark: "#253B54", leather: "#A86B3C",
   };
 
-  /* ---------- the menu items ---------- */
-  const saucer = (y = 106, rx = 44) =>
-    `<ellipse cx="60" cy="${y}" rx="${rx}" ry="7" fill="#E9E5DC"/><ellipse cx="60" cy="${y - 1.5}" rx="${rx - 10}" ry="4" fill="#D7D1C4"/>`;
+  /* ---------- the menu items ----------
+     Drawn in the same bold ink outline as the barista, so the whole
+     foreground reads as one illustrated world. */
+  const INK = "#2A1A12";
+  const ol = (w = 3) => `stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+  const shadow = (rx = 40, y = 109) => `<ellipse cx="60" cy="${y}" rx="${rx}" ry="5" fill="#000" opacity=".16"/>`;
+  const plate = (rx = 46, y = 104) => `${shadow(rx - 2, y + 5)}<ellipse cx="60" cy="${y}" rx="${rx}" ry="8" fill="#FBF7EE" ${ol()}/>
+      <ellipse cx="60" cy="${y - 1}" rx="${rx - 12}" ry="4" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".3"/>`;
+  /* steam that drifts up from hot drinks */
+  const wisps = (x = 60, y = 62) => `<g class="wisps" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round">
+      <path d="M${x - 8},${y} q-6,-9 0,-17 q6,-8 0,-16"/><path class="w2" d="M${x + 8},${y - 2} q6,-9 0,-17 q-6,-8 0,-16"/></g>`;
+  /* a small emblem for the café: cup over an island wave */
+  const emblem = (x, y, r) => `<g transform="translate(${x},${y}) scale(${r / 20})">
+      <circle r="20" fill="${C.goldSoft}" ${ol(3)}/>
+      <path d="M-9,-4 h16 v5 a8,8 0 0 1 -16,0 z" fill="${C.bottle}"/>
+      <path d="M7,-3 h2.5 a3.5,3.5 0 0 1 0,7 h-2.5" fill="none" stroke="${C.bottle}" stroke-width="2.4"/>
+      <path d="M-4,-8 q-2,-3 0,-5 M3,-8 q-2,-3 0,-5" fill="none" stroke="${C.bottle}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-12,12 q4,-4 8,0 t8,0 t8,0" fill="none" stroke="${C.bottle}" stroke-width="2.4" stroke-linecap="round"/></g>`;
 
-  const cup = (x0, x1, y0, y1, handle = true) => {
-    const mid = (x0 + x1) / 2, rx = (x1 - x0) / 2;
-    return `${handle ? `<path d="M${x1 - 2},${y0 + 7} q16,0 14,11 q-2,9 -16,8" fill="none" stroke="#F4F1EA" stroke-width="5"/>` : ""}
-      <path d="M${x0},${y0} L${x1},${y0} L${x1 - 3},${y1 - 10} Q${mid},${y1 + 2} ${x0 + 3},${y1 - 10} Z" fill="#F7F4EE"/>
-      <path d="M${mid + rx * 0.45},${y0 + 2} L${x1 - 3},${y0 + 2} L${x1 - 5},${y1 - 11} Q${mid + rx * 0.6},${y1 - 4} ${mid + rx * 0.4},${y1 - 6} Z" fill="#E4DFD4"/>
-      <ellipse cx="${mid}" cy="${y0}" rx="${rx}" ry="4.5" fill="#F7F4EE"/>
-      <ellipse cx="${mid}" cy="${y0 + 0.5}" rx="${rx - 3}" ry="3.2" fill="${C.crema}"/>
-      <ellipse cx="${mid}" cy="${y0 + 1}" rx="${rx - 7}" ry="2" fill="${C.coffee}"/>`;
+  const cup = (cx, w, y0, y1, handle = true) => {
+    const x0 = cx - w / 2, x1 = cx + w / 2, h = y1 - y0;
+    const hd = `M${x1 - 3},${y0 + h * .22} q${w * .36},-2 ${w * .34},${h * .3} q-2,${h * .3} -${w * .36},${h * .26}`;
+    return `${handle ? `<path d="${hd}" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="${hd}" fill="none" stroke="#FBF7EE" stroke-width="3.6" stroke-linecap="round"/>` : ""}
+      <path d="M${x0},${y0} C${x0},${y1 - 2} ${cx - w * .3},${y1} ${cx},${y1} C${cx + w * .3},${y1} ${x1},${y1 - 2} ${x1},${y0} Z" fill="#FBF7EE" ${ol()}/>
+      <path d="M${cx + w * .18},${y1 - 4} C${cx + w * .36},${y1 - 6} ${x1 - 5},${y1 - h * .45} ${x1 - 5},${y0 + 7}" fill="none" stroke="${INK}" stroke-width="1.6" opacity=".28" stroke-linecap="round"/>
+      <ellipse cx="${cx}" cy="${y0}" rx="${w / 2}" ry="${Math.max(4, w * .11)}" fill="#C98A4B" ${ol()}/>
+      <ellipse cx="${cx - w * .06}" cy="${y0 + .5}" rx="${w * .26}" ry="${Math.max(1.6, w * .05)}" fill="#5A3018"/>`;
   };
 
   const items = {
-    espresso: () => `${saucer()}${cup(38, 82, 72, 106)}`,
-    ristretto: () => `${saucer(106, 36)}${cup(45, 75, 82, 106)}`,
-    doubleshot: () => `${saucer(106, 50)}
-      <g transform="translate(-20,4)">${cup(46, 74, 76, 102, false)}</g>
-      <g transform="translate(20,4)">${cup(46, 74, 76, 102)}</g>`,
-    macchiato: () => `${saucer(107, 36)}
-      <path d="M43,64 L77,64 L74,104 L46,104 Z" fill="#ffffff" fill-opacity=".35" stroke="#ffffff" stroke-opacity=".8" stroke-width="2"/>
-      <path d="M45,78 L75,78 L73,103 L47,103 Z" fill="${C.coffee}"/>
-      <path d="M44,70 L76,70 L75,79 L45,79 Z" fill="#E9D3B4"/>
-      <ellipse cx="60" cy="68" rx="15" ry="5" fill="#FBF6EC"/>
-      <circle cx="60" cy="66" r="4" fill="${C.crema}"/>`,
-    latte: () => `<ellipse cx="60" cy="108" rx="30" ry="4" fill="#000" opacity=".18"/>
-      <path d="M40,24 L80,24 L76,107 L44,107 Z" fill="#ffffff" fill-opacity=".28" stroke="#ffffff" stroke-opacity=".85" stroke-width="2"/>
-      <path d="M42,78 L78,78 L76,106 L44,106 Z" fill="#5A3420"/>
-      <path d="M41,48 L79,48 L78,79 L42,79 Z" fill="#D9B98F"/>
-      <path d="M41,30 L79,30 L79,49 L41,49 Z" fill="#F6EEE0"/>
-      <path d="M45,40 q15,-8 30,0" fill="none" stroke="${C.crema}" stroke-width="2.5" opacity=".7"/>
-      <path d="M47,30 L50,104" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
-      <path d="M70,12 L62,60" stroke="${C.gold}" stroke-width="3" stroke-linecap="round"/>`,
-    cookies: () => `<ellipse cx="60" cy="107" rx="46" ry="7" fill="#E9E5DC"/>
-      ${[98, 88, 78].map((y, i) => `<g transform="translate(${i % 2 ? 3 : -2},0)">
-        <ellipse cx="60" cy="${y + 4}" rx="32" ry="8" fill="#B87A3A"/>
-        <ellipse cx="60" cy="${y}" rx="32" ry="8" fill="#DDA45E"/>
-        <ellipse cx="60" cy="${y - 1}" rx="22" ry="4.5" fill="#E8B977"/>
-        <circle cx="50" cy="${y - 1}" r="1.6" fill="#9A5E26"/><circle cx="66" cy="${y + 1}" r="1.6" fill="#9A5E26"/><circle cx="60" cy="${y - 3}" r="1.4" fill="#9A5E26"/></g>`).join("")}`,
+    espresso: () => `${plate(44, 105)}${cup(60, 44, 74, 104)}${wisps(60, 64)}`,
+    ristretto: () => `${plate(36, 105)}${cup(60, 30, 84, 104)}${wisps(60, 74)}`,
+    doubleshot: () => `${plate(54, 105)}${cup(40, 30, 80, 103, false)}${cup(78, 30, 80, 103)}${wisps(59, 70)}`,
+    macchiato: () => `${plate(36, 106)}
+      <path d="M43,62 L77,62 L74,103 Q60,107 46,103 Z" fill="#FBF7EE"/>
+      <path d="M45.2,80 L74.8,80 L74,103 Q60,107 46,103 Z" fill="#5A3018"/>
+      <path d="M44.4,70 L75.6,70 L74.8,80 L45.2,80 Z" fill="#E9CFA6"/>
+      <path d="M43,62 L77,62 L74,103 Q60,107 46,103 Z" fill="none" ${ol()}/>
+      <ellipse cx="60" cy="62" rx="17" ry="5" fill="#FFFDF7" ${ol()}/><ellipse cx="60" cy="62" rx="5.5" ry="2" fill="#C98A4B"/>
+      <path d="M48,68 L49.6,98" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" stroke-linecap="round"/>`,
+    latte: () => `${shadow(30)}
+      <path d="M40,26 L80,26 L76,104 Q60,109 44,104 Z" fill="#FFF8EA"/>
+      <path d="M41.7,50 L78.3,50 L76,104 Q60,109 44,104 Z" fill="#E4C295"/>
+      <path d="M43.1,80 L76.9,80 L76,104 Q60,109 44,104 Z" fill="#6B3A1E"/>
+      <path d="M40,26 L80,26 L76,104 Q60,109 44,104 Z" fill="none" ${ol()}/>
+      <ellipse cx="60" cy="26" rx="20" ry="5" fill="#FFFDF7" ${ol()}/>
+      <path d="M73,6 L65,56" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/><path d="M73,6 L65,56" stroke="${C.gold}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M47,36 L49.5,98" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>`,
+    cookies: () => `${plate(46, 105)}
+      ${[96, 86, 76].map((y, i) => `<g transform="translate(${i % 2 ? 4 : -3},0)">
+        <ellipse cx="60" cy="${y + 5}" rx="31" ry="8" fill="#B5732F" ${ol(2.6)}/>
+        <ellipse cx="60" cy="${y}" rx="31" ry="8" fill="#E3AD66" ${ol(2.6)}/>
+        ${[[46, -1], [63, 2], [57, -4], [73, -1]].map(([x, dy]) => `<circle cx="${x}" cy="${y + dy}" r="2.4" fill="#5A3018"/>`).join("")}</g>`).join("")}`,
     jar: (o = {}) => {
       const col = o.jarColor || C.chili;
-      return `<ellipse cx="60" cy="108" rx="30" ry="4" fill="#000" opacity=".18"/>
-      <rect x="34" y="18" width="52" height="12" rx="3" fill="#7E8A86"/><rect x="34" y="18" width="52" height="4" rx="2" fill="#A7B2AE"/>
-      <path d="M38,30 L82,30 Q90,34 90,46 L90,98 Q90,108 80,108 L40,108 Q30,108 30,98 L30,46 Q30,34 38,30 Z" fill="#ffffff" fill-opacity=".22" stroke="#ffffff" stroke-opacity=".85" stroke-width="2"/>
-      <path d="M33,56 Q60,50 87,56 L87,98 Q87,105 79,105 L41,105 Q33,105 33,98 Z" fill="#4A2A18"/>
-      ${[[42, 64], [55, 60], [70, 63], [80, 70], [48, 76], [63, 73], [76, 84], [40, 90], [56, 88], [70, 96], [45, 100], [82, 96]].map(([x, y]) =>
-        `<ellipse cx="${x}" cy="${y}" rx="4" ry="2.6" fill="#6B3D22" transform="rotate(${(x * 7) % 60 - 30} ${x} ${y})"/>`).join("")}
-      <rect x="40" y="66" width="40" height="24" rx="3" fill="${col}"/>
-      <rect x="43" y="69" width="34" height="18" rx="2" fill="none" stroke="#F3EEE3" stroke-opacity=".7" stroke-width="1.2"/>
-      <path d="M38,36 L38,96" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>`;
+      const body = "M38,30 L82,30 Q90,34 90,46 L90,98 Q90,108 80,108 L40,108 Q30,108 30,98 L30,46 Q30,34 38,30 Z";
+      return `${shadow(30)}
+      <path d="${body}" fill="#EAF4F1" fill-opacity=".6"/>
+      <path d="M32,56 Q60,50 88,56 L88,98 Q88,106 80,106 L40,106 Q32,106 32,98 Z" fill="#5A3018"/>
+      ${[[42, 62], [56, 58], [71, 61], [81, 68], [47, 96], [64, 99], [78, 95], [38, 80]].map(([x, y]) =>
+        `<ellipse cx="${x}" cy="${y}" rx="4.4" ry="2.8" fill="#8A5530" transform="rotate(${(x * 7) % 60 - 30} ${x} ${y})"/>`).join("")}
+      <rect x="40" y="66" width="40" height="24" rx="3" fill="${col}" ${ol(2.2)}/>
+      <path d="M46,74 h28 M50,81 h20" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>
+      <path d="${body}" fill="none" ${ol()}/>
+      <rect x="33" y="15" width="54" height="15" rx="4" fill="#93A19C" ${ol()}/><path d="M39,20 h42" stroke="#fff" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M37,38 L37,56" stroke="#fff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>`;
     },
-    cloche: () => `<ellipse cx="60" cy="106" rx="50" ry="8" fill="#CFCAC0"/><ellipse cx="60" cy="104" rx="50" ry="7" fill="#EDEAE3"/>
-      <g transform="translate(14,4) scale(.78)">${cup(46, 74, 80, 106)}</g>
-      <path d="M38,70 l3,6 6,3 -6,3 -3,6 -3,-6 -6,-3 6,-3z M84,64 l2,4 4,2 -4,2 -2,4 -2,-4 -4,-2 4,-2z" fill="${C.gold}"/>
-      <g class="cloche-dome"><path d="M14,102 Q14,48 60,46 Q106,48 106,102 Z" fill="#C3C9CE"/>
-      <path d="M24,96 Q26,58 56,52" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="5" stroke-linecap="round"/>
-      <path d="M14,102 L106,102" stroke="#9DA4AA" stroke-width="3"/>
-      <circle cx="60" cy="42" r="7" fill="${C.gold}"/><circle cx="58" cy="40" r="2.2" fill="#F2DE9F"/></g>`,
-    croissant: () => `<ellipse cx="60" cy="108" rx="46" ry="7" fill="#E9E5DC"/>
-      <path d="M14,96 Q20,70 40,66 Q60,58 80,66 Q100,70 106,96 Q96,88 86,90 Q74,80 60,80 Q46,80 34,90 Q24,88 14,96 Z" fill="#C9822F"/>
-      <path d="M22,92 Q28,74 42,70 Q60,63 78,70 Q92,74 98,92" fill="none" stroke="#E7AE5B" stroke-width="5" stroke-linecap="round"/>
-      ${[38, 50, 62, 74].map(x => `<path d="M${x},${x < 60 ? 68 : 67} Q${x + 4},${78} ${x + 2},${86}" stroke="#8E541C" stroke-width="2.2" fill="none" stroke-linecap="round"/>`).join("")}`,
-    roll: () => `<ellipse cx="60" cy="108" rx="46" ry="7" fill="#E9E5DC"/>
-      <ellipse cx="60" cy="96" rx="40" ry="11" fill="#9A5A27"/>
-      <ellipse cx="60" cy="86" rx="40" ry="15" fill="#C98445"/>
-      <path d="M60,86 m-4,0 a4,3 0 1,1 8,1 a10,7 0 1,1 -18,-1 a16,11 0 1,1 30,2 a22,14 0 1,1 -40,-3" fill="none" stroke="#7D4318" stroke-width="3" stroke-linecap="round"/>
-      <path d="M30,80 q8,8 4,14 M52,72 q4,6 -2,12 M78,76 q-6,8 2,14" stroke="#F6EEE0" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>`,
-    biscotti: () => `<ellipse cx="60" cy="108" rx="46" ry="7" fill="#E9E5DC"/>
-      <g transform="rotate(-14 46 86)"><rect x="18" y="74" width="58" height="22" rx="6" fill="#D6A060"/><rect x="18" y="74" width="58" height="6" rx="3" fill="#B97C3C"/>
-      <ellipse cx="34" cy="87" rx="5" ry="3" fill="#F1DDB8"/><ellipse cx="52" cy="89" rx="5" ry="3" fill="#F1DDB8"/><ellipse cx="64" cy="85" rx="4" ry="2.5" fill="#F1DDB8"/></g>
-      <g transform="rotate(8 70 92)"><rect x="44" y="82" width="58" height="22" rx="6" fill="#DFAA69"/><rect x="44" y="82" width="58" height="6" rx="3" fill="#B97C3C"/>
-      <ellipse cx="58" cy="95" rx="5" ry="3" fill="#F1DDB8"/><ellipse cx="76" cy="96" rx="5" ry="3" fill="#F1DDB8"/><ellipse cx="90" cy="93" rx="4" ry="2.5" fill="#F1DDB8"/></g>`,
-    muffin: () => `<ellipse cx="60" cy="108" rx="36" ry="6" fill="#000" opacity=".15"/>
-      <path d="M32,70 L88,70 L80,108 L40,108 Z" fill="${C.chili}"/>
-      ${[40, 50, 60, 70, 80].map(x => `<path d="M${x},70 L${x + (x - 60) * -0.12},108" stroke="#8E3020" stroke-width="2"/>`).join("")}
-      <path d="M26,72 Q24,40 60,36 Q96,40 94,72 Q60,80 26,72 Z" fill="#A86634"/>
-      <path d="M36,58 Q50,44 70,46" fill="none" stroke="#C88752" stroke-width="5" stroke-linecap="round"/>
-      ${[[44, 62], [58, 54], [72, 60], [64, 68], [50, 70], [80, 66]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#3B2014"/>`).join("")}`,
+    cloche: () => `${shadow(50, 110)}<ellipse cx="60" cy="104" rx="52" ry="8" fill="#FBF7EE" ${ol()}/>
+      <g transform="translate(13.2,22.9) scale(.78)">${cup(60, 34, 80, 104)}</g>
+      <path d="M36,68 l3,6 6,3 -6,3 -3,6 -3,-6 -6,-3 6,-3z M86,62 l2,4 4,2 -4,2 -2,4 -2,-4 -4,-2 4,-2z" fill="${C.goldSoft}" ${ol(1.6)}/>
+      <g class="cloche-dome"><path d="M14,102 Q14,48 60,46 Q106,48 106,102 Z" fill="#C9CFD4" ${ol()}/>
+      <path d="M25,94 Q27,60 54,53" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="60" cy="41" r="7.5" fill="${C.gold}" ${ol()}/></g>`,
+    croissant: () => `${plate(48, 105)}
+      <path d="M14,94 C12,72 32,54 60,54 C88,54 108,72 106,94 C102,101 92,100 89,93 C85,84 75,79 60,79 C45,79 35,84 31,93 C28,100 18,101 14,94 Z" fill="#DE9A3E" ${ol()}/>
+      <path d="M26,75 q3,-6 7,-9 M42,62 q2,-2 5,-3 M57,58 l6,0 M75,60 q3,1 5,3 M93,75 q-2,-5 -5,-8" fill="none" stroke="#F7CE84" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M36,60 Q40,74 35,87 M49,55 Q52,68 49,80 M71,55 Q68,68 71,80 M84,60 Q80,74 85,87" fill="none" ${ol(2.2)}/>`,
+    roll: () => `${plate(48, 106)}
+      <ellipse cx="60" cy="92" rx="38" ry="13" fill="#B5732F" ${ol()}/>
+      <ellipse cx="60" cy="84" rx="38" ry="15" fill="#DDA057" ${ol()}/>
+      <path d="M57,84 a3,2 0 1,1 7,1 a9,5.5 0 1,1 -17,-1 a15,8.5 0 1,1 28,2 a21,11 0 1,1 -38,-3" fill="none" ${ol(2.2)}/>
+      ${["M31,81 q9,7 6,14", "M52,71 q5,7 -1,13", "M77,74 q-6,8 3,15"].map(d => `<path d="${d}" fill="none" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#FFFDF7" stroke-width="3.6" stroke-linecap="round"/>`).join("")}`,
+    biscotti: () => `${plate(48, 106)}
+      ${[["rotate(-14 46 86)", 18, 74, "#D9A460"], ["rotate(8 70 92)", 44, 82, "#E3AD66"]].map(([tr, x, y, col]) => `<g transform="${tr}">
+        <rect x="${x}" y="${y}" width="58" height="22" rx="7" fill="${col}" ${ol()}/>
+        <path d="M${x + 5},${y + 6} h48" stroke="#B5732F" stroke-width="3" stroke-linecap="round"/>
+        ${[[14, 14], [31, 15], [45, 13]].map(([dx, dy]) => `<ellipse cx="${x + dx}" cy="${y + dy}" rx="5" ry="3" fill="#FBF0D6" ${ol(1.5)}/>`).join("")}</g>`).join("")}`,
+    muffin: () => `${shadow(34)}
+      <path d="M32,70 L88,70 L80,107 L40,107 Z" fill="#C2503A" ${ol()}/>
+      ${[42, 51, 60, 69, 78].map(x => `<path d="M${x},74 L${x + (x - 60) * -0.12},104" ${ol(1.8)} opacity=".55"/>`).join("")}
+      <path d="M24,72 Q20,40 60,34 Q100,40 96,72 Q60,82 24,72 Z" fill="#A8683A" ${ol()}/>
+      <path d="M35,58 Q48,44 68,45" fill="none" stroke="#CE9058" stroke-width="5" stroke-linecap="round"/>
+      ${[[44, 63], [58, 54], [73, 60], [64, 69], [50, 71], [82, 67]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.2" fill="#3B2014"/>`).join("")}`,
   };
 
   /* to-go paper cup: kraft sleeve, lid, and a slot for the visitor's name */
-  items.togo = (o = {}) => `<ellipse cx="60" cy="109" rx="26" ry="4" fill="#000" opacity=".18"/>
-      <path d="M33,34 L87,34 L81,108 L39,108 Z" fill="#FBFAF6"/>
-      <path d="M71,34 L87,34 L81,108 L73,108 Z" fill="#E9E5DC"/>
-      <path d="M36.3,96 L83.7,96 L83.2,101 L36.8,101 Z" fill="${o.accent || C.bottle}"/>
-      <path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#C49A6C"/>
-      <path d="M35.3,62 L84.7,62 M37.4,89 L82.6,89" stroke="#8E6A43" stroke-width="1.2"/>
-      ${[42, 50, 58, 66, 74].map(x => `<path d="M${x},64 l0,23" stroke="#B5895B" stroke-width="1"/>`).join("")}
-      <rect x="29" y="27" width="62" height="9" rx="4" fill="#EFEBE3"/>
-      <path d="M34,27 Q36,15 60,14 Q84,15 86,27 Z" fill="#F7F4EE"/>
-      <rect x="62" y="16" width="12" height="4" rx="2" fill="#D3CDC1"/>
+  items.togo = (o = {}) => `${shadow(26)}
+      <path d="M33,34 L87,34 L81,108 L39,108 Z" fill="#FFFDF7" ${ol()}/>
+      <path d="M36.4,96 L83.6,96 L83,102 L37,102 Z" fill="${o.accent || C.bottle}"/>
+      <path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#CFA06C" ${ol(2.2)}/>
+      ${[43, 51, 59, 67, 75].map(x => `<path d="M${x},65 l0,21" stroke="#A97D4E" stroke-width="1.2"/>`).join("")}
+      <rect x="29" y="26" width="62" height="10" rx="4" fill="#F2EEE6" ${ol()}/>
+      <path d="M35,26 Q37,15 60,14 Q83,15 85,26 Z" fill="#FFFDF7" ${ol()}/>
+      <rect x="62" y="17" width="12" height="4" rx="2" fill="${INK}" opacity=".45"/>
       <g class="cup-name-slot"></g>`;
 
   const escT = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -164,13 +176,13 @@ window.ART = (function () {
   }
 
   /* a book standing on the counter (for serving), cover facing the visitor */
-  items.book = (o = {}) => `<ellipse cx="60" cy="109" rx="30" ry="4" fill="#000" opacity=".18"/>
-      <rect x="30" y="22" width="62" height="88" rx="3" fill="#F3EEE3"/>
-      <rect x="28" y="20" width="62" height="88" rx="3" fill="${o.color || C.bottle}"/>
-      <rect x="28" y="20" width="7" height="88" fill="#000" opacity=".22"/>
-      <rect x="40" y="28" width="44" height="72" rx="1" fill="none" stroke="${C.goldSoft}" stroke-width="1.4" opacity=".8"/>
-      <path d="M48,44 l28,0 M52,52 l20,0" stroke="${C.goldSoft}" stroke-width="2.4" stroke-linecap="round"/>
-      <circle cx="62" cy="76" r="9" fill="none" stroke="${C.goldSoft}" stroke-width="2"/>`;
+  items.book = (o = {}) => `${shadow(30)}
+      <rect x="32" y="22" width="62" height="88" rx="3" fill="#FBF7EE" ${ol()}/>
+      <rect x="27" y="19" width="62" height="88" rx="3" fill="${o.color || C.bottle}" ${ol()}/>
+      <path d="M35,21 L35,105" stroke="${INK}" stroke-width="2" opacity=".45"/>
+      <rect x="42" y="28" width="40" height="70" rx="1" fill="none" stroke="${C.goldSoft}" stroke-width="1.6" opacity=".85"/>
+      <path d="M49,44 l26,0 M53,52 l18,0" stroke="${C.goldSoft}" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="62" cy="76" r="9" fill="none" stroke="${C.goldSoft}" stroke-width="2.2"/>`;
 
   function item(art, opts = {}) {
     return (items[art] || items.espresso)(opts);
@@ -221,7 +233,7 @@ window.ART = (function () {
         return `<image class="pose" data-pose="${name}" href="${href}" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
       }).join("");
       return `<g id="barista" data-pose="idle" style="transform: translate(800px, 0px)"><g id="barista-inner">
-        <g id="b-lean"><g id="b-poses">${layers}</g></g>
+        <g id="b-lean"><g id="b-pop"><g id="b-talk"><g id="b-poses">${layers}</g></g></g></g>
         <g id="armL" class="arm"></g><g id="armR" class="arm"></g>
       </g></g>`;
     }
@@ -325,12 +337,12 @@ window.ART = (function () {
 
       <!-- wall bookshelf: one spine per post in the reading corner -->
       <g id="book-shelf">
-        <rect x="84" y="390" width="250" height="9" fill="${C.teak}"/><rect x="84" y="399" width="250" height="4" fill="${C.teakDark}"/>
-        <rect x="96" y="356" width="14" height="34" rx="2" fill="#5C6B5E"/><rect x="112" y="350" width="12" height="40" rx="2" fill="#8A6A4A"/>
+        <rect x="84" y="390" width="250" height="11" rx="3" fill="${C.teak}" ${ol(2.6)}/>
+        <rect x="96" y="356" width="14" height="34" rx="2" fill="#5C6B5E" ${ol(2.2)}/><rect x="112" y="350" width="12" height="40" rx="2" fill="#8A6A4A" ${ol(2.2)}/>
         ${books.slice(0, 6).map((b, i) => { const x = 132 + i * 32, h = 48 - (i % 2) * 6; return `<g class="shelf-book hot" data-book="${i}" data-act="book:${i}">
-          <rect x="${x}" y="${390 - h}" width="26" height="${h}" rx="2" fill="${b.color}"/>
+          <rect x="${x}" y="${390 - h}" width="26" height="${h}" rx="2" fill="${b.color}" ${ol(2.2)}/>
           <rect x="${x + 4}" y="${390 - h + 6}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/><rect x="${x + 4}" y="${390 - 12}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/></g>`; }).join("")}
-        <path d="M${132 + Math.min(books.length, 6) * 32 + 4},390 l0,-30 l14,0 l0,30" fill="${C.gold}" opacity=".9"/>
+        <path d="M${132 + Math.min(books.length, 6) * 32 + 4},390 l0,-30 l14,0 l0,30 Z" fill="${C.gold}" ${ol(2.2)}/>
       </g>
 
       <!-- jar shelf -->
@@ -394,66 +406,79 @@ window.ART = (function () {
 
       <!-- a stack of books on the counter: opens the reading corner -->
       <g class="hot" data-act="books" transform="translate(12,0)">
-        <rect x="0" y="530" width="48" height="12" rx="2" fill="#7A2E2E"/><rect x="4" y="518" width="44" height="12" rx="2" fill="${C.bottle}"/>
-        <rect x="2" y="506" width="46" height="12" rx="2" fill="#B07A1E"/><rect x="0" y="542" width="50" height="18" rx="2" fill="#4E7A4A"/>
-        <path d="M6,536 l36,0 M10,524 l32,0 M8,512 l34,0 M6,551 l38,0" stroke="#E8C48A" stroke-width="1.5" opacity=".8"/>
+        <rect x="0" y="542" width="50" height="18" rx="3" fill="#4E7A4A" ${ol(2.6)}/>
+        <rect x="0" y="530" width="48" height="12" rx="3" fill="#7A2E2E" ${ol(2.6)}/>
+        <rect x="4" y="518" width="44" height="12" rx="3" fill="${C.bottle}" ${ol(2.6)}/>
+        <rect x="2" y="506" width="46" height="12" rx="3" fill="#B07A1E" ${ol(2.6)}/>
+        <path d="M8,536 l32,0 M12,524 l28,0 M10,512 l30,0 M8,551 l34,0" stroke="#E8C48A" stroke-width="1.6" opacity=".85" stroke-linecap="round"/>
       </g>
 
       <!-- island things on the counter: a conch and a coconut -->
       <g transform="translate(104,560)">
-        <path d="M-34,0 Q-44,-22 -20,-34 Q6,-44 28,-30 Q40,-20 34,-6 Q30,2 18,0 Z" fill="#F2D6C4"/>
-        <path d="M-20,-34 l-6,-12 M-4,-40 l0,-13 M12,-38 l6,-11" stroke="#E6BFA8" stroke-width="5" stroke-linecap="round"/>
-        <path d="M-2,-4 Q14,-22 30,-12 Q24,-2 14,0 Z" fill="#E59A8A"/>
-        <path d="M-30,-6 Q-16,-20 -2,-14" stroke="#D9B39C" stroke-width="2" fill="none"/>
+        <path d="M-20,-34 l-6,-12 M-4,-40 l0,-13 M12,-38 l6,-11" stroke="${INK}" stroke-width="9" stroke-linecap="round"/>
+        <path d="M-34,0 Q-44,-22 -20,-34 Q6,-44 28,-30 Q40,-20 34,-6 Q30,2 18,0 Z" fill="#F4D9C7" ${ol()}/>
+        <path d="M-20,-34 l-6,-12 M-4,-40 l0,-13 M12,-38 l6,-11" stroke="#F4D9C7" stroke-width="4" stroke-linecap="round"/>
+        <path d="M-2,-3 Q14,-22 30,-12 Q24,-2 14,-1 Z" fill="#E59A8A" ${ol(2)}/>
+        <path d="M-30,-8 Q-16,-22 -2,-16" stroke="${INK}" stroke-width="1.8" fill="none" opacity=".45" stroke-linecap="round"/>
       </g>
       <g transform="translate(158,560)">
-        <ellipse cx="0" cy="-18" rx="22" ry="20" fill="#6B4A2E"/><ellipse cx="0" cy="-34" rx="17" ry="5" fill="#F3EEE3"/>
-        <path d="M-7,-36 L6,-66" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/><path d="M6,-66 l9,-4" stroke="${C.chili}" stroke-width="4" stroke-linecap="round"/>
-        <path d="M-12,-24 q4,8 0,16" stroke="#4E3420" stroke-width="2" fill="none"/>
+        <path d="M-7,-36 L6,-66 l9,-4" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M-7,-36 L6,-66 l9,-4" fill="none" stroke="${C.chili}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <ellipse cx="0" cy="-18" rx="22" ry="20" fill="#7B5434" ${ol()}/><ellipse cx="0" cy="-34" rx="17" ry="5" fill="#FBF7EE" ${ol(2.4)}/>
+        <path d="M-12,-22 q4,8 0,16 M10,-14 q2,4 0,8" ${ol(1.8)} fill="none" opacity=".5"/>
       </g>
 
       <!-- pastry case -->
       <g id="pastry-case" class="hot" data-act="shelf:pastry-case">
-        <rect x="180" y="548" width="340" height="16" fill="${C.teak}"/>
-        <path d="M184,548 L184,420 Q184,410 196,410 L504,410 Q516,410 516,420 L516,548" fill="#E9F3EE" fill-opacity=".32" stroke="#ffffff" stroke-opacity=".9" stroke-width="3"/>
-        <rect x="188" y="476" width="324" height="5" fill="#ffffff" fill-opacity=".7"/>
+        <path d="M184,548 L184,424 Q184,410 198,410 L502,410 Q516,410 516,424 L516,548 Z" fill="#EAF4F1" fill-opacity=".4"/>
+        <rect x="186" y="474" width="328" height="7" fill="#FBF7EE" ${ol(2.4)}/>
         ${[["croissant", 236, 476], ["roll", 330, 476], ["muffin", 424, 476], ["cookies", 236, 548], ["biscotti", 330, 548], ["croissant", 424, 548]]
           .map(([a, x, y]) => `<g style="transform: translate(${x - 60 * .62}px, ${y - 110 * .62}px) scale(.62)">${item(a)}</g>`).join("")}
-        <path d="M200,420 L230,540" stroke="#fff" stroke-opacity=".5" stroke-width="6" stroke-linecap="round"/>
+        <path d="M184,548 L184,424 Q184,410 198,410 L502,410 Q516,410 516,424 L516,548" fill="none" ${ol(4)}/>
+        <path d="M202,426 L224,532 M222,422 L234,480" stroke="#fff" stroke-opacity=".6" stroke-width="6" stroke-linecap="round"/>
+        <rect x="174" y="546" width="352" height="18" rx="5" fill="${C.teak}" ${ol(4)}/>
       </g>
 
-      <!-- espresso machine -->
+      <!-- espresso machine, wearing the café emblem -->
       <g id="machine" class="hot" data-act="shelf:signature-brews">
-        <rect x="1150" y="392" width="250" height="160" rx="14" fill="url(#chrome)"/>
-        <rect x="1150" y="392" width="250" height="34" rx="12" fill="${C.bottle}"/>
-        <text x="1275" y="416" text-anchor="middle" font-family="Rozha One, serif" font-size="20" fill="${C.gold}">MINJ</text>
-        <circle cx="1352" cy="452" r="18" fill="#F6F1E4" stroke="${C.gold}" stroke-width="4"/><path d="M1352,452 L1362,442" stroke="${C.chili}" stroke-width="3"/>
-        <rect x="1190" y="460" width="80" height="18" rx="6" fill="#59636A"/>
-        <rect x="1214" y="478" width="32" height="12" fill="#3E464C"/>
-        <rect x="1180" y="482" width="20" height="8" rx="3" fill="#2A2A26"/>
+        <rect x="1168" y="546" width="28" height="14" rx="3" fill="${INK}"/><rect x="1354" y="546" width="28" height="14" rx="3" fill="${INK}"/>
+        <rect x="1150" y="392" width="250" height="158" rx="16" fill="#E4E8EA" ${ol(4)}/>
+        <path d="M1150,432 L1150,408 Q1150,392 1166,392 L1384,392 Q1400,392 1400,408 L1400,432 Z" fill="${C.bottle}" ${ol(4)}/>
+        ${emblem(1180, 412, 14)}
+        <text x="1296" y="420" text-anchor="middle" font-family="Rozha One, serif" font-size="21" letter-spacing="2" fill="${C.goldSoft}">CAFÉ MINJ</text>
+        <path d="M1164,446 L1164,522" stroke="#fff" stroke-opacity=".75" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="1356" cy="466" r="19" fill="#FBF7EE" ${ol(3.4)}/>
+        ${[-60, -20, 20, 60].map(a => `<path d="M1356,451 l0,4" transform="rotate(${a} 1356 466)" ${ol(1.8)}/>`).join("")}
+        <path d="M1356,466 L1366,455" stroke="${C.chili}" stroke-width="3.4" stroke-linecap="round"/><circle cx="1356" cy="466" r="2.6" fill="${INK}"/>
+        <circle cx="1296" cy="452" r="6" fill="${C.gold}" ${ol(2.2)}/><circle cx="1314" cy="452" r="6" fill="${C.chili}" ${ol(2.2)}/>
+        <path d="M1384,474 q22,12 10,56" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/><path d="M1384,474 q22,12 10,56" fill="none" stroke="#B9C1C5" stroke-width="4.4" stroke-linecap="round"/>
+        <rect x="1186" y="444" width="88" height="24" rx="9" fill="#8D979C" ${ol(3.4)}/>
+        <path d="M1212,478 L1180,486" stroke="${INK}" stroke-width="12" stroke-linecap="round"/><path d="M1212,478 L1180,486" stroke="#4A2717" stroke-width="5.6" stroke-linecap="round"/>
+        <rect x="1210" y="468" width="40" height="14" rx="4" fill="#59636A" ${ol(3)}/>
+        <path d="M1224,482 l0,7 M1236,482 l0,7" ${ol(3)}/>
         <path id="pour" d="M1228,490 L1228,520 M1232,490 L1232,520" stroke="${C.coffee}" stroke-width="3" opacity="0"/>
-        <path d="M1380,470 q20,10 10,60" stroke="#8E979C" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <rect x="1160" y="544" width="230" height="10" rx="3" fill="#59636A"/>
+        <rect x="1168" y="534" width="214" height="14" rx="5" fill="#59636A" ${ol(3.4)}/>
+        <path d="M1184,541 h182" stroke="${INK}" stroke-width="2" stroke-dasharray="10 8" opacity=".6"/>
         <g id="steam" opacity="0">
-          <path class="puff" d="M1222,470 q-12,-20 0,-40 q12,-20 0,-40" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".7"/>
-          <path class="puff p2" d="M1244,470 q12,-20 0,-40 q-12,-20 0,-40" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".6"/>
+          <path class="puff" d="M1222,470 q-12,-20 0,-40 q12,-20 0,-40" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>
+          <path class="puff p2" d="M1244,470 q12,-20 0,-40 q-12,-20 0,-40" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"/>
         </g>
       </g>
 
       <!-- register -->
       <g class="hot" id="register" data-act="bill">
-        <path d="M1440,560 L1450,486 L1560,486 L1570,560 Z" fill="${C.gold}"/>
-        <rect x="1462" y="460" width="86" height="32" rx="4" fill="${C.teakDark}"/>
-        <text x="1505" y="483" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="18" fill="#9BE38F">0.00</text>
-        ${[0, 1, 2].map(r => [0, 1, 2, 3].map(c => `<rect x="${1466 + c * 21}" y="${504 + r * 16}" width="16" height="10" rx="2" fill="${C.ivory}"/>`).join("")).join("")}
-        <rect class="receipt-tongue" x="1484" y="440" width="42" height="24" fill="#fff"/>
+        <rect class="receipt-tongue" x="1484" y="436" width="42" height="28" fill="#fff" ${ol(2.4)}/>
+        <path d="M1438,560 L1450,488 L1560,488 L1572,560 Z" fill="${C.gold}" ${ol(4)}/>
+        <rect x="1460" y="458" width="90" height="34" rx="6" fill="${C.teakDark}" ${ol(3.4)}/>
+        <text x="1505" y="482" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="18" fill="#9BE38F">0.00</text>
+        ${[0, 1, 2].map(r => [0, 1, 2, 3].map(c => `<rect x="${1466 + c * 21}" y="${504 + r * 16}" width="16" height="10" rx="2.5" fill="${C.ivory}" ${ol(1.8)}/>`).join("")).join("")}
       </g>
 
       <!-- pick-up counter sign -->
       <g transform="translate(968,0)">
-        <rect x="-4" y="526" width="8" height="36" fill="${C.gold}"/><rect x="-26" y="556" width="52" height="6" rx="2" fill="${C.gold}"/>
-        <rect x="-66" y="494" width="132" height="36" rx="5" fill="${C.bottle}" stroke="${C.gold}" stroke-width="3"/>
-        <text x="0" y="518" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="17" fill="${C.goldSoft}">Pick up here</text>
+        <rect x="-4" y="526" width="8" height="34" fill="${C.gold}" ${ol(2.4)}/><rect x="-26" y="554" width="52" height="8" rx="3" fill="${C.gold}" ${ol(2.4)}/>
+        <rect x="-68" y="492" width="136" height="38" rx="7" fill="${C.bottle}" ${ol(3.4)}/>
+        <text x="0" y="517" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="17" fill="${C.goldSoft}">Pick up here</text>
       </g>
 
       <!-- served items live here -->
@@ -523,6 +548,16 @@ window.ART = (function () {
             <text x="0" y="-16" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="16" fill="${C.chili}">OPEN</text>
             <text x="0" y="2" text-anchor="middle" font-family="Mukta, sans-serif" font-size="12" fill="${C.bottleInk}">come in, it's free</text>
           </g>
+        </g>
+      </g>
+      <!-- a pulse around the door and a comic pointer, so nobody misses the way in -->
+      <path class="door-pulse" d="M670,780 L670,460 Q670,370 800,370 Q930,370 930,460 L930,780" fill="none" stroke="#FFE3A3" stroke-width="10" stroke-linecap="round"/>
+      <g id="door-hint" class="hot" data-act="enter">
+        <g class="door-hint-inner">
+          <path d="M962,612 L934,632 L966,640 Z" fill="#fff" ${ol(4)}/>
+          <rect x="956" y="590" width="196" height="56" rx="16" fill="#fff" ${ol(4)}/>
+          <path d="M960,616 L960,636" stroke="#fff" stroke-width="8"/>
+          <text id="door-hint-text" x="1054" y="628" text-anchor="middle" textLength="164" lengthAdjust="spacingAndGlyphs" font-family="Bangers, Impact, sans-serif" font-size="30" fill="${INK}">Click the door!</text>
         </g>
       </g>
       <!-- lamps -->

@@ -133,3 +133,10 @@ Everything here is original or freely licensed, so the site can't be taken down 
 - **DNS at Hostinger:** four A records for `@` (185.199.108.153 / .109.153 / .110.153 / .111.153) and a CNAME for `www` to `minjjohnpaul1206-cloud.github.io`.
 - **Email:** Hostinger mail on the same domain. Never delete the MX, SPF/DMARC TXT or mail CNAME records when editing DNS.
 - **Renewal:** keep auto-renew on at Hostinger so the domain never lapses.
+
+## How the café feels alive
+
+- **One illustrated world.** The barista poses are images (`assets/pose-*.webp`); the cups, pastries, jars, coffee machine and till are drawn in code in the same bold ink outline (`js/art.js`).
+- **Motion.** The barista steps when he walks, pops slightly on every pose change, bobs while he talks and does small idle gestures (`js/scene.js`). Visitors who prefer reduced motion get a still café.
+- **Guidance.** A pulsing door and a "Click the door!" pointer outside, a three-step how-it-works list, and a first-visit tip inside.
+- **Skip the show.** While an order is being made, visitors can fast-forward it.

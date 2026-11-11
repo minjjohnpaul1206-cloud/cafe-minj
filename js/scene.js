@@ -3,7 +3,7 @@
    Public: Cafe.scene.serve(item) → the item's SVG element, Cafe.scene.wave()
    ========================================================= */
 (() => {
-  const { A, D, P, $, reduce, PACE, wait, usesCup } = Cafe;
+  const { A, D, P, $, reduce, speed, wait, usesCup, state } = Cafe;
   const NS = "http://www.w3.org/2000/svg";
 
   $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || []);
@@ -29,13 +29,13 @@
     const from = el.style.transform || to;
     el.style.transform = to;
     if (reduce || !dur || from === to) return Promise.resolve();
-    return el.animate([{ transform: from }, { transform: to }], { duration: dur * PACE, easing }).finished.catch(() => {});
+    return el.animate([{ transform: from }, { transform: to }], { duration: dur * speed.k, easing }).finished.catch(() => {});
   }
   function fade(el, to, dur = 400) {
     const from = el.style.opacity || "1";
     el.style.opacity = to;
     if (reduce || !dur) return Promise.resolve();
-    return el.animate([{ opacity: from }, { opacity: String(to) }], { duration: dur * PACE }).finished.catch(() => {});
+    return el.animate([{ opacity: from }, { opacity: String(to) }], { duration: dur * speed.k }).finished.catch(() => {});
   }
   const itemAt = (x, y, s) => `translate(${x - 60 * s}px, ${y - 110 * s}px) scale(${s})`; // art base is (60,110)
   const at = (x, y) => `translate(${x}px, ${y}px)`;
@@ -52,10 +52,31 @@
 
   /* switch between the picture poses (idle, walk, reach, serve); mirror = face the other way */
   const hasPose = name => !!svg.querySelector(`.pose[data-pose="${name}"]`);
+  const popEl = $("#b-pop");                    // only exists for the picture barista
+  const act = (frames, duration = 300, easing = "ease-out") =>
+    popEl && !reduce ? popEl.animate(frames.map(f => ({ transform: f })), { duration, easing }) : null;
   function pose(name, mirror = false) {
-    barista.dataset.pose = hasPose(name) ? name : "idle";
+    const next = hasPose(name) ? name : "idle";
+    const changed = barista.dataset.pose !== next;
+    barista.dataset.pose = next;
     barista.dataset.mirror = mirror ? "1" : "";
+    if (changed) act(["scale(1.06,.94)", "scale(.98,1.03)", "scale(1,1)"], 280); // a little squash and stretch
   }
+
+  /* small things he does on his own while waiting, so he never stands frozen */
+  const GESTURES = [
+    [["rotate(0deg)", "rotate(-3deg)", "rotate(2.5deg)", "rotate(-2deg)", "rotate(0deg)"], 1000],             // friendly sway
+    [["translateY(0)", "translateY(-14px)", "translateY(0)", "translateY(-6px)", "translateY(0)"], 700],      // little hop
+    [["scale(1)", "scale(1.04) rotate(1.5deg)", "scale(1.04) rotate(1.5deg)", "scale(1)"], 1100],             // leans in
+  ];
+  const gesture = (i = Math.floor(Math.random() * GESTURES.length)) => act(GESTURES[i][0], GESTURES[i][1], "ease-in-out");
+  (function idleLoop() {
+    setTimeout(() => {
+      if (!document.hidden && !state.busy && state.view === "inside" && barista.dataset.pose === "idle") gesture();
+      idleLoop();
+    }, 4500 + Math.random() * 4000);
+  })();
+  const talk = on => barista.classList.toggle("talking", !!on);
 
   async function walk(x, carry) {
     const dx = x - bx;
@@ -198,12 +219,14 @@
       await Promise.all([rot(hand, 0, 380), tw(el, itemAt(800, 604, 1.5), 420, "cubic-bezier(.3,1.5,.5,1)")]);
     }
     sparkle(800, 500);
+    gesture(1);                                 // a happy little hop as he serves
     barista.classList.add("wink");
     setTimeout(() => barista.classList.remove("wink"), 1300); // peek over the shades, wink
     return (counterItem = el);
   }
 
   async function wave() {
+    if (popEl) { gesture(0); return; }          // picture barista: he is already waving, so he sways hello
     await rot(armR, -150, 420);
     for (let i = 0; i < 2; i++) { await rot(armR, -128, 180); await rot(armR, -158, 180); }
     await rot(armR, 0, 420);
@@ -262,5 +285,5 @@
     setTimeout(() => s.remove(), 1100);
   }
 
-  Cafe.scene = { serve, wave, tw, clear: clearCounter, bubble, sfx };
+  Cafe.scene = { serve, wave, tw, clear: clearCounter, bubble, sfx, talk };
 })();
