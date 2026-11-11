@@ -15,9 +15,9 @@ window.CAFE = {
     city: "Pune, India",
     website: "johnpaulminj.com",
     /* The CV page: a keyword headline and a short summary, written for
-       B2B sales and marketing roles at product companies. */
-    headline: "B2B Sales and Marketing | Business Development | Account Management | Market Research",
-    summary: "B2B sales and marketing professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Experience across the sales cycle: lead generation, cold outreach, account management and client presentations to senior decision-makers in international markets, backed by marketing strategy and market research. An engineering background helps in understanding technical products quickly and explaining them simply to buyers.",
+       sales and marketing roles in any industry. */
+    headline: "Sales and Marketing | Business Development | Account Management | Marketing Strategy | Market Research",
+    summary: "Sales and marketing professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Sales experience across the full cycle: lead generation, cold outreach, account management, client presentations to senior decision-makers and closing. Marketing experience in positioning, customer research and campaign strategy, with one campaign doubling revenue within a month. An engineering background helps in learning new products quickly and explaining them simply to customers.",
     email: "johnpaul@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
@@ -191,7 +191,7 @@ window.CAFE = {
         "Consultative selling, client presentations, proposal and pitch development.",
       ],
       cvNotes: [
-        "B2B sales, business development, lead generation, cold email, cold calling, prospect qualification, pipeline management, account management, consultative selling, client presentations, proposal and pitch development.",
+        "Sales, B2B sales, business development, lead generation, cold email, cold calling, prospect qualification, pipeline management, account management, consultative selling, client presentations, proposal and pitch development.",
       ],
       tags: ["B2B", "Pipeline", "Pitching"],
     },
