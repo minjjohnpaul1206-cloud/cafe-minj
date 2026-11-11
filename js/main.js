@@ -57,7 +57,7 @@
     state.view = v;
     Object.entries(views).forEach(([k, el]) => (el.hidden = k !== v));
     scrollTo(0, 0);
-    document.title = v === "cv" ? `${P.name} | Resume` : `${P.name} | Sales and Business Development Portfolio`;
+    document.title = v === "cv" ? `${P.name} | Resume` : `${P.name} | B2B Sales and Marketing Portfolio`;
     if (v === "street") resetStreet();
     if (v === "inside") {
       if (!reduce) views.inside.animate([{ opacity: 0, filter: "brightness(1.6)" }, { opacity: 1, filter: "none" }], { duration: 700, easing: "ease-out" });

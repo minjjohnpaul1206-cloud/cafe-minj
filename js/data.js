@@ -15,9 +15,9 @@ window.CAFE = {
     city: "Pune, India",
     website: "johnpaulminj.com",
     /* The CV page: a keyword headline and a short summary, written for
-       B2B sales and business development roles. */
-    headline: "Business Development and B2B Sales | Industrial Machinery and Automation | India Market Entry",
-    summary: "Business development and B2B sales professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Experience in lead generation, account management and India market-entry research for European industrial machinery companies. Skilled in consultative selling, client presentations, market research and Excel-based account analysis.",
+       B2B sales and marketing roles at product companies. */
+    headline: "B2B Sales and Marketing | Business Development | Account Management | Market Research",
+    summary: "B2B sales and marketing professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Experience across the sales cycle: lead generation, cold outreach, account management and client presentations to senior decision-makers in international markets, backed by marketing strategy and market research. An engineering background helps in understanding technical products quickly and explaining them simply to buyers.",
     email: "johnpaul@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
