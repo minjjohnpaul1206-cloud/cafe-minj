@@ -18,7 +18,7 @@
     paper.innerHTML = `
       <button class="x" type="button" data-act="close-bill" aria-label="Close the bill">×</button>
       <h2 id="bill-title">Café Minj</h2>
-      <p class="c muted">Beach café and portfolio, Pune</p>
+      <p class="c muted">A portfolio, not a real café. Pune</p>
       <p class="c muted">Bill JPM-1206 &nbsp; ${esc(when)}</p>
       <hr>${lines}<hr>
       <div class="row total"><span>Total</span><span>0.00</span></div>
@@ -113,18 +113,28 @@
       ? `<li><b>${esc(it.notes[0].replace(/, certified by Google\.$/, ""))}</b>, Google certification</li>`
       : `<li><b>${esc(it.role)}</b>, ${esc(it.org)}. ${esc(it.notes.join(" "))}</li>`;
 
+    const edu = it => `<div class="cv-entry">
+      <div class="cv-entry-head"><b>${esc(it.role)}</b><span>${esc(it.period || "")}</span></div>
+      <div class="cv-org">${esc([it.org, it.place].filter(Boolean).join(", "))}</div>${list(it.cvNotes)}</div>`;
+    const lead = shelfItems("pastry-case").filter(it => it.role !== "Certification");
+    const certs = shelfItems("pastry-case").filter(it => it.role === "Certification");
+
+    /* Standard resume headings and plain text, so applicant tracking systems
+       (ATS) can read the page and the PDF printed from it. */
     $("#cv-paper").innerHTML = `
       <header class="cv-head">
-        ${P.photo ? `<img class="cv-photo" src="${esc(P.photo)}" alt="${esc(P.name)}">` : ""}
+        ${P.photo ? `<img class="cv-photo" src="${esc(P.photo)}" alt="">` : ""}
         <div><h1>${esc(P.name)}</h1>
-        <p class="cv-role">${esc(P.role)}, ${esc(P.employer)}. ${esc(P.degree)}.</p>
-        <p class="cv-contact"><span>${esc(P.city)}</span><a href="mailto:${esc(P.email)}">${esc(P.email)}</a><a href="${esc(P.phoneHref)}">${esc(P.phone)}</a><a href="${esc(P.linkedin)}" target="_blank" rel="noopener">${esc(P.linkedinLabel)}</a></p></div>
+        <p class="cv-role">${esc(P.headline || P.role)}</p>
+        <p class="cv-contact"><span>${esc(P.city)}</span><a href="${esc(P.phoneHref)}">${esc(P.phone)}</a><a href="mailto:${esc(P.email)}">${esc(P.email)}</a><a href="${esc(P.linkedin)}" target="_blank" rel="noopener">${esc(P.linkedinLabel)}</a>${P.website ? `<a href="https://${esc(P.website)}">${esc(P.website)}</a>` : ""}</p></div>
       </header>
-      ${section("Experience", shelfItems("signature-brews").map(it => entry(it)).join(""))}
-      ${section("Education", shelfItems("brew-school").map(it => entry(it, it.cvNotes || it.notes)).join(""))}
+      ${P.summary ? section("Professional Summary", `<p class="cv-summary">${esc(P.summary)}</p>`) : ""}
+      ${section("Work Experience", shelfItems("signature-brews").map(it => entry(it, it.cvNotes || it.notes)).join(""))}
+      ${section("Education", shelfItems("brew-school").map(edu).join(""))}
       ${section("Skills", `<dl class="cv-skills">${shelfItems("bean-shelf").map(it => `<dt>${esc(it.cvTitle || it.name)}</dt><dd>${esc((it.cvNotes || it.notes).join(" "))}</dd>`).join("")}</dl>`)}
-      ${section("Academic project", shelfItems("secret-menu").map(it => entry({ ...it, role: it.cvTitle || it.org, org: "", period: "" })).join(""))}
-      ${section("Leadership & certifications", `<div class="cv-entry"><ul>${shelfItems("pastry-case").map(leadership).join("")}</ul></div>`)}`;
+      ${section("Projects", shelfItems("secret-menu").map(it => entry({ ...it, role: it.cvTitle || it.org, org: "", period: "" })).join(""))}
+      ${section("Leadership", `<div class="cv-entry"><ul>${lead.map(leadership).join("")}</ul></div>`)}
+      ${section("Certifications", `<div class="cv-entry"><ul>${certs.map(it => `<li>${esc(it.notes[0].replace(/, certified by Google\.$/, ""))}, Google</li>`).join("")}</ul></div>`)}`;
 
     if (P.resumePdf) Object.assign($("#cv-pdf"), { hidden: false, href: P.resumePdf });
   }

@@ -76,7 +76,7 @@
     if (!first) return say("What else can I tempt you with?");
     if (state.returning && state.name)
       return say(`${hi}, ${state.name}. Back again? I had a feeling you would be. Your loyalty card stands at ${state.stamps.length} of ${D.items.length}. What shall I make appear today?`);
-    return say(`${hi}, and welcome. You've wandered into Café Minj, where every cup comes with a plot twist. I'm ${P.firstName}: born on the Andaman Islands, barista by night, management trainee in sales and marketing by day. Everything on the menu is a chapter of my work, and all of it is on the house. Choose well.`);
+    return say(`${hi}, and welcome. You've wandered into Café Minj, my resume dressed up as a café. I'm ${P.firstName}: born on the Andaman Islands, barista by night, management trainee in sales and marketing by day. Everything on the menu is a chapter of my work, and all of it is on the house. Choose well.`);
   }
   function openShelf(id) {
     const s = shelf(id);

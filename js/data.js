@@ -13,6 +13,11 @@ window.CAFE = {
     employer: "Eckstein Engineering Business Solutions",
     degree: "MBA, IIM Jammu (2026)",
     city: "Pune, India",
+    website: "johnpaulminj.com",
+    /* The CV page: a keyword headline and a short summary, written for
+       B2B sales and business development roles. */
+    headline: "Business Development and B2B Sales | Industrial Machinery and Automation | India Market Entry",
+    summary: "Business development and B2B sales professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Experience in lead generation, account management and India market-entry research for European industrial machinery companies. Skilled in consultative selling, client presentations, market research and Excel-based account analysis.",
     email: "johnpaul@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
@@ -41,7 +46,7 @@ window.CAFE = {
     },
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */
-    resumePdf: null,
+    resumePdf: "assets/John-Paul-Minj-Resume.pdf",
   },
 
   /* ---------- Today's special: the chip shown first at the counter ---------- */
@@ -83,14 +88,14 @@ window.CAFE = {
       period: "Apr 2026 – Present", place: "Pune, India",
       line: "A concentrated shot of German–Indian market entry. Short, intense, and it lands.",
       notes: [
-        "Manage and grow a portfolio of European accounts, planning next steps, follow-ups and meetings.",
-        "Shape each client pitch: after listening to a client, I work out how Eckstein's BOT/GEC model can serve their goals, and say so honestly when it can't.",
-        "Research India market-entry opportunities for German industrial machinery clients: market size, competitive landscape, target account segments.",
-        "Prioritise and analyse accounts across Germany, Austria and Italy in Excel, maintaining the structured research database the sales team runs on.",
-        "Write company-specific cold emails and call scripts for German Mittelstand machine builders, landing introductory meetings with owner-managers and senior decision-makers.",
-        "Lead India market discovery for a German packaging automation client, mapping how Indian food manufacturers run their production and packaging lines.",
-        "Built the corporate pitch deck for European machinery SME audiences and delivered client-facing presentations to senior European stakeholders.",
-        "Prototyped a B2B sales CRM using AI-assisted development and wrote the 10-page BRD and feature specs guiding the developer-led build, now in progress.",
+        "Manage and grow a portfolio of European industrial accounts across Germany, Austria and Italy: account planning, follow-ups and meetings with owner-managers and senior decision-makers.",
+        "Generate leads through company-specific cold email and cold-calling campaigns to German Mittelstand machine builders, securing introductory meetings with senior decision-makers.",
+        "Develop tailored pitches by mapping each client's goals to Eckstein's Build-Operate-Transfer (BOT) and Global Engineering Centre (GEC) model, and qualify out opportunities where the model is not a fit.",
+        "Conduct India market-entry research for German industrial machinery clients: market sizing, competitive landscape and target account segmentation.",
+        "Lead India market discovery for a German packaging automation client, mapping production and packaging practices of Indian food manufacturers.",
+        "Analyse and prioritise accounts in Microsoft Excel and maintain the account research database used by the sales team.",
+        "Built the corporate pitch deck for European machinery SME audiences and delivered client presentations to senior European stakeholders.",
+        "Prototyped a B2B sales CRM using AI-assisted development and wrote the 10-page Business Requirements Document (BRD) and feature specifications for the developer-led build.",
       ],
       tags: ["B2B sales", "Account management", "Pitching", "Market entry", "Data analysis"],
     },
@@ -104,11 +109,11 @@ window.CAFE = {
       period: "Apr 2025 – May 2025", place: "Gaudham Farm Stay",
       line: "I wrote the recipe; the creative team poured it.",
       notes: [
-        "Led the marketing strategy for Gaudham Farm Stay's turnaround: positioning, the USP to lead with, and the content themes for Instagram and campaigns.",
-        "Called past guests to learn what they loved about Gaudham; their own words shaped the USP and the messaging.",
-        "Picked keywords straight from those guest conversations, then worked with the SEO specialist to match them to the search terms trending most.",
-        "Briefed the graphic and content team on the themes and keywords; they produced and posted the content, while I reviewed what worked and refined the plan.",
-        "Proposed a 10% returning-guest offer, agreed it with management and re-engaged past guests directly: revenue doubled within a month as they came back.",
+        "Led the marketing strategy for the turnaround of Gaudham Farm Stay: positioning, unique selling proposition (USP) and content themes for Instagram and campaigns.",
+        "Conducted customer interviews with past guests by phone and used their feedback to define the USP and messaging.",
+        "Selected keywords from customer conversations and worked with the SEO specialist to align them with high-volume search terms.",
+        "Briefed the graphic design and content team on themes and keywords, reviewed performance and refined the content plan.",
+        "Proposed a 10% returning-guest offer, agreed it with management and re-engaged past guests directly; revenue doubled within one month.",
       ],
       tags: ["Marketing strategy", "Customer insight", "Positioning", "Briefing creative teams"],
     },
@@ -122,9 +127,9 @@ window.CAFE = {
       period: "Oct 2024 – Nov 2024", place: "Remote",
       line: "A small cup with a record stained in: sold, closed, over target.",
       notes: [
-        "Managed the full sales cycle for digital development courses, end to end.",
-        "Converted a pipeline of 60 qualified prospects into 14 paying customers at a 23% conversion rate.",
-        "Exceeded every assigned sales target within a six-week engagement, handling prospecting, qualification, objections and closing independently.",
+        "Managed the full sales cycle for digital development courses: prospecting, qualification, objection handling and closing.",
+        "Converted 14 of 60 qualified prospects into paying customers, a 23% conversion rate.",
+        "Exceeded all assigned sales targets within a six-week engagement.",
       ],
       tags: ["Full sales cycle", "23% conversion", "Closing"],
     },
@@ -141,7 +146,6 @@ window.CAFE = {
         "Coordinator, Infrastructure Committee: selected through a four-stage process; primary liaison for a 1,500-student body across administration and engineering teams.",
         "Where the sales, marketing and strategy behind the Signature Brews were ground.",
       ],
-      cvNotes: ["Coordinator, Infrastructure Committee: selected through a four-stage process; primary liaison for a 1,500-student body."],
       tags: ["MBA", "IIM Jammu", "2026"],
     },
     {
@@ -157,7 +161,6 @@ window.CAFE = {
         "The engineering layer under every commercial move, from CRM specification to demand-generation campaigns — and why German machine builders find the conversation easy.",
         "Event Coordinator on campus: led the 'Noise Ignition' music competition end to end.",
       ],
-      cvNotes: ["Event Coordinator: led the 'Noise Ignition' music competition end to end."],
       tags: ["B.Tech", "ECE", "NIT Puducherry"],
     },
     {
@@ -177,7 +180,7 @@ window.CAFE = {
       tags: ["CBSE", "Port Blair"],
     },
     {
-      id: "bd-beans", cvTitle: "Business development", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#B5452E", jarIndex: 0,
+      id: "bd-beans", cvTitle: "Sales and business development", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#B5452E", jarIndex: 0,
       name: "Business Development Beans",
       kind: "Single origin, ground daily",
       role: "Core skill",
@@ -187,10 +190,13 @@ window.CAFE = {
         "Prospect qualification, pipeline management, account research.",
         "Consultative selling, client presentations, proposal and pitch development.",
       ],
+      cvNotes: [
+        "B2B sales, business development, lead generation, cold email, cold calling, prospect qualification, pipeline management, account management, consultative selling, client presentations, proposal and pitch development.",
+      ],
       tags: ["B2B", "Pipeline", "Pitching"],
     },
     {
-      id: "strategy-beans", cvTitle: "Market & strategy", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#2F5D8A", jarIndex: 1,
+      id: "strategy-beans", cvTitle: "Market research and strategy", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#2F5D8A", jarIndex: 1,
       name: "Market & Strategy Beans",
       kind: "Slow-roasted, pairs well with whiteboards",
       role: "Core skill",
@@ -199,6 +205,9 @@ window.CAFE = {
         "Market-entry research, market sizing, competitive analysis.",
         "Account segmentation and customer segmentation.",
         "STP and SWOT analysis, go-to-market strategy.",
+      ],
+      cvNotes: [
+        "Market-entry research, market sizing, competitive analysis, account segmentation, customer segmentation, STP analysis, SWOT analysis, go-to-market strategy.",
       ],
       tags: ["Market sizing", "GTM", "STP & SWOT"],
     },
@@ -213,11 +222,14 @@ window.CAFE = {
         "Customer interviews and keyword research with SEO specialists.",
         "Briefing creative teams, campaign performance analysis, Google Analytics.",
       ],
+      cvNotes: [
+        "Marketing strategy, positioning, USP development, customer interviews, keyword research, briefing creative teams, campaign performance analysis, Google Analytics.",
+      ],
       tags: ["Strategy", "Positioning", "Customer insight"],
     },
 
     {
-      id: "tools-blend", cvTitle: "Tools & languages", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#4E7A4A", jarIndex: 3,
+      id: "tools-blend", cvTitle: "Tools and languages", shelf: "bean-shelf", station: "shelf", art: "jar", jarColor: "#4E7A4A", jarIndex: 3,
       name: "Tool Shed Blend",
       kind: "Utility roast, always in the pocket",
       role: "Tools & languages",
@@ -226,6 +238,9 @@ window.CAFE = {
         "Microsoft Excel and Microsoft PowerPoint.",
         "CRM design and BRD documentation.",
         "English (fluent), Hindi (fluent).",
+      ],
+      cvNotes: [
+        "Microsoft Excel, Microsoft PowerPoint, CRM design, Business Requirements Document (BRD) writing. Languages: English (fluent), Hindi (fluent).",
       ],
       tags: ["Excel", "PowerPoint", "BRD"],
     },
@@ -241,7 +256,9 @@ window.CAFE = {
         "Prototyped a B2B sales CRM with AI-assisted development and drafted its 10-page BRD for the developer-led build.",
         "Designed and launched this café, johnpaulminj.com, by directing AI tools from concept and copy to code and deployment.",
       ],
-      cvNotes: ["Claude in PowerPoint and Claude Projects for on-brand client presentations; ChatGPT for first-pass market research; every output reviewed and fact-checked by me."],
+      cvNotes: [
+        "Claude (Projects, Claude in PowerPoint) for on-brand client presentations; ChatGPT for first-pass market research; all output reviewed and fact-checked.",
+      ],
       tags: ["Claude", "ChatGPT", "Brand consistency", "Fact-checking"],
     },
 
