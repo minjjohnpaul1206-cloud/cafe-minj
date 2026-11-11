@@ -55,12 +55,25 @@
   const popEl = $("#b-pop");                    // only exists for the picture barista
   const act = (frames, duration = 300, easing = "ease-out") =>
     popEl && !reduce ? popEl.animate(frames.map(f => ({ transform: f })), { duration, easing }) : null;
-  function pose(name, mirror = false) {
+  function pose(name, mirror = false, pop = true) {
     const next = hasPose(name) ? name : "idle";
     const changed = barista.dataset.pose !== next;
     barista.dataset.pose = next;
     barista.dataset.mirror = mirror ? "1" : "";
-    if (changed) act(["scale(1.06,.94)", "scale(.98,1.03)", "scale(1,1)"], 280); // a little squash and stretch
+    svg.querySelectorAll(".pose").forEach(p => p.classList.toggle("on", p.dataset.pose === next));
+    if (changed && pop) act(["scale(1.06,.94)", "scale(.98,1.03)", "scale(1,1)"], 280); // a little squash and stretch
+  }
+  const frame = name => pose(name, false, false); // one frame of an animation: no squash, no mirror
+  const now = () => barista.dataset.pose;
+
+  /* a pose he strikes for a moment (laugh, think, thumbs up…), then back to standing */
+  let held = null;                              // a reaction he holds even while talking
+  function react(name, ms = 2200, hold = true) {
+    if (reduce || !hasPose(name) || !talkSet.includes(now())) return; // not while his hands are busy
+    clearInterval(talkTimer); talkTimer = null;
+    pose(name);
+    held = hold ? name : null;
+    setTimeout(() => { if (held === name) held = null; if (now() === name) pose("idle"); }, ms);
   }
 
   /* small things he does on his own while waiting, so he never stands frozen */
@@ -72,11 +85,32 @@
   const gesture = (i = Math.floor(Math.random() * GESTURES.length)) => act(GESTURES[i][0], GESTURES[i][1], "ease-in-out");
   (function idleLoop() {
     setTimeout(() => {
-      if (!document.hidden && !state.busy && state.view === "inside" && barista.dataset.pose === "idle") gesture();
+      if (!document.hidden && !state.busy && state.view === "inside" && now() === "idle" && !talkTimer) {
+        if (Math.random() < 0.5) gesture();
+        else react(MOODS[Math.floor(Math.random() * MOODS.length)], 2600, false); // waits like a person would
+      }
       idleLoop();
     }, 4500 + Math.random() * 4000);
   })();
-  const talk = on => barista.classList.toggle("talking", !!on);
+  const MOODS = ["crossed", "think", "phone"];
+
+  /* talking: his mouth and hands move while the words type out.
+     Standing → open hands (mouth shut / mouth open). Waving → he keeps waving as he says hello. */
+  const TALK = ["shrug", "tada"], HELLO = ["wave1", "wave2", "wave3", "wave2", "wave3", "wave2", "wave1", "wave2", "wave3", "wave2"];
+  const talkSet = ["idle", ...MOODS, ...TALK, "wave1", "wave2", "wave3", "laugh", "point", "thumbs", "bill"];
+  let talkTimer = null;
+  function talk(on) {
+    barista.classList.toggle("talking", !!on);
+    clearInterval(talkTimer); talkTimer = null;
+    if (!talkSet.includes(now()) || held === now()) return; // hands busy, or holding a reaction: just the little bob
+    if (!on || reduce || !hasPose("shrug")) { if (now() !== "idle") pose("idle", false, false); return; }
+    const hello = now() === "wave1" ? [...HELLO] : [];
+    let i = 0;
+    talkTimer = setInterval(() => {
+      if (!talkSet.includes(now()) || held === now()) { clearInterval(talkTimer); talkTimer = null; return; } // he walked off mid-sentence
+      frame(hello.length ? hello.shift() : TALK[i++ % 2]);
+    }, 170);
+  }
 
   async function walk(x, carry) {
     const dx = x - bx;
@@ -110,6 +144,7 @@
   const stations = {
     async machine(it) {
       await walk(1040);
+      if (hasPose("brew")) { pose("brew"); sfx("Click!", 1200, 330); await wait(650); } // portafilter in hand, presses the button
       pose("espresso");                         // locks the portafilter into the machine
       await rot(armR, -70);
       $("#steam").classList.add("on"); $("#pour").classList.add("on");
@@ -125,10 +160,14 @@
     },
     async case(it) {
       await walk(620);
+      pose("tongs1");                           // leans into the case with the tongs
       await rot(armL, 55);
       const el = makeItem(it, 400, 476, 0.62, 0);
       await fade(el, 1, 300);
+      frame("tongs2");                          // lifts it out
+      sfx("Snip!", 430, 420);
       await tw(el, itemAt(400, 444, 0.62), 300);
+      frame("tongs3");
       await Promise.all([rot(armL, 35, 450), tw(el, itemAt(620 - HAND, 548, CARRY), 450)]);
       await walk(800, { el, dx: -HAND });
       return [el, armL];
@@ -186,11 +225,44 @@
     if (it.station === "books") return "book";
     if (it.art === "cloche") return "cloche";
     if (it.station === "case") return "plate";
+    if (it.station === "shelf") return "jar";
     if (usesCup(it)) return "togo";
     if (HANDED.includes(it.art)) return "serve";
     return null;
   }
   const PLATE_TOP = [803, 522];                 // where the plate sits in the plate pose
+
+  /* He takes the marker from his pocket and writes the name on the cup. A comic
+     close-up shows the letters landing one by one, in step with his pen. */
+  async function writeName() {
+    if (!hasPose("write2")) { pose("write"); return wait(1300); }
+    const text = state.cupText || "";
+    pose("write1");
+    await wait(520);
+    let close = null;
+    if (text && !reduce) {
+      close = document.createElementNS(NS, "g");
+      close.id = "closeup";
+      const cx = bx - 262, cy = 318;
+      close.innerHTML = `<circle cx="${cx}" cy="${cy}" r="96" fill="#FBF3DF" stroke="#2A1A12" stroke-width="6"/>
+        <path d="M${cx + 84},${cy + 46} l44,26 -30,-48z" fill="#FBF3DF" stroke="#2A1A12" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="${cx}" cy="${cy}" r="90" fill="#FBF3DF"/>
+        <g transform="translate(${cx - 108},${cy - 112}) scale(1.8)">${A.item("togo", {})}</g>`;
+      layer.appendChild(close);
+    }
+    const slot = close && close.querySelector(".cup-name-slot");
+    const pen = ["write2", "write3", "write4", "write3"];
+    const letters = [...text], n = Math.max(letters.length, 5);
+    for (let i = 0; i < n; i++) {
+      frame(pen[i % pen.length]);
+      if (slot && i < letters.length)
+        slot.innerHTML = `<text x="60" y="54" text-anchor="middle" font-family="Kalam, cursive" font-size="15" fill="#2A2522"${letters.length > 7 ? ' textLength="46" lengthAdjust="spacingAndGlyphs"' : ""}>${letters.slice(0, i + 1).join("").replace(/[&<>]/g, "")}</text>`;
+      await wait(150);
+    }
+    frame("write5");                            // done: caps the marker, pleased with himself
+    await wait(650);
+    if (close) { await fade(close, 0, 200); close.remove(); }
+  }
 
   async function serve(it) {
     await clearCounter();
@@ -205,7 +277,7 @@
         await tw(el, itemAt(800, 604, 1.5), 380, "cubic-bezier(.3,1.5,.5,1)");
       } else {
         fade(el, 0, 150);
-        if (give === "togo" && hasPose("write")) { pose("write"); await wait(1300); } // name on the cup first
+        if (give === "togo") await writeName();   // name on the cup first, letter by letter
         pose(give);                             // offers it to the visitor
         if (give === "cloche") sfx("Ta-da!", 980, 240);
         await wait(1300);
@@ -226,7 +298,12 @@
   }
 
   async function wave() {
-    if (popEl) { gesture(0); return; }          // picture barista: he is already waving, so he sways hello
+    if (hasPose("wave1")) {                     // picture barista: raises his hand; talk() keeps it waving as he says hello
+      if (reduce) return;
+      pose("wave1");
+      setTimeout(() => { if (now() === "wave1" && !talkTimer) pose("idle"); }, 2500);
+      return;
+    }
     await rot(armR, -150, 420);
     for (let i = 0; i < 2; i++) { await rot(armR, -128, 180); await rot(armR, -158, 180); }
     await rot(armR, 0, 420);
@@ -252,7 +329,7 @@
         const sw = stage.clientWidth, w = bubbleEl.offsetWidth, h = bubbleEl.offsetHeight;
         const [cx] = toBox(stage, barista, 0, 260);
         const right = cx < sw * 0.58;                      // open on the side with more room
-        const [ex, ey] = toBox(stage, barista, right ? 78 : -78, 262);
+        const [ex, ey] = toBox(stage, barista, right ? 200 : -200, 262); // clear of his hands when he waves or gestures
         const left = right ? ex + 18 : ex - 18 - w;
         const top = Math.max(10, ey - Math.min(70, h * 0.35));
         bubbleEl.style.left = Math.max(8, Math.min(sw - w - 8, left)) + "px";
@@ -285,5 +362,5 @@
     setTimeout(() => s.remove(), 1100);
   }
 
-  Cafe.scene = { serve, wave, tw, clear: clearCounter, bubble, sfx, talk };
+  Cafe.scene = { serve, wave, tw, clear: clearCounter, bubble, sfx, talk, react };
 })();

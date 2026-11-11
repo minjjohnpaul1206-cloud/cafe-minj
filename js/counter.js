@@ -82,10 +82,12 @@
     const s = shelf(id);
     state.shelf = id; step("shelf");
     scrollToEl(".stage", true);
+    Cafe.scene.react("point", 2600);            // points down at the choices
     say(`${s.label}. ${s.blurb} Go on, pick one. I promise nothing explodes.`);
   }
   function wifi() {
     step("back");
+    Cafe.scene.react("laugh", 3200);
     say(`The password is "breweddaily". But you didn't come all this way for the wifi. Nobody ever does. Shall I show you the menu?`);
   }
   function rules() {
@@ -124,6 +126,7 @@
   function askName(id) {
     state.pending = id; step("name");
     scrollToEl(".stage", true);
+    Cafe.scene.react("think", 2600);
     say("Excellent taste. Now, a name for the cup, your real one ideally. And is it for here or to go?");
     setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
   }
@@ -154,13 +157,16 @@
     if (scrollToEl(".stage", true)) await wait(550);
     say(`One ${short(it)}${state.name ? " for " + state.name : ""}. Watch closely.`);
 
-    const el = await Cafe.scene.serve(it);
+    /* what goes on the cup is decided before he writes it (the first cup gets it a little wrong) */
     let wrong = null;
-    if (usesCup(it) && state.name) {
+    const named = usesCup(it) && state.name;
+    if (named) {
       wrong = !state.wroteOnce && state.name.length >= 3 ? misspell(state.name) : null;
       state.wroteOnce = true;
-      el.querySelector(".cup-name-slot").innerHTML = A.cupName(state.name, wrong);
     }
+    state.cupText = named ? wrong || state.name : "";
+    const el = await Cafe.scene.serve(it);
+    if (named) el.querySelector(".cup-name-slot").innerHTML = A.cupName(state.name, wrong);
 
     if (!state.tray.includes(id)) state.tray.push(id);
     const newStamp = !state.stamps.includes(id);
@@ -178,6 +184,7 @@
     step("served");
     state.busy = false;
     speed.k = speed.normal;                     // back to normal after a "Skip"
+    Cafe.scene.react(full ? "tada" : "thumbs", full ? 3000 : 1500);
     await wait(900);
     if (state.step === "served") scrollToEl("#served"); // open the story, unless they've already moved on
   }

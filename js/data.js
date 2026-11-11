@@ -30,7 +30,7 @@ window.CAFE = {
     illustration: "assets/barista.webp",
     /* The barista behind the counter: your illustration, cut out.
        Set to null to use the hand-drawn animated barista instead. */
-    baristaImage: "assets/barista-cut.webp",
+    baristaImage: "assets/pose-stand.webp",
     /* Extra poses, switched automatically: walking between stations, reaching
        up to a shelf, and handing over a cup. Same style as the idle image. */
     baristaPoses: {
@@ -43,6 +43,8 @@ window.CAFE = {
       book: "assets/pose-book.webp",
       cloche: "assets/pose-cloche.webp",
       espresso: "assets/pose-espresso.webp",
+      /* animation frames */
+      wave1: "assets/pose-wave1.webp", wave2: "assets/pose-wave2.webp", wave3: "assets/pose-wave3.webp", shrug: "assets/pose-shrug.webp", tada: "assets/pose-tada.webp", crossed: "assets/pose-crossed.webp", think: "assets/pose-think.webp", phone: "assets/pose-phone.webp", laugh: "assets/pose-laugh.webp", point: "assets/pose-point.webp", thumbs: "assets/pose-thumbs.webp", bill: "assets/pose-bill.webp", jar: "assets/pose-jar.webp", brew: "assets/pose-brew.webp", tongs1: "assets/pose-tongs1.webp", tongs2: "assets/pose-tongs2.webp", tongs3: "assets/pose-tongs3.webp", write1: "assets/pose-write1.webp", write2: "assets/pose-write2.webp", write3: "assets/pose-write3.webp", write4: "assets/pose-write4.webp", write5: "assets/pose-write5.webp",
     },
     /* Optional: put your PDF resume at assets/John-Paul-Minj-Resume.pdf and
        set this to that path. A download button appears in the CV view. */

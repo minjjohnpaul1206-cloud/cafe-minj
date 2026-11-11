@@ -66,7 +66,7 @@
         state.greeted = true;
         setTimeout(async () => {
           const q = state.queued; state.queued = null;
-          if (!q) { counter.greet(first); if (first) scene.wave(); return; }
+          if (!q) { if (first) scene.wave(); counter.greet(first); return; } // hand up first, so he waves as he talks
           await counter.greet(first);
           counter.order(q); // they already chose on the street
         }, reduce ? 0 : 450);

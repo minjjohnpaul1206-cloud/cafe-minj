@@ -45,6 +45,7 @@
       <div class="barcode" aria-hidden="true"></div>
       <p class="c muted">Thank you. Come again.</p>`;
 
+    Cafe.scene.react("bill", 2400);             // holds up the receipt
     $("#register").classList.add("printing");
     setTimeout(() => $("#register").classList.remove("printing"), 1300);
     bill.showModal();

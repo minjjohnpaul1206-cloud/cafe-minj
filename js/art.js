@@ -213,7 +213,7 @@ window.ART = (function () {
 
   /* where each pose image sits so the heads line up (head centred on x = 0, hair top at y = 205) */
   const POSE_BOX = {
-    idle: [-179, 205, 350, 411],
+    idle: [-153, 203, 313, 541],   // standing, arms down
     walk: [-262, 152, 488, 600],
     serve: [-205, 143, 384, 472],
     reach: [-182, 118, 418, 514],
@@ -223,6 +223,29 @@ window.ART = (function () {
     book: [-205, 143, 384, 472],
     cloche: [-414, 153, 812, 453],
     espresso: [-411, 153, 806, 450],
+    /* frames for the small animations (hello wave, talking, reactions, tongs, writing on the cup) */
+    wave1: [-154, 204, 325, 412],
+    wave2: [-153, 203, 360, 541],
+    wave3: [-153, 203, 365, 541],
+    shrug: [-204, 204, 383, 412],
+    tada: [-203, 204, 382, 412],
+    crossed: [-136, 204, 279, 411],
+    think: [-130, 203, 351, 438],
+    phone: [-192, 204, 360, 412],
+    laugh: [-154, 204, 314, 412],
+    point: [-144, 203, 366, 444],
+    thumbs: [-144, 203, 366, 444],
+    bill: [-204, 203, 367, 466],
+    jar: [-155, 204, 320, 412],
+    brew: [-172, 203, 498, 435],
+    tongs1: [-300, 218, 523, 433],
+    tongs2: [-294, 218, 518, 432],
+    tongs3: [-264, 203, 488, 447],
+    write1: [-183, 204, 345, 443],
+    write2: [-183, 203, 345, 443],
+    write3: [-184, 203, 346, 443],
+    write4: [-184, 203, 347, 443],
+    write5: [-184, 204, 347, 443],
   };
   function barista(initials = "JPM", img = null, poses = null) {
     /* the illustration version: picture poses that walk, lean, reach and serve */
@@ -230,7 +253,7 @@ window.ART = (function () {
       const all = { idle: img, ...(poses || {}) };
       const layers = Object.entries(all).map(([name, href]) => {
         const [x, y, w, h] = POSE_BOX[name] || POSE_BOX.idle;
-        return `<image class="pose" data-pose="${name}" href="${href}" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+        return `<image class="pose${name === "idle" ? " on" : ""}" data-pose="${name}" href="${href}" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
       }).join("");
       return `<g id="barista" data-pose="idle" style="transform: translate(800px, 0px)"><g id="barista-inner">
         <g id="b-lean"><g id="b-pop"><g id="b-talk"><g id="b-poses">${layers}</g></g></g></g>
