@@ -143,24 +143,43 @@
   /* ---------- the four stations: where each kind of item is made ---------- */
   const CARRY = 0.75, HAND = 181; // carry scale; hand distance from his centre
   const stations = {
+    /* The way a barista really pulls a shot: lock the portafilter into the left group,
+       stand a cup under the spouts, press the button, wait for the pour, take the cup. */
     async machine(it) {
-      await walk(1040);
-      if (hasPose("brew")) { pose("brew"); sfx("Click!", 1200, 330); await wait(650); } // portafilter in hand, presses the button
-      pose("espresso");                         // locks the portafilter into the machine
-      await rot(armR, -70);
-      $("#steam").classList.add("on"); $("#pour").classList.add("on");
-      sfx("Ssshh!", 1300, 360);
-      const el = makeItem(it, 1230, 546, 0.55, 0);
-      await fade(el, 1, 1100);
+      const pf = $("#pf1"), btn = $("#brew-btn"), needle = $("#needle");
+      const MX = 1085;                          // close enough that his hands work behind the machine
+      if (pf) pf.style.opacity = 0;             // the portafilter is in his hand, not on the machine
+      await walk(MX);
+      pose("espresso");                         // reaches in with the portafilter…
+      await wait(380);
+      if (pf) {                                 // …and twists it into the group head
+        pf.style.opacity = 1;
+        if (!reduce) pf.animate([{ transform: "rotate(-32deg)" }, { transform: "rotate(0deg)" }], { duration: 260 * speed.k, easing: "ease-out" });
+      }
+      sfx("Clack!", 1215, 500);
+      if (hasPose("brew")) pose("brew");        // hands free: his arm goes to the buttons
+      await wait(420);
+      const s = usesCup(it) ? 0.45 : 0.55;      // a paper cup is taller: keep it clear of the spouts
+      const el = makeItem(it, 1230, 546, s, 0); // stands the cup on the drip tray, under the spouts
+      await fade(el, 1, 260);
+      await wait(360);
+      btn?.classList.add("on"); needle?.classList.add("on");
+      sfx("Click!", 1246, 428);
       await wait(250);
+      $("#pour").classList.add("on"); $("#steam").classList.add("on"); // the shot pours into the cup
+      sfx("Ssshh!", 1300, 360);
+      await wait(1300);
       $("#pour").classList.remove("on");
+      btn?.classList.remove("on"); needle?.classList.remove("on");
       setTimeout(() => $("#steam").classList.remove("on"), 700);
-      await Promise.all([rot(armR, -35, 450), tw(el, itemAt(1040 + HAND, 548, CARRY), 450)]);
-      await walk(800, { el, dx: HAND });
-      return [el, armR];
+      await wait(250);
+      pose("idle");                             // takes the cup off the tray
+      await tw(el, itemAt(MX - HAND, 548, CARRY), 480);
+      await walk(800, { el, dx: -HAND });
+      return [el, armL];
     },
     async case(it) {
-      await walk(620);
+      await walk(545);                          // close in: the tongs come up right where the pastry is
       pose("tongs1");                           // leans into the case with the tongs
       await rot(armL, 55);
       const el = makeItem(it, 400, 476, 0.62, 0);
@@ -171,25 +190,28 @@
       await tw(el, itemAt(400, 444, 0.62), 300);
       frame("tongs3");
       dish(el, true);                           // plated, ready to carry
-      await Promise.all([rot(armL, 35, 450), tw(el, itemAt(620 - HAND, 548, CARRY), 450)]);
-      await walk(800, { el, dx: -HAND });
-      return [el, armL];
+      await Promise.all([rot(armL, 35, 450), tw(el, itemAt(545 + HAND, 548, CARRY), 450)]);
+      await walk(800, { el, dx: HAND });
+      return [el, armR];
     },
     async shelf(it) {
-      const i = it.jarIndex || 0, jx = 420 + i * 74, x = jx - 180;
+      const i = it.jarIndex || 0, jx = 420 + i * 74, grab = hasPose("wave1"), x = jx - (grab ? 122 : 180);
       await walk(x);
-      pose("reach");
-      await rot(armR, -165, 480);
+      if (grab) {                               // up on his toes, open hand right on the jar
+        pose("wave1"); held = "wave1";
+        await tw(barista, at(x, by = -50), 280);
+      } else { pose("reach"); await rot(armR, -165, 480); }
       sfx("Clink!", jx - 10, 190);
       hiddenEl = $(`.shelf-jar[data-jar="${i}"]`);
       hiddenEl.style.opacity = 0;
       const el = makeItem(it, jx, 300, 0.75);
-      await Promise.all([rot(armR, -35, 650), tw(el, itemAt(x + HAND, 548, CARRY), 650)]);
+      await Promise.all([tw(barista, at(x, by = 0), 420), tw(el, itemAt(x + HAND, 548, CARRY), 650)]);
+      held = null;
       await walk(800, { el, dx: HAND });
       return [el, armR];
     },
     async books(it) {
-      const i = it.bookIndex, sx = 145 + i * 32, x = sx + 180;
+      const i = it.bookIndex, sx = 145 + i * 32, x = sx + (hasPose("wave1") ? 125 : 180);
       await walk(x);
       if (hasPose("wave1")) { pose("wave1", true); held = "wave1"; } // open hand at shelf height, on the shelf side
       else pose("reach", true);

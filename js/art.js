@@ -484,16 +484,18 @@ window.ART = (function () {
         <!-- pressure gauge, and a row of buttons over each group -->
         <circle cx="1372" cy="452" r="14" fill="#FBF7EE" ${ol(3)}/>
         ${[-70, -35, 0, 35, 70].map(a => `<path d="M1372,441 v3" transform="rotate(${a} 1372 452)" ${ol(1.6)}/>`).join("")}
-        <path d="M1372,452 L1380,444" stroke="${C.chili}" stroke-width="3" stroke-linecap="round"/><circle cx="1372" cy="452" r="2.2" fill="${INK}"/>
-        ${[1230, 1310].map(cx => `${[-14, 0, 14].map((dx, i) => `<circle cx="${cx + dx}" cy="447" r="4.6" fill="${i === 1 ? C.gold : "#FBF7EE"}" ${ol(2)}/>`).join("")}
+        <path id="needle" d="M1372,452 L1363,446" stroke="${C.chili}" stroke-width="3" stroke-linecap="round"/><circle cx="1372" cy="452" r="2.2" fill="${INK}"/>
+        ${[1230, 1310].map(cx => `${[-14, 0, 14].map((dx, i) => `<circle ${cx === 1230 && i === 1 ? 'id="brew-btn" ' : ""}cx="${cx + dx}" cy="447" r="4.6" fill="${i === 1 ? C.gold : "#FBF7EE"}" ${ol(2)}/>`).join("")}
           <rect x="${cx - 12}" y="457" width="24" height="5" rx="2.5" fill="#8D979C" ${ol(1.6)}/>`).join("")}
         <circle cx="1178" cy="452" r="5" fill="#9BE38F" ${ol(2)}/>
         <!-- two group heads, each with its portafilter and twin spouts -->
         ${[1230, 1310].map(cx => `
           <rect x="${cx - 22}" y="470" width="44" height="14" rx="4" fill="#8D979C" ${ol(3.2)}/>
-          <rect x="${cx - 18}" y="484" width="36" height="10" rx="3" fill="#59636A" ${ol(3)}/>
-          <path d="M${cx - 16},490 L${cx - 44},502" stroke="${INK}" stroke-width="11" stroke-linecap="round"/><path d="M${cx - 16},490 L${cx - 44},502" stroke="#4A2717" stroke-width="5" stroke-linecap="round"/>
-          <path d="M${cx - 5},494 v7 M${cx + 5},494 v7" ${ol(3.2)}/>`).join("")}
+          <g ${cx === 1230 ? 'id="pf1" style="opacity:0"' : ""}>
+            <rect x="${cx - 18}" y="484" width="36" height="10" rx="3" fill="#59636A" ${ol(3)}/>
+            <path d="M${cx - 16},490 L${cx - 44},502" stroke="${INK}" stroke-width="11" stroke-linecap="round"/><path d="M${cx - 16},490 L${cx - 44},502" stroke="#4A2717" stroke-width="5" stroke-linecap="round"/>
+            <path d="M${cx - 5},494 v7 M${cx + 5},494 v7" ${ol(3.2)}/>
+          </g>`).join("")}
         <path id="pour" d="M1225,502 L1225,528 M1235,502 L1235,528" stroke="${C.coffee}" stroke-width="3" opacity="0"/>
         <!-- steam wand with its knob -->
         <circle cx="1400" cy="446" r="9" fill="${INK}"/><circle cx="1400" cy="446" r="3" fill="#8D979C"/>
