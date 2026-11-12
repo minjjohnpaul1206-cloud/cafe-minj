@@ -143,38 +143,30 @@
   /* ---------- the four stations: where each kind of item is made ---------- */
   const CARRY = 0.75, HAND = 181; // carry scale; hand distance from his centre
   const stations = {
-    /* The way a barista really pulls a shot: lock the portafilter into the left group,
-       stand a cup under the spouts, press the button, wait for the pour, take the cup. */
+    /* The machine's working face is turned towards him, as in a real café, so we watch him
+       work behind it: lock the portafilter in, press the button, wait for the shot, bring the cup out. */
     async machine(it) {
-      const pf = $("#pf1"), btn = $("#brew-btn"), needle = $("#needle");
-      const MX = 1085;                          // close enough that his hands work behind the machine
-      if (pf) pf.style.opacity = 0;             // the portafilter is in his hand, not on the machine
+      const light = $("#brew-btn"), body = $("#machine-body");
+      const MX = 1085;                          // right behind the machine's near corner
       await walk(MX);
       pose("espresso");                         // reaches in with the portafilter…
-      await wait(380);
-      if (pf) {                                 // …and twists it into the group head
-        pf.style.opacity = 1;
-        if (!reduce) pf.animate([{ transform: "rotate(-32deg)" }, { transform: "rotate(0deg)" }], { duration: 260 * speed.k, easing: "ease-out" });
-      }
-      sfx("Clack!", 1215, 500);
-      if (hasPose("brew")) pose("brew");        // hands free: his arm goes to the buttons
       await wait(420);
-      const s = usesCup(it) ? 0.45 : 0.55;      // a paper cup is taller: keep it clear of the spouts
-      const el = makeItem(it, 1230, 546, s, 0); // stands the cup on the drip tray, under the spouts
-      await fade(el, 1, 260);
-      await wait(360);
-      btn?.classList.add("on"); needle?.classList.add("on");
-      sfx("Click!", 1246, 428);
-      await wait(250);
-      $("#pour").classList.add("on"); $("#steam").classList.add("on"); // the shot pours into the cup
-      sfx("Ssshh!", 1300, 360);
-      await wait(1300);
-      $("#pour").classList.remove("on");
-      btn?.classList.remove("on"); needle?.classList.remove("on");
+      sfx("Clack!", 1190, 470);                 // …and twists it into the group head
+      await wait(380);
+      if (hasPose("brew")) pose("brew");        // hands free: his arm goes to the buttons
+      await wait(380);
+      sfx("Click!", 1250, 420);
+      light?.classList.add("on"); body?.classList.add("brewing"); // the pump runs: light on, a little hum
+      await wait(260);
+      $("#steam").classList.add("on");
+      sfx("Ssshh!", 1300, 340);
+      await wait(1400);                         // the shot pours, out of sight on his side
+      light?.classList.remove("on"); body?.classList.remove("brewing");
       setTimeout(() => $("#steam").classList.remove("on"), 700);
-      await wait(250);
-      pose("idle");                             // takes the cup off the tray
-      await tw(el, itemAt(MX - HAND, 548, CARRY), 480);
+      pose("idle");
+      const el = makeItem(it, 1146, 548, CARRY, 0); // he brings the cup out from behind the machine
+      fade(el, 1, 220);
+      await tw(el, itemAt(MX - HAND, 548, CARRY), 520);
       await walk(800, { el, dx: -HAND });
       return [el, armL];
     },

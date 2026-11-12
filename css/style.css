@@ -212,11 +212,10 @@ button { font: inherit; }
 #barista.wink #b-eyeR { transform: scaleY(.12); }
 #barista.wink #b-browR { transform: translateY(3px); }
 #steam, #pour { transition: opacity .35s; }
-#pf1 { transform-box: view-box; transform-origin: 1230px 478px; }
 #brew-btn { transition: fill .15s; }
 #brew-btn.on { fill: #9BE38F; filter: drop-shadow(0 0 5px #9BE38F); }
-#needle { transform-box: view-box; transform-origin: 1372px 452px; transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
-#needle.on { transform: rotate(95deg); }
+#machine-body.brewing { animation: hum .12s linear infinite; }
+@keyframes hum { 50% { transform: translateY(-1.2px); } }
 #steam.on, #pour.on { opacity: 1 !important; }
 .puff { animation: puff 1.4s ease-out infinite; }
 .puff.p2 { animation-delay: .5s; }
@@ -591,7 +590,7 @@ dialog#book-dialog::backdrop { background: rgba(10, 18, 15, .75); backdrop-filte
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .fan-blades, .puff, .halo, #b-eyes, #barista-inner { animation: none !important; }
+  .fan-blades, .puff, .halo, #b-eyes, #barista-inner, #machine-body { animation: none !important; }
 }
 
 /* ============ PRINT (CV) ============ */
