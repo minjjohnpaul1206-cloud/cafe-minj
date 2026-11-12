@@ -36,18 +36,21 @@
   const btn = (title, sub, act, cls = "") =>
     `<button type="button" class="choice ${cls}" data-act="${esc(act)}"><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</button>`;
 
+  /* whose name is on the cup, with the way to change it right beside it */
+  const who = () => state.name ? `<p class="who">Ordering as <b>${esc(state.name)}</b>
+      <button type="button" class="who-change" data-act="rename">Not ${esc(state.name)}? Change name</button></p>` : "";
+
   const layouts = {
-    greet: () => (D.special ? btn("Today's special", short(item(D.special)) + ", what I do now", "item:" + D.special, "primary") : "")
+    greet: () => who() + (D.special ? btn("Today's special", short(item(D.special)) + ", what I do now", "item:" + D.special, "primary") : "")
       + D.shelves.map(s => btn(s.label, s.sub, "shelf:" + s.id)).join("")
       + ((D.writing || []).length ? btn("Something to read?", "From my bookshelf", "books") : "")
       + btn("Just here for the wifi", "Bold choice", "wifi")
-      + btn("I'm hiring, keep it short", "Straight to the CV", "cv")
-      + (state.name ? btn(`Not ${state.name}?`, "Change the name on the cup", "rename") : ""),
+      + btn("I'm hiring, keep it short", "Straight to the CV", "cv"),
     shelf: () => shelfItems(state.shelf).map(i => btn(i.name + (state.stamps.includes(i.id) ? " ✓" : ""), i.kind, "item:" + i.id)).join("")
       + btn("Something else", "", "greet"),
     served: () => {
       const s = shelf(state.shelf), full = state.stamps.length === D.items.length;
-      return btn("Tell me the story", "The full details, below", "story", "primary")
+      return who() + btn("Tell me the story", "The full details, below", "story", "primary")
         + (full ? "" : btn("Another from " + s.label, "", "shelf:" + s.id) + btn("Surprise me", "Barista's choice", "surprise"))
         + btn("Bring the bill", "And get in touch", "bill") + btn("Back to the menu", "", "greet");
     },
@@ -136,11 +139,15 @@
     state.togo = !!togo;
     store.set("name", state.name); store.set("togo", state.togo);
     const id = state.pending; state.pending = null;
-    if (id) order(id);
+    if (id) return order(id);
+    step("greet");
+    say(state.name ? `${state.name} it is. What can I get you?` : "No name, no problem. What can I get you?");
   }
   function rename() {
     state.name = null; state.returning = false; store.set("name", null);
-    step("greet"); say("A new name? I admire that. I'll ask for it when you order.");
+    state.pending = null; step("name");         // ask straight away, no order needed
+    say("A new name? I admire that. What shall I write on the cup, and is it for here or to go?");
+    setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
   }
   /* the classic: get the name a little wrong on the first cup */
   function misspell(n) {

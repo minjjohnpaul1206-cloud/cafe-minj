@@ -107,6 +107,10 @@ button { font: inherit; }
 .tagline { font-family: var(--hand); font-size: 1.15rem; line-height: 1.35; color: var(--ivory); opacity: .9; margin-top: 6px; }
 .intro-face { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
 .street-intro p { color: var(--ivory); opacity: .92; max-width: 44ch; }
+.who { flex-basis: 100%; margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--ivory); font-size: .95rem; }
+.who b { color: var(--gold); }
+.who-change { padding: 5px 14px; border-radius: 999px; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); font: inherit; font-weight: 600; font-size: .85rem; cursor: pointer; }
+.who-change:hover, .who-change:focus-visible { background: var(--gold); color: var(--bottle-ink); }
 .kind-badge { display: inline-block; margin: 0 0 12px; padding: 3px 12px; border-radius: 999px; background: var(--gold); color: var(--bottle-ink); font-weight: 700; font-size: .85rem; }
 .brand-tag { margin-left: 4px; font-family: var(--body); font-size: .8rem; font-weight: 500; color: var(--ivory); opacity: .75; }
 .cv-summary { max-width: 78ch; }
