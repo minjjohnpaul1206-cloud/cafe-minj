@@ -462,26 +462,43 @@ window.ART = (function () {
         <rect x="174" y="546" width="352" height="18" rx="5" fill="${C.teak}" ${ol(4)}/>
       </g>
 
-      <!-- espresso machine, wearing the café emblem -->
+      <!-- espresso machine: a two-group café machine wearing the café emblem -->
       <g id="machine" class="hot" data-act="shelf:signature-brews">
-        <rect x="1168" y="546" width="28" height="14" rx="3" fill="${INK}"/><rect x="1354" y="546" width="28" height="14" rx="3" fill="${INK}"/>
-        <rect x="1150" y="392" width="250" height="158" rx="16" fill="#E4E8EA" ${ol(4)}/>
-        <path d="M1150,432 L1150,408 Q1150,392 1166,392 L1384,392 Q1400,392 1400,408 L1400,432 Z" fill="${C.bottle}" ${ol(4)}/>
-        ${emblem(1180, 412, 14)}
-        <text x="1296" y="420" text-anchor="middle" font-family="Rozha One, serif" font-size="21" letter-spacing="2" fill="${C.goldSoft}">CAFÉ MINJ</text>
-        <path d="M1164,446 L1164,522" stroke="#fff" stroke-opacity=".75" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="1356" cy="466" r="19" fill="#FBF7EE" ${ol(3.4)}/>
-        ${[-60, -20, 20, 60].map(a => `<path d="M1356,451 l0,4" transform="rotate(${a} 1356 466)" ${ol(1.8)}/>`).join("")}
-        <path d="M1356,466 L1366,455" stroke="${C.chili}" stroke-width="3.4" stroke-linecap="round"/><circle cx="1356" cy="466" r="2.6" fill="${INK}"/>
-        <circle cx="1296" cy="452" r="6" fill="${C.gold}" ${ol(2.2)}/><circle cx="1314" cy="452" r="6" fill="${C.chili}" ${ol(2.2)}/>
-        <path d="M1384,474 q22,12 10,56" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/><path d="M1384,474 q22,12 10,56" fill="none" stroke="#B9C1C5" stroke-width="4.4" stroke-linecap="round"/>
-        <rect x="1186" y="444" width="88" height="24" rx="9" fill="#8D979C" ${ol(3.4)}/>
-        <path d="M1212,478 L1180,486" stroke="${INK}" stroke-width="12" stroke-linecap="round"/><path d="M1212,478 L1180,486" stroke="#4A2717" stroke-width="5.6" stroke-linecap="round"/>
-        <rect x="1210" y="468" width="40" height="14" rx="4" fill="#59636A" ${ol(3)}/>
-        <path d="M1224,482 l0,7 M1236,482 l0,7" ${ol(3)}/>
-        <path id="pour" d="M1228,490 L1228,520 M1232,490 L1232,520" stroke="${C.coffee}" stroke-width="3" opacity="0"/>
-        <rect x="1168" y="534" width="214" height="14" rx="5" fill="#59636A" ${ol(3.4)}/>
-        <path d="M1184,541 h182" stroke="${INK}" stroke-width="2" stroke-dasharray="10 8" opacity=".6"/>
+        <!-- cups warming on top, behind a little rail -->
+        ${[1186, 1212, 1238].map(x => `<path d="M${x},372 h20 l-3,20 h-14 z" fill="#FBF7EE" ${ol(2.6)}/>`).join("")}
+        <path d="M1199,354 h20 l-3,18 h-14 z" fill="#FBF7EE" ${ol(2.6)}/>
+        <rect x="1160" y="392" width="230" height="12" rx="4" fill="#AEB7BC" ${ol(3.4)}/>
+        <path d="M1164,384 H1386 M1168,384 v8 M1275,384 v8 M1382,384 v8" fill="none" ${ol(3)}/>
+        <!-- feet, drip tray and the recess where the cups stand -->
+        <rect x="1168" y="548" width="28" height="12" rx="3" fill="${INK}"/><rect x="1354" y="548" width="28" height="12" rx="3" fill="${INK}"/>
+        <rect x="1160" y="466" width="230" height="70" fill="#B4BDC2" ${ol(4)}/>
+        <path d="M1164,470 H1386 V484 H1164 Z" fill="#000" opacity=".14"/>
+        <rect x="1154" y="530" width="242" height="20" rx="5" fill="#59636A" ${ol(3.6)}/>
+        ${Array.from({ length: 11 }, (_, i) => `<path d="M${1172 + i * 20},536 v8" stroke="${INK}" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>`).join("")}
+        <!-- the body: brushed steel with a brand plate -->
+        <rect x="1150" y="402" width="250" height="72" rx="12" fill="#E4E8EA" ${ol(4)}/>
+        <path d="M1150,432 V414 Q1150,402 1162,402 H1388 Q1400,402 1400,414 V432 Z" fill="${C.bottle}" ${ol(4)}/>
+        ${emblem(1178, 417, 11)}
+        <text x="1284" y="424" text-anchor="middle" font-family="Rozha One, serif" font-size="19" letter-spacing="2" fill="${C.goldSoft}">CAFÉ MINJ</text>
+        <path d="M1160,440 V468" stroke="#fff" stroke-opacity=".8" stroke-width="4" stroke-linecap="round"/>
+        <!-- pressure gauge, and a row of buttons over each group -->
+        <circle cx="1372" cy="452" r="14" fill="#FBF7EE" ${ol(3)}/>
+        ${[-70, -35, 0, 35, 70].map(a => `<path d="M1372,441 v3" transform="rotate(${a} 1372 452)" ${ol(1.6)}/>`).join("")}
+        <path d="M1372,452 L1380,444" stroke="${C.chili}" stroke-width="3" stroke-linecap="round"/><circle cx="1372" cy="452" r="2.2" fill="${INK}"/>
+        ${[1230, 1310].map(cx => `${[-14, 0, 14].map((dx, i) => `<circle cx="${cx + dx}" cy="447" r="4.6" fill="${i === 1 ? C.gold : "#FBF7EE"}" ${ol(2)}/>`).join("")}
+          <rect x="${cx - 12}" y="457" width="24" height="5" rx="2.5" fill="#8D979C" ${ol(1.6)}/>`).join("")}
+        <circle cx="1178" cy="452" r="5" fill="#9BE38F" ${ol(2)}/>
+        <!-- two group heads, each with its portafilter and twin spouts -->
+        ${[1230, 1310].map(cx => `
+          <rect x="${cx - 22}" y="470" width="44" height="14" rx="4" fill="#8D979C" ${ol(3.2)}/>
+          <rect x="${cx - 18}" y="484" width="36" height="10" rx="3" fill="#59636A" ${ol(3)}/>
+          <path d="M${cx - 16},490 L${cx - 44},502" stroke="${INK}" stroke-width="11" stroke-linecap="round"/><path d="M${cx - 16},490 L${cx - 44},502" stroke="#4A2717" stroke-width="5" stroke-linecap="round"/>
+          <path d="M${cx - 5},494 v7 M${cx + 5},494 v7" ${ol(3.2)}/>`).join("")}
+        <path id="pour" d="M1225,502 L1225,528 M1235,502 L1235,528" stroke="${C.coffee}" stroke-width="3" opacity="0"/>
+        <!-- steam wand with its knob -->
+        <circle cx="1400" cy="446" r="9" fill="${INK}"/><circle cx="1400" cy="446" r="3" fill="#8D979C"/>
+        <path d="M1384,474 q10,6 8,44" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M1384,474 q10,6 8,44" fill="none" stroke="#C9D0D3" stroke-width="3.6" stroke-linecap="round"/>
+        <rect x="1386" y="496" width="12" height="10" rx="3" fill="${INK}"/>
         <g id="steam" opacity="0">
           <path class="puff" d="M1222,470 q-12,-20 0,-40 q12,-20 0,-40" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>
           <path class="puff p2" d="M1244,470 q12,-20 0,-40 q-12,-20 0,-40" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"/>
