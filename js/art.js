@@ -18,8 +18,8 @@ window.ART = (function () {
   const INK = "#2A1A12";
   const ol = (w = 3) => `stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
   const shadow = (rx = 40, y = 109) => `<ellipse cx="60" cy="${y}" rx="${rx}" ry="5" fill="#000" opacity=".16"/>`;
-  const plate = (rx = 46, y = 104) => `${shadow(rx - 2, y + 5)}<ellipse cx="60" cy="${y}" rx="${rx}" ry="8" fill="#FBF7EE" ${ol()}/>
-      <ellipse cx="60" cy="${y - 1}" rx="${rx - 12}" ry="4" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".3"/>`;
+  const plate = (rx = 46, y = 104) => `<g class="dish">${shadow(rx - 2, y + 5)}<ellipse cx="60" cy="${y}" rx="${rx}" ry="8" fill="#FBF7EE" ${ol()}/>
+      <ellipse cx="60" cy="${y - 1}" rx="${rx - 12}" ry="4" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".3"/></g>`;
   /* steam that drifts up from hot drinks */
   const wisps = (x = 60, y = 62) => `<g class="wisps" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round">
       <path d="M${x - 8},${y} q-6,-9 0,-17 q6,-8 0,-16"/><path class="w2" d="M${x + 8},${y - 2} q6,-9 0,-17 q-6,-8 0,-16"/></g>`;

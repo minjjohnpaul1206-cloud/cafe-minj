@@ -41,6 +41,7 @@
   const at = (x, y) => `translate(${x}px, ${y}px)`;
   const rot = (arm, deg, dur = 380) => tw(arm, `rotate(${deg}deg)`, dur);
 
+  const dish = (el, show) => el.querySelectorAll(".dish").forEach(d => (d.style.display = show ? "" : "none"));
   function makeItem(it, x, y, s, opacity = 1) {
     const g = document.createElementNS(NS, "g");
     g.innerHTML = A.item(usesCup(it) ? "togo" : it.art, it);
@@ -163,11 +164,13 @@
       pose("tongs1");                           // leans into the case with the tongs
       await rot(armL, 55);
       const el = makeItem(it, 400, 476, 0.62, 0);
+      dish(el, false);                          // he already holds a plate: the pastry comes without its own
       await fade(el, 1, 300);
       frame("tongs2");                          // lifts it out
       sfx("Snip!", 430, 420);
       await tw(el, itemAt(400, 444, 0.62), 300);
       frame("tongs3");
+      dish(el, true);                           // plated, ready to carry
       await Promise.all([rot(armL, 35, 450), tw(el, itemAt(620 - HAND, 548, CARRY), 450)]);
       await walk(800, { el, dx: -HAND });
       return [el, armL];
@@ -188,13 +191,15 @@
     async books(it) {
       const i = it.bookIndex, sx = 145 + i * 32, x = sx + 180;
       await walk(x);
-      pose("reach", true);                      // reach up with the arm on the shelf side
+      if (hasPose("wave1")) { pose("wave1", true); held = "wave1"; } // open hand at shelf height, on the shelf side
+      else pose("reach", true);
       await wait(450);
       sfx("Fwip!", sx - 10, 300);
       hiddenEl = $(`.shelf-book[data-book="${i}"]`);
       hiddenEl.style.opacity = 0;
       const el = makeItem(it, sx, 390, 0.45);
       await tw(el, itemAt(x + HAND, 548, CARRY), 650);
+      held = null;
       await walk(800, { el, dx: HAND });
       return [el, armR];
     },
@@ -271,16 +276,26 @@
     if (give && hasPose(give)) {
       if (give === "plate") {
         pose("plate");                          // the pastry rides on the plate in his hands
+        dish(el, false);                        // one plate only: his
         await tw(el, itemAt(...PLATE_TOP, 0.8), 200);
         await wait(1200);
         pose("idle");
+        dish(el, true);
         await tw(el, itemAt(800, 604, 1.5), 380, "cubic-bezier(.3,1.5,.5,1)");
       } else {
         fade(el, 0, 150);
         if (give === "togo") await writeName();   // name on the cup first, letter by letter
         pose(give);                             // offers it to the visitor
         if (give === "cloche") sfx("Ta-da!", 980, 240);
+        let tag = null;
+        if (give === "jar") {                   // the jar in his hands wears this jar's own label
+          tag = document.createElementNS(NS, "g");
+          tag.innerHTML = `<rect x="${bx - 9}" y="478" width="34" height="24" rx="3" fill="${it.jarColor || "#B5452E"}" stroke="#2A1A12" stroke-width="2.2"/>
+            <path d="M${bx - 3},486 h22 M${bx + 1},493 h14" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>`;
+          barista.after(tag);                   // just in front of him, still behind the counter
+        }
         await wait(1300);
+        tag?.remove();
         pose("idle");
         el.style.transform = itemAt(800, 604, 1.5);
         await fade(el, 1, 250);                 // and sets it down on the counter
