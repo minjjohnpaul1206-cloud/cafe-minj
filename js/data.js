@@ -18,7 +18,7 @@ window.CAFE = {
        sales and marketing roles in any industry. */
     headline: "Sales and Marketing | Business Development | Account Management | Marketing Strategy | Market Research",
     summary: "Sales and marketing professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Sales experience across the full cycle: lead generation, cold outreach, account management, client presentations to senior decision-makers and closing. Marketing experience in positioning, customer research and campaign strategy, with one campaign doubling revenue within a month. An engineering background helps in learning new products quickly and explaining them simply to customers.",
-    email: "johnpaul@johnpaulminj.com",
+    email: "hello@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
     linkedin: "https://www.linkedin.com/in/johnpaulminj/",
