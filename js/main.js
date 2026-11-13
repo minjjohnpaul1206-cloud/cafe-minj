@@ -66,7 +66,12 @@
         state.greeted = true;
         setTimeout(async () => {
           const q = state.queued; state.queued = null;
-          if (!q) { if (first) scene.wave(); counter.greet(first); return; } // hand up first, so he waves as he talks
+          if (!q) {                             // hand up first, so he waves as he talks
+            if (first) scene.wave();
+            await counter.greet(first);
+            if (first) Cafe.guide.auto();       // then a short tour, on a first visit
+            return;
+          }
           await counter.greet(first);
           counter.order(q); // they already chose on the street
         }, reduce ? 0 : 450);
@@ -93,6 +98,7 @@
     wifi: counter.wifi, rules: counter.rules, surprise: counter.surprise,
     skipname: () => counter.setName("", false), rename: counter.rename,
     jar: i => counter.order(D.items.find(it => it.jarIndex === +i).id),
+    guide: () => Cafe.guide.start(),
     cup: counter.pickCup, othername: counter.otherName,
     bill: counter.bill, "close-bill": pages.closeBill, print: () => print(),
     cv: () => (location.hash = "cv"),
