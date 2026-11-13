@@ -65,7 +65,8 @@
           <button type="submit" class="choice cup-pick" value="togo">${cupPic("togo")}<span><b>To go</b><small>Paper cup, name on it</small></span></button>
           ${state.pending ? btn("Something else", "Back to the menu", "greet") : btn("Skip", "", "skipname")}
         </div></form>`,
-    cup: () => who()
+    cup: () => `<p class="who">This one is for <b>${esc(state.name)}</b>
+        <button type="button" class="who-change" data-act="othername">Another name</button></p>`
       + `<button type="button" class="choice primary cup-pick" data-act="cup:here">${cupPic("espresso")}<span><b>For here</b><small>In a proper cup</small></span></button>
          <button type="button" class="choice cup-pick" data-act="cup:togo">${cupPic("togo")}<span><b>To go</b><small>Paper cup, name on it</small></span></button>`
       + btn("Something else", "Back to the menu", "greet"),
@@ -180,7 +181,14 @@
     state.pending = id; step("cup");
     scrollToEl(".stage", true);
     Cafe.scene.react("think", 2200);
-    say(`One ${short(item(id))}, ${state.name}. For here, or to go?`);
+    say(`One ${short(item(id))}. Shall I put it under ${state.name}, or another name? And is it for here or to go?`);
+  }
+  function otherName() {                        // same order, a different name on the cup
+    const id = state.pending;
+    if (!id) return rename();
+    state.pending = id; step("name");
+    say("Another name it is. Who is this one for, and is it for here or to go?");
+    setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
   }
   function pickCup(where) {
     const id = state.pending; state.pending = null;
@@ -304,5 +312,5 @@
   });
 
   const skip = () => { speed.k = 0.08; };       // fast-forward the making of this order
-  Cafe.counter = { bill, pickCup, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
+  Cafe.counter = { bill, pickCup, otherName, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
 })();
