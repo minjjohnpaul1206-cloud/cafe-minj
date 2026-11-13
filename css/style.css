@@ -107,6 +107,9 @@ button { font: inherit; }
 .tagline { font-family: var(--hand); font-size: 1.15rem; line-height: 1.35; color: var(--ivory); opacity: .9; margin-top: 6px; }
 .intro-face { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
 .street-intro p { color: var(--ivory); opacity: .92; max-width: 44ch; }
+.cup-pic { display: block; width: 64px; height: 64px; margin-bottom: 6px; background: var(--ivory); border-radius: 12px; padding: 5px; }
+.cup-pick span, .cup-pick b, .cup-pick small { display: block; }
+.cup-pic .wisps { display: none; }
 .who { flex-basis: 100%; margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--ivory); font-size: .95rem; }
 .who b { color: var(--gold); }
 .who-change { padding: 5px 14px; border-radius: 999px; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); font: inherit; font-weight: 600; font-size: .85rem; cursor: pointer; }

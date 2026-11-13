@@ -36,6 +36,9 @@
   const btn = (title, sub, act, cls = "") =>
     `<button type="button" class="choice ${cls}" data-act="${esc(act)}"><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</button>`;
 
+  /* a small drawing of each cup, for the here / to-go choice */
+  const cupPic = art => `<svg class="cup-pic" viewBox="${art === "togo" ? "14 6 92 112" : "8 46 104 74"}" aria-hidden="true">${A.item(art, {})}</svg>`;
+
   /* whose name is on the cup, with the way to change it right beside it */
   const who = () => state.name ? `<p class="who">Ordering as <b>${esc(state.name)}</b>
       <button type="button" class="who-change" data-act="rename">Not ${esc(state.name)}? Change name</button></p>` : "";
@@ -58,8 +61,8 @@
         <label for="name-input">Name for the cup <span class="optional">(any name will do, it just goes on the cup)</span></label>
         <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name">
         <div class="name-btns">
-          <button type="submit" class="choice primary" value="here"><b>For here</b><small>In a proper cup</small></button>
-          <button type="submit" class="choice" value="togo"><b>To go</b><small>Paper cup, name on it</small></button>
+          <button type="submit" class="choice primary cup-pick" value="here">${cupPic("espresso")}<span><b>For here</b><small>In a proper cup</small></span></button>
+          <button type="submit" class="choice cup-pick" value="togo">${cupPic("togo")}<span><b>To go</b><small>Paper cup, name on it</small></span></button>
           ${state.pending ? btn("Something else", "Back to the menu", "greet") : btn("Skip", "", "skipname")}
         </div></form>`,
     billname: () => `<form class="name-form" id="name-form">
