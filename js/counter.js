@@ -65,6 +65,10 @@
           <button type="submit" class="choice cup-pick" value="togo">${cupPic("togo")}<span><b>To go</b><small>Paper cup, name on it</small></span></button>
           ${state.pending ? btn("Something else", "Back to the menu", "greet") : btn("Skip", "", "skipname")}
         </div></form>`,
+    cup: () => who()
+      + `<button type="button" class="choice primary cup-pick" data-act="cup:here">${cupPic("espresso")}<span><b>For here</b><small>In a proper cup</small></span></button>
+         <button type="button" class="choice cup-pick" data-act="cup:togo">${cupPic("togo")}<span><b>To go</b><small>Paper cup, name on it</small></span></button>`
+      + btn("Something else", "Back to the menu", "greet"),
     billname: () => `<form class="name-form" id="name-form">
         <label for="name-input">Name for the bill <span class="optional">(optional)</span></label>
         <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name">
@@ -155,6 +159,7 @@
     if (!forBill) state.togo = !!togo;          // the bill form doesn't ask here / to go
     store.set("name", state.name); store.set("togo", state.togo);
     const id = state.pending; state.pending = null;
+    if (id && item(id).station === "machine") return order(id, true); // the form already asked here / to go
     if (forBill) {
       step(state.tray.length ? "served" : "greet");
       say(state.name ? `Thank you, ${state.name}. Here is the damage: nothing at all.` : "Here is the damage: nothing at all.");
@@ -169,6 +174,18 @@
     state.pending = null; step("name");         // ask straight away, no order needed
     say("A new name? I admire that. What shall I write on the cup, and is it for here or to go?");
     setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
+  }
+  /* every coffee: proper cup or paper cup? (the name is already known) */
+  function askCup(id) {
+    state.pending = id; step("cup");
+    scrollToEl(".stage", true);
+    Cafe.scene.react("think", 2200);
+    say(`One ${short(item(id))}, ${state.name}. For here, or to go?`);
+  }
+  function pickCup(where) {
+    const id = state.pending; state.pending = null;
+    state.togo = where === "togo"; store.set("togo", state.togo);
+    if (id) order(id, true);
   }
   /* the bill: anyone who hasn't given a name yet (no coffee ordered) is asked once, here */
   function bill() {
@@ -186,10 +203,11 @@
   }
 
   /* ---------- taking an order ---------- */
-  async function order(id) {
+  async function order(id, cupChosen = false) {
     if (state.busy) return;
     const it = item(id);
     if (it.station === "machine" && !state.name) return askName(id); // a coffee always has a name on the cup
+    if (it.station === "machine" && !cupChosen) return askCup(id);   // and every coffee gets the cup question
     state.busy = true; state.shelf = it.shelf; step("working");
     if (scrollToEl(".stage", true)) await wait(550);
     say(`One ${short(it)}${state.name ? " for " + state.name : ""}. Watch closely.`);
@@ -286,5 +304,5 @@
   });
 
   const skip = () => { speed.k = 0.08; };       // fast-forward the making of this order
-  Cafe.counter = { bill, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
+  Cafe.counter = { bill, pickCup, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
 })();
