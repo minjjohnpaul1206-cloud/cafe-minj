@@ -55,12 +55,19 @@
         + btn("Bring the bill", "And get in touch", "bill") + btn("Back to the menu", "", "greet");
     },
     name: () => `<form class="name-form" id="name-form">
-        <label for="name-input">Name for the order <span class="optional">(optional, it just goes on the cup)</span></label>
+        <label for="name-input">Name for the cup <span class="optional">(any name will do, it just goes on the cup)</span></label>
         <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name">
         <div class="name-btns">
           <button type="submit" class="choice primary" value="here"><b>For here</b><small>In a proper cup</small></button>
           <button type="submit" class="choice" value="togo"><b>To go</b><small>Paper cup, name on it</small></button>
-          ${btn("Skip", "", "skipname")}
+          ${state.pending ? btn("Something else", "Back to the menu", "greet") : btn("Skip", "", "skipname")}
+        </div></form>`,
+    billname: () => `<form class="name-form" id="name-form">
+        <label for="name-input">Name for the bill <span class="optional">(optional)</span></label>
+        <input id="name-input" maxlength="20" autocomplete="given-name" placeholder="Your first name">
+        <div class="name-btns">
+          <button type="submit" class="choice primary" value="bill"><b>Bring the bill</b><small>With my name on it</small></button>
+          ${btn("Skip", "Just the bill", "skipname")}
         </div></form>`,
     books: () => (D.writing || []).map((b, i) => btn(b.title, b.kicker, "book:" + i)).join("") + btn("Something else", "", "greet"),
     bookserved: () => btn("Open the book", "", "openbook", "primary") + btn("Another book", "", "books") + btn("Back to the menu", "", "greet"),
@@ -74,6 +81,7 @@
 
   /* ---------- conversation ---------- */
   function greet(first) {
+    state.pending = null; state.pendingBill = false;
     step("greet");
     const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
     if (!first) return say("What else can I tempt you with?");
@@ -135,10 +143,20 @@
   }
   function setName(raw, togo) {
     const n = (raw || "").trim().split(/\s+/)[0].replace(/[^\p{L}'-]/gu, "").slice(0, 14);
+    if (!n && state.pending && item(state.pending).station === "machine") { // a coffee never goes out without a name
+      say("A cup needs a name. Any name will do, I won't check your ID.");
+      return $("#name-input")?.focus({ preventScroll: true });
+    }
     state.name = n ? n[0].toUpperCase() + n.slice(1) : "";
-    state.togo = !!togo;
+    const forBill = state.pendingBill; state.pendingBill = false;
+    if (!forBill) state.togo = !!togo;          // the bill form doesn't ask here / to go
     store.set("name", state.name); store.set("togo", state.togo);
     const id = state.pending; state.pending = null;
+    if (forBill) {
+      step(state.tray.length ? "served" : "greet");
+      say(state.name ? `Thank you, ${state.name}. Here is the damage: nothing at all.` : "Here is the damage: nothing at all.");
+      return Cafe.pages.openBill();
+    }
     if (id) return order(id);
     step("greet");
     say(state.name ? `${state.name} it is. What can I get you?` : "No name, no problem. What can I get you?");
@@ -147,6 +165,15 @@
     state.name = null; state.returning = false; store.set("name", null);
     state.pending = null; step("name");         // ask straight away, no order needed
     say("A new name? I admire that. What shall I write on the cup, and is it for here or to go?");
+    setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
+  }
+  /* the bill: anyone who hasn't given a name yet (no coffee ordered) is asked once, here */
+  function bill() {
+    if (state.busy || state.name || state.billAsked) return Cafe.pages.openBill();
+    state.billAsked = true; state.pendingBill = true; state.pending = null;
+    step("billname");
+    scrollToEl(".stage", true);
+    say("Of course. And whose name shall I put on the bill?");
     setTimeout(() => $("#name-input")?.focus({ preventScroll: true }), reduce ? 0 : 400);
   }
   /* the classic: get the name a little wrong on the first cup */
@@ -158,8 +185,8 @@
   /* ---------- taking an order ---------- */
   async function order(id) {
     if (state.busy) return;
-    if (state.name === null) return askName(id);
     const it = item(id);
+    if (it.station === "machine" && !state.name) return askName(id); // a coffee always has a name on the cup
     state.busy = true; state.shelf = it.shelf; step("working");
     if (scrollToEl(".stage", true)) await wait(550);
     say(`One ${short(it)}${state.name ? " for " + state.name : ""}. Watch closely.`);
@@ -256,5 +283,5 @@
   });
 
   const skip = () => { speed.k = 0.08; };       // fast-forward the making of this order
-  Cafe.counter = { skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
+  Cafe.counter = { bill, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
 })();

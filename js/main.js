@@ -93,7 +93,7 @@
     wifi: counter.wifi, rules: counter.rules, surprise: counter.surprise,
     skipname: () => counter.setName("", false), rename: counter.rename,
     jar: i => counter.order(D.items.find(it => it.jarIndex === +i).id),
-    bill: pages.openBill, "close-bill": pages.closeBill, print: () => print(),
+    bill: counter.bill, "close-bill": pages.closeBill, print: () => print(),
     cv: () => (location.hash = "cv"),
     story: () => scrollToEl("#served"), counter: () => scrollToEl(".stage"),
   };
