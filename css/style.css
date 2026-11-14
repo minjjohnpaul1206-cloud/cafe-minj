@@ -550,6 +550,7 @@ dialog#book-dialog::backdrop { background: rgba(10, 18, 15, .75); backdrop-filte
 .cv-head { display: flex; gap: 24px; align-items: center; }
 .cv-photo { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); }
 .cv-paper h1 { font-size: var(--step-4); color: var(--bottle); }
+.cv-current { margin: 2px 0 2px; font-size: var(--step-1); color: var(--bottle-ink); }
 .cv-role { font-size: var(--step-1); color: #4B524E; }
 .cv-contact { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: .95rem; }
 .cv-contact a { color: var(--bottle); }
@@ -621,6 +622,7 @@ dialog#book-dialog::backdrop { background: rgba(10, 18, 15, .75); backdrop-filte
   .cv-paper { font-size: 9.5pt; line-height: 1.32; }
   .cv-paper h1 { font-size: 19pt; margin: 0; }
   .cv-paper h2 { font-size: 11pt; margin: 10pt 0 5pt; text-transform: uppercase; letter-spacing: .04em; }
+  .cv-current { font-size: 11pt; margin: 2pt 0 1pt; }
   .cv-role { font-size: 10pt; }
   .cv-entry + .cv-entry { margin-top: 7pt; }
   .cv-paper ul { margin: 3pt 0 0; }

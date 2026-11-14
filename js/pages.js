@@ -126,6 +126,7 @@
       <header class="cv-head">
         ${P.photo ? `<img class="cv-photo" src="${esc(P.photo)}" alt="">` : ""}
         <div><h1>${esc(P.name)}</h1>
+        <p class="cv-current"><b>${esc(P.role)}</b>, ${esc(P.employer)}</p>
         <p class="cv-role">${esc(P.headline || P.role)}</p>
         <p class="cv-contact"><span>${esc(P.city)}</span><a href="${esc(P.phoneHref)}">${esc(P.phone)}</a><a href="mailto:${esc(P.email)}">${esc(P.email)}</a><a href="${esc(P.linkedin)}" target="_blank" rel="noopener">${esc(P.linkedinLabel)}</a>${P.website ? `<a href="https://${esc(P.website)}">${esc(P.website)}</a>` : ""}</p></div>
       </header>

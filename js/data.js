@@ -9,7 +9,7 @@ window.CAFE = {
   person: {
     name: "John Paul Minj",
     firstName: "John Paul",
-    role: "Management Trainee, Sales & Marketing",
+    role: "Management Trainee – Sales & Marketing",
     employer: "Eckstein Engineering Business Solutions",
     degree: "MBA, IIM Jammu (2026)",
     city: "Pune, India",
@@ -17,7 +17,7 @@ window.CAFE = {
     /* The CV page: a keyword headline and a short summary, written for
        sales and marketing roles in any industry. */
     headline: "Sales and Marketing | Business Development | Account Management | Marketing Strategy | Market Research",
-    summary: "Sales and marketing professional with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Sales experience across the full cycle: lead generation, cold outreach, account management, client presentations to senior decision-makers and closing. Marketing experience in positioning, customer research and campaign strategy, with one campaign doubling revenue within a month. An engineering background helps in learning new products quickly and explaining them simply to customers.",
+    summary: "Management Trainee – Sales & Marketing at Eckstein Engineering Business Solutions, with an MBA from IIM Jammu and a B.Tech in Electronics and Communication Engineering from NIT Puducherry. Sales experience across the full cycle: lead generation, cold outreach, account management, client presentations to senior decision-makers and closing. Marketing experience in positioning, customer research and campaign strategy, with one campaign doubling revenue within a month. An engineering background helps in learning new products quickly and explaining them simply to customers.",
     email: "hello@johnpaulminj.com",
     phone: "+91 99332 24856",
     phoneHref: "tel:+919933224856",
@@ -86,7 +86,7 @@ window.CAFE = {
       name: "The Eckstein Espresso",
       kind: "Double shot, dark roast, no filler",
       org: "Eckstein Engineering Business Solutions Pvt. Ltd.",
-      role: "Management Trainee, Sales & Marketing",
+      role: "Management Trainee – Sales & Marketing",
       period: "Apr 2026 – Present", place: "Pune, India",
       line: "A concentrated shot of German–Indian market entry. Short, intense, and it lands.",
       notes: [
