@@ -259,7 +259,7 @@ window.ART = (function () {
     book: [-156, 170, 315, 451],
     frame: [-156, 170, 315, 451],
     cloche: [-231, 204, 457, 442],
-    espresso: [-106, 204, 342, 399],
+    espresso: [-118, 204, 329, 398],
     /* frames for the small animations (hello wave, talking, reactions, tongs, writing on the cup) */
     wave1: [-153, 204, 324, 384],
     wave2: [-160, 204, 325, 384],
@@ -274,7 +274,7 @@ window.ART = (function () {
     thumbs: [-155, 205, 313, 405],
     bill: [-155, 170, 311, 434],
     jar: [-152, 170, 310, 434],
-    brew: [-139, 204, 393, 399],
+    brew: [-88, 204, 338, 395],
     tongs1: [-188, 204, 384, 397],
     tongs2: [-176, 204, 333, 397],
     tongs3: [-200, 204, 437, 444],
