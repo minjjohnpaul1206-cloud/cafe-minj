@@ -183,6 +183,27 @@ window.ART = (function () {
     </svg>`;
   }
 
+  /* ---------- a framed certificate (viewBox 0 0 100 120): on the wall, in his hands, on the counter ---------- */
+  function certArt(c = {}) {
+    const seal = c.sealColor || "#B5452E";
+    return `<svg viewBox="0 0 100 120" aria-hidden="true">
+      <rect x="1.5" y="1.5" width="97" height="117" rx="3" fill="#C9A06A" stroke="#2A1A12" stroke-width="3"/>
+      <rect x="8" y="8" width="84" height="104" fill="#A87C47"/>
+      <rect x="11" y="11" width="78" height="98" fill="#FBF3DF"/>
+      <rect x="16" y="16" width="68" height="88" fill="none" stroke="#C98A1B" stroke-width="1.2"/>
+      <text x="50" y="31" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" letter-spacing="1.2" fill="#6B4A2E">CERTIFICATE</text>
+      <path d="M30,38 h40" stroke="#C98A1B" stroke-width="1.2"/>
+      <path d="M24,49 h52 M28,57 h44 M32,65 h36" stroke="#8C7A66" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+      <path d="M58,86 l-5,16 6,-4 4,6 2,-16z M70,86 l5,16 -6,-4 -4,6 -2,-16z" fill="${seal}" opacity=".9"/>
+      <circle cx="64" cy="84" r="9" fill="#E3B65C" stroke="#B07A1E" stroke-width="1.5"/>
+      <circle cx="64" cy="84" r="5" fill="none" stroke="#B07A1E" stroke-width="1.2"/>
+      <path d="M24,92 h22" stroke="#8C7A66" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+    </svg>`;
+  }
+  items.frame = (o = {}) => `${shadow(28)}
+      <path d="M60,104 l-14,6 M60,104 l14,6" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
+      <svg x="29" y="30" width="62" height="75" viewBox="0 0 100 120">${certArt(o).replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg>`;
+
   /* a book standing on the counter (for serving), cover facing the visitor */
   items.book = (o = {}) => o.platform ? `${shadow(30)}
       <rect x="32" y="22" width="62" height="88" rx="3" fill="#FBF7EE" ${ol()}/>
@@ -236,6 +257,7 @@ window.ART = (function () {
     togo: [-192, 170, 352, 429],
     write: [-129, 204, 325, 414],
     book: [-156, 170, 315, 451],
+    frame: [-156, 170, 315, 451],
     cloche: [-231, 204, 457, 442],
     espresso: [-106, 204, 342, 399],
     /* frames for the small animations (hello wave, talking, reactions, tongs, writing on the cup) */
@@ -332,7 +354,7 @@ window.ART = (function () {
   }
 
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
-  function interior(person, shelves, rules, books = []) {
+  function interior(person, shelves, rules, books = [], certs = []) {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
     const jarSlots = [0, 1, 2, 3, 4].map(i => 420 + i * 74);
     const lamp = x => `<g class="lamp"><path d="M${x},0 L${x},118" stroke="#2A2A26" stroke-width="2"/>
@@ -381,6 +403,13 @@ window.ART = (function () {
           <rect x="${x}" y="${390 - h}" width="26" height="${h}" rx="2" fill="${b.color}" ${ol(2.2)}/>
           <rect x="${x + 4}" y="${390 - h + 6}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/><rect x="${x + 4}" y="${390 - 12}" width="18" height="3" fill="${C.goldSoft}" opacity=".8"/></g>`; }).join("")}
         <path d="M${132 + Math.min(books.length, 6) * 32 + 4},390 l0,-30 l14,0 l0,30 Z" fill="${C.gold}" ${ol(2.2)}/>
+      </g>
+
+      <!-- certificate wall: one frame per course, he takes it down to show you -->
+      <g id="cert-wall">
+        ${certs.slice(0, 3).map((c, i) => { const x = 405 + i * 72; return `<g class="cert-frame hot" data-cert="${i}" data-act="cert:${i}">
+          <path d="M${x + 25},${108} L${x + 8},${120} M${x + 25},${108} L${x + 42},${120}" stroke="#6B4A2E" stroke-width="1.6"/><circle cx="${x + 25}" cy="107" r="2.5" fill="#6B4A2E"/>
+          <svg x="${x}" y="118" width="50" height="60" viewBox="0 0 100 120">${certArt({ ...c, sealColor: ["#B5452E", "#2F5D8A", "#4E7A4A"][i % 3] }).replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg></g>`; }).join("")}
       </g>
 
       <!-- jar shelf -->
@@ -631,5 +660,5 @@ window.ART = (function () {
     </svg>`;
   }
 
-  return { item, itemSVG, cupName, bookCover, interior, street, colors: C };
+  return { item, itemSVG, cupName, bookCover, certArt, interior, street, colors: C };
 })();

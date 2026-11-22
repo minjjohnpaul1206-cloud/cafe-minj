@@ -41,6 +41,7 @@ window.CAFE = {
       togo: "assets/pose-togo.webp",
       write: "assets/pose-write.webp",
       book: "assets/pose-book.webp",
+      frame: "assets/pose-frame.webp",
       cloche: "assets/pose-cloche.webp",
       espresso: "assets/pose-espresso.webp",
       /* animation frames */

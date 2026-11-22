@@ -47,6 +47,7 @@
     greet: () => who() + (D.special ? btn("Today's special", short(item(D.special)) + ", what I do now", "item:" + D.special, "primary") : "")
       + D.shelves.map(s => btn(s.label, s.sub, "shelf:" + s.id)).join("")
       + ((D.writing || []).length ? btn("Something to read?", "From my bookshelf", "books") : "")
+      + ((D.learning || []).length ? btn("The frames on the wall?", "Courses I've finished", "certs") : "")
       + btn("Just here for the wifi", "Bold choice", "wifi")
       + btn("I'm hiring, keep it short", "Straight to the CV", "cv"),
     shelf: () => shelfItems(state.shelf).map(i => btn(i.name + (state.stamps.includes(i.id) ? " ✓" : ""), i.kind, "item:" + i.id)).join("")
@@ -78,6 +79,9 @@
           ${btn("Skip", "Just the bill", "skipname")}
         </div></form>`,
     books: () => (D.writing || []).map((b, i) => btn(b.title, b.kicker, "book:" + i)).join("") + btn("Something else", "", "greet"),
+    certs: () => (D.learning || []).slice(0, 3).map((x, i) => btn(x.title, `${x.by}, ${x.date}`, "cert:" + i)).join("") + btn("Something else", "", "greet"),
+    certserved: () => (lastCert?.url ? `<a class="choice primary" href="${esc(lastCert.url)}" target="_blank" rel="noopener"><b>See it on LinkedIn</b><small>The certificate post</small></a>` : "")
+      + btn("Another frame", "", "certs") + btn("Back to the menu", "", "greet"),
     bookserved: () => btn("Open the book", "", "openbook", "primary") + btn("Another book", "", "books") + btn("Back to the menu", "", "greet"),
     working: () => `<p class="working">Making your order… keep your eyes on the counter.</p>${btn("Skip the show", "Serve it right away", "skip")}`,
     back: () => btn("Show me the menu", "", "greet", "primary"),
@@ -135,6 +139,27 @@
     Cafe.pages.openBook(b);
   }
   const reopenBook = () => lastBook && Cafe.pages.openBook(lastBook);
+
+  /* ---------- the certificate wall: he takes a frame down and shows it to you ---------- */
+  let lastCert = null;
+  function openCerts() {
+    step("certs"); scrollToEl(".stage", true);
+    say("Those frames? Courses I finished after hours. Pick one and I'll take it down for you.");
+  }
+  async function serveCert(i) {
+    if (state.busy) return;
+    const c = (D.learning || [])[+i];
+    if (!c) return;
+    state.busy = true; step("working");
+    if (scrollToEl(".stage", true)) await wait(550);
+    say(`"${c.title}". Let me get it down.`);
+    await Cafe.scene.serve({ ...c, station: "certs", art: "frame", certIndex: +i, sealColor: ["#B5452E", "#2F5D8A", "#4E7A4A"][+i % 3] });
+    await say(`${c.title}, ${c.by}, ${c.date}. The certificate itself is on my LinkedIn.`);
+    lastCert = c;
+    step("certserved");
+    state.busy = false;
+    speed.k = speed.normal;
+  }
 
   function surprise() {
     const left = D.items.filter(i => !state.tray.includes(i.id)), pool = left.length ? left : D.items;
@@ -312,5 +337,5 @@
   });
 
   const skip = () => { speed.k = 0.08; };       // fast-forward the making of this order
-  Cafe.counter = { bill, pickCup, otherName, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook };
+  Cafe.counter = { bill, pickCup, otherName, skip, greet, openShelf, wifi, rules, surprise, order, setName, rename, updateStamps, openBooks, serveBook, reopenBook, openCerts, serveCert };
 })();

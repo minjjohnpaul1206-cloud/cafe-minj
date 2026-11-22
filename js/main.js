@@ -93,6 +93,7 @@
     reading: () => scrollToEl("#reading"),
     skip: counter.skip,
     books: counter.openBooks, book: counter.serveBook, openbook: counter.reopenBook,
+    certs: counter.openCerts, cert: counter.serveCert,
     "close-book": pages.closeBook,
     shelf: counter.openShelf, item: counter.order, greet: () => counter.greet(false),
     wifi: counter.wifi, rules: counter.rules, surprise: counter.surprise,

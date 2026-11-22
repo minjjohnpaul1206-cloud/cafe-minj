@@ -6,7 +6,7 @@
   const { A, D, P, $, reduce, speed, wait, usesCup, state } = Cafe;
   const NS = "http://www.w3.org/2000/svg";
 
-  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || []);
+  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || [], D.learning || []);
   const svg = $("#scene"), barista = $("#barista"), inner = $("#barista-inner");
   const armL = $("#armL"), armR = $("#armR"), layer = $("#items-layer");
   armL.style.transform = armR.style.transform = "rotate(0deg)";
@@ -231,6 +231,19 @@
       await walk(800, { el, dx: HAND });
       return [el, armR];
     },
+    async certs(it) {                           // up on his toes, lifts the frame off its nail
+      const i = it.certIndex || 0, fx = 430 + i * 72, x = fx - 200;
+      await walk(x);
+      pose("reach");
+      await tw(barista, at(x, by = -40), 300);
+      sfx("Tink!", fx, 100);
+      hiddenEl = $(`.cert-frame[data-cert="${i}"]`);
+      hiddenEl.style.opacity = 0;
+      const el = makeItem(it, fx, 182, 0.65);
+      await Promise.all([tw(barista, at(x, by = 0), 420), tw(el, itemAt(x + HAND, 548, CARRY), 650)]);
+      await walk(800, { el, dx: HAND });
+      return [el, armR];
+    },
     async under(it) {
       await walk(800);
       pose("idle");
@@ -256,6 +269,7 @@
   const HANDED = ["espresso", "macchiato", "ristretto", "doubleshot"];
   function handover(it) {
     if (it.station === "books") return "book";
+    if (it.station === "certs") return "frame";
     if (it.art === "cloche") return "cloche";
     if (it.station === "case") return "plate";
     if (it.station === "shelf") return "jar";
@@ -322,10 +336,10 @@
             <path d="M${bx - 18},508 h40 M${bx - 10},520 h24" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/>`;
           barista.after(tag);                   // just in front of him, still behind the counter
         }
-        if (give === "book" && it.platform) {     // the book in his hands wears this post's own cover
-          const first = barista.querySelector(".pose");
+        if ((give === "book" && it.platform) || give === "frame") { // what he holds wears its own cover or certificate
+          const first = barista.querySelector(".pose"), art = give === "book" ? A.bookCover(it) : A.certArt(it);
           tag = document.createElementNS(NS, "g");
-          tag.innerHTML = `<svg x="-52" y="451" width="108" height="126" viewBox="0 0 120 170" preserveAspectRatio="none">${A.bookCover(it).replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg>`;
+          tag.innerHTML = `<svg x="-52" y="451" width="108" height="126" viewBox="${give === "book" ? "0 0 120 170" : "0 0 100 120"}" preserveAspectRatio="none">${art.replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg>`;
           first.parentNode.insertBefore(tag, first); // behind his fingers
         }
         await wait(1300);
