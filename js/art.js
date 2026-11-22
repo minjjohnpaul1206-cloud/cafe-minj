@@ -166,17 +166,28 @@ window.ART = (function () {
     waves: `<path d="M14,110 q12,-8 24,0 t24,0 t24,0 t24,0" stroke="#E8DCC4" stroke-width="4" fill="none"/>`,
   };
   function bookCover(b) {
+    /* with a cover picture (the post's own image): picture on top, short title underneath */
+    const words = (b.coverTitle || []).map((t, i) => `<tspan x="64" dy="${i ? 11 : 0}">${t.replace(/[&<>]/g, "")}</tspan>`).join("");
+    const art = b.cover
+      ? `<rect x="16" y="14" width="96" height="96" rx="2" fill="#000" opacity=".25"/>
+         <image href="${b.cover}" x="16" y="14" width="96" height="96" preserveAspectRatio="xMidYMid slice"/>
+         <rect x="16" y="14" width="96" height="96" rx="2" fill="none" stroke="#E8C48A" stroke-width="1.5"/>
+         <text x="64" y="126" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#FBF3DF">${words}</text>`
+      : motifs[b.motif] || motifs.waves;
     return `<svg viewBox="0 0 120 170" aria-hidden="true">
       <rect width="120" height="170" rx="4" fill="${b.color}"/>
       <rect x="0" y="0" width="10" height="170" fill="#000" opacity=".22"/>
-      <rect x="16" y="12" width="96" height="146" rx="2" fill="none" stroke="#E8C48A" stroke-width="1.5" opacity=".75"/>
-      ${motifs[b.motif] || motifs.waves}
-      <text x="64" y="150" text-anchor="middle" font-family="Mukta, sans-serif" font-size="9" letter-spacing="1.5" fill="#E8C48A">${b.platform.toUpperCase()}</text>
+      <rect x="16" y="${b.cover ? 8 : 12}" width="96" height="${b.cover ? 154 : 146}" rx="2" fill="none" stroke="#E8C48A" stroke-width="1.5" opacity="${b.cover ? 0 : 0.75}"/>
+      ${art}
+      <text x="64" y="${b.cover ? 158 : 150}" text-anchor="middle" font-family="Mukta, sans-serif" font-size="8" letter-spacing="1.5" fill="#E8C48A">${b.platform.toUpperCase()}</text>
     </svg>`;
   }
 
   /* a book standing on the counter (for serving), cover facing the visitor */
-  items.book = (o = {}) => `${shadow(30)}
+  items.book = (o = {}) => o.platform ? `${shadow(30)}
+      <rect x="32" y="22" width="62" height="88" rx="3" fill="#FBF7EE" ${ol()}/>
+      <svg x="27" y="19" width="62" height="88" viewBox="0 0 120 170" preserveAspectRatio="none">${bookCover(o).replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg>
+      <rect x="27" y="19" width="62" height="88" rx="3" fill="none" ${ol()}/>` : `${shadow(30)}
       <rect x="32" y="22" width="62" height="88" rx="3" fill="#FBF7EE" ${ol()}/>
       <rect x="27" y="19" width="62" height="88" rx="3" fill="${o.color || C.bottle}" ${ol()}/>
       <path d="M35,21 L35,105" stroke="${INK}" stroke-width="2" opacity=".45"/>

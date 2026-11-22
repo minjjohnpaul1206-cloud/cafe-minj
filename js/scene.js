@@ -322,6 +322,12 @@
             <path d="M${bx - 18},508 h40 M${bx - 10},520 h24" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/>`;
           barista.after(tag);                   // just in front of him, still behind the counter
         }
+        if (give === "book" && it.platform) {     // the book in his hands wears this post's own cover
+          const first = barista.querySelector(".pose");
+          tag = document.createElementNS(NS, "g");
+          tag.innerHTML = `<svg x="-52" y="451" width="108" height="126" viewBox="0 0 120 170" preserveAspectRatio="none">${A.bookCover(it).replace(/^<svg[^>]*>|<\/svg>\s*$/g, "")}</svg>`;
+          first.parentNode.insertBefore(tag, first); // behind his fingers
+        }
         await wait(1300);
         tag?.remove();
         pose("idle");
