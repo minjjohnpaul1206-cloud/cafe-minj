@@ -191,10 +191,12 @@
       await fade(el, 1, 300);
       frame("tongs2");                          // lifts it out
       sfx("Snip!", 430, 420);
-      await tw(el, itemAt(400, 444, 0.62), 300);
+      await tw(el, itemAt(408, 438, 0.62), 300); // up in the tongs' grip
       frame("tongs3");
       dish(el, true);                           // plated, ready to carry
-      await Promise.all([rot(armL, 35, 450), tw(el, itemAt(545 + HAND, 548, CARRY), 450)]);
+      await Promise.all([rot(armL, 35, 450), tw(el, itemAt(712, 404, 0.62), 450)]); // onto the plate in his hand
+      await wait(250);
+      await tw(el, itemAt(545 + HAND, 548, CARRY), 300);
       await walk(800, { el, dx: HAND });
       return [el, armR];
     },
@@ -274,9 +276,9 @@
     if (text && !reduce) {
       close = document.createElementNS(NS, "g");
       close.id = "closeup";
-      const cx = bx - 262, cy = 318;
+      const cx = bx + 310, cy = 445;            // to his right, pointing at the cup in his hand
       close.innerHTML = `<circle cx="${cx}" cy="${cy}" r="96" fill="#FBF3DF" stroke="#2A1A12" stroke-width="6"/>
-        <path d="M${cx + 84},${cy + 46} l44,26 -30,-48z" fill="#FBF3DF" stroke="#2A1A12" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M${cx - 84},${cy - 46} l-44,-26 30,48z" fill="#FBF3DF" stroke="#2A1A12" stroke-width="6" stroke-linejoin="round"/>
         <circle cx="${cx}" cy="${cy}" r="90" fill="#FBF3DF"/>
         <g transform="translate(${cx - 108},${cy - 112}) scale(1.8)">${A.item("togo", {})}</g>`;
       layer.appendChild(close);
