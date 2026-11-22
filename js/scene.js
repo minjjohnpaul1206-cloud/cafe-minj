@@ -95,21 +95,33 @@
   })();
   const MOODS = ["crossed", "think", "phone"];
 
+  /* he blinks every few seconds, like a person does */
+  (function blinkLoop() {
+    setTimeout(() => {
+      if (!reduce && !document.hidden && now() === "idle" && !talkTimer && hasPose("blink")) {
+        frame("blink");
+        setTimeout(() => { if (now() === "blink") frame("idle"); }, 140);
+      }
+      blinkLoop();
+    }, 2600 + Math.random() * 3400);
+  })();
+
   /* talking: his mouth and hands move while the words type out.
      Standing → open hands (mouth shut / mouth open). Waving → he keeps waving as he says hello. */
-  const TALK = ["shrug", "tada"], HELLO = ["wave1", "wave2", "wave3", "wave2", "wave3", "wave2", "wave1", "wave2", "wave3", "wave2"];
-  const talkSet = ["idle", ...MOODS, ...TALK, "wave1", "wave2", "wave3", "laugh", "point", "thumbs", "bill"];
+  /* mouth frames drawn on the standing pose itself, so only his lips move; now and then his hands open too */
+  const TALK = ["talk1", "talk2", "talk1", "idle", "talk2", "talk1", "idle", "talk1", "talk2", "talk1", "hands", "hands", "hands", "idle"], HELLO = ["wave1", "wave2", "wave3", "wave2", "wave3", "wave2", "wave1", "wave2", "wave3", "wave2"];
+  const talkSet = ["idle", "blink", ...MOODS, ...TALK, "shrug", "tada", "wave1", "wave2", "wave3", "laugh", "point", "thumbs", "bill"];
   let talkTimer = null;
   function talk(on) {
     barista.classList.toggle("talking", !!on);
     clearInterval(talkTimer); talkTimer = null;
     if (!talkSet.includes(now()) || held === now()) return; // hands busy, or holding a reaction: just the little bob
-    if (!on || reduce || !hasPose("shrug")) { if (now() !== "idle") pose("idle", false, false); return; }
+    if (!on || reduce || !hasPose("talk1")) { if (now() !== "idle") pose("idle", false, false); return; }
     const hello = now() === "wave1" ? [...HELLO] : [];
     let i = 0;
     talkTimer = setInterval(() => {
       if (!talkSet.includes(now()) || held === now()) { clearInterval(talkTimer); talkTimer = null; return; } // he walked off mid-sentence
-      frame(hello.length ? hello.shift() : TALK[i++ % 2]);
+      frame(hello.length ? hello.shift() : TALK[i++ % TALK.length]);
     }, 170);
   }
 
@@ -249,7 +261,7 @@
     if (HANDED.includes(it.art)) return "serve";
     return null;
   }
-  const PLATE_TOP = [803, 522];                 // where the plate sits in the plate pose
+  const PLATE_TOP = [802, 514];                 // where the plate sits in the plate pose
 
   /* He takes the marker from his pocket and writes the name on the cup. A comic
      close-up shows the letters landing one by one, in step with his pen. */
@@ -304,8 +316,8 @@
         let tag = null;
         if (give === "jar") {                   // the jar in his hands wears this jar's own label
           tag = document.createElementNS(NS, "g");
-          tag.innerHTML = `<rect x="${bx - 9}" y="478" width="34" height="24" rx="3" fill="${it.jarColor || "#B5452E"}" stroke="#2A1A12" stroke-width="2.2"/>
-            <path d="M${bx - 3},486 h22 M${bx + 1},493 h14" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>`;
+          tag.innerHTML = `<rect x="${bx - 31}" y="494" width="66" height="42" rx="4" fill="${it.jarColor || "#B5452E"}" stroke="#2A1A12" stroke-width="2.6"/>
+            <path d="M${bx - 18},508 h40 M${bx - 10},520 h24" stroke="#FBF7EE" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/>`;
           barista.after(tag);                   // just in front of him, still behind the counter
         }
         await wait(1300);
