@@ -124,7 +124,8 @@ window.ART = (function () {
       <path d="M36.4,96 L83.6,96 L83,102 L37,102 Z" fill="${XM ? "#2E6B4E" : o.accent || C.bottle}"/>
       ${XM ? `<path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#C8262B" ${ol(2.2)}/>
         <path d="M35.6,66 L84.4,66 M37.1,85 L82.9,85" stroke="#FBF6EC" stroke-width="1.6" stroke-dasharray="3 3"/>
-        ${holly(60, 76, .62)}${xstar(44, 75, 3.2)}${xstar(76, 75, 3.2)}` : `<path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#CFA06C" ${ol(2.2)}/>
+        <rect x="43" y="68.5" width="34" height="16" rx="3" fill="#FBF6EC" stroke="${INK}" stroke-width="1.4"/>
+        ${holly(81.5, 70, .42, 20)}${xstar(39.5, 76, 2.6)}` : `<path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#CFA06C" ${ol(2.2)}/>
       ${[43, 51, 59, 67, 75].map(x => `<path d="M${x},65 l0,21" stroke="#A97D4E" stroke-width="1.2"/>`).join("")}`}
       <rect x="29" y="26" width="62" height="10" rx="4" fill="#F2EEE6" ${ol()}/>
       <path d="M35,26 Q37,15 60,14 Q83,15 85,26 Z" fill="#FFFDF7" ${ol()}/>
@@ -140,7 +141,7 @@ window.ART = (function () {
     const t1 = wrong.length * 90;
     return line(wrong, 54, 0)
       + `<path class="strike" style="animation-delay:${t1 + 200}ms" d="M39,49 Q60,46 81,50" stroke="#2A2522" stroke-width="2" fill="none" pathLength="44"/>`
-      + line(name, 81, t1 + 700);
+      + (XM ? line(name, 81, t1 + 700).replace('font-size="15"', 'font-size="13"') : line(name, 81, t1 + 700));
   }
 
   /* ---------- island bits: palms, sea, shells ---------- */
