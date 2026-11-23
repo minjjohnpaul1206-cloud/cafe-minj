@@ -559,7 +559,7 @@ window.ART = (function () {
   }
 
   /* ---------- the street front (viewBox 0 0 1600 900) ---------- */
-  function street(person) {
+  function street(person, season = "") {
     /* ---------- people seen through the glass: warm silhouettes ---------- */
     const SIL = "#4A2C1B";
     const person1 = (x, y, s = 1, o = {}) => {        // seated, facing out, waist-up; y = table/bar line
@@ -682,6 +682,66 @@ window.ART = (function () {
       <path d="M-26,-58 L-10,-58" stroke-width="6"/>
     </g>`;
 
+
+    /* ---------- Christmas, the way it looks in Pune and Port Blair: paper star lanterns, a wreath,
+       poinsettias and coloured lights. No snow. ---------- */
+    const kandil = (x, y, s, col) => `<g transform="translate(${x},${y}) scale(${s})">
+      <path d="M0,-120 L0,-34" stroke="#2A2A26" stroke-width="2"/>
+      <circle cx="0" cy="0" r="64" fill="url(#lampHalo)" class="halo"/>
+      <path d="${Array.from({ length: 10 }, (_, i) => { const a = (i * 36 - 90) * Math.PI / 180, r = i % 2 ? 16 : 36; return `${i ? "L" : "M"}${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`; }).join(" ")}Z" fill="${col}" stroke="#7A1E16" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="${Array.from({ length: 10 }, (_, i) => { const a = (i * 36 - 90) * Math.PI / 180, r = i % 2 ? 8 : 18; return `${i ? "L" : "M"}${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`; }).join(" ")}Z" fill="#FFF1C4" opacity=".85"/>
+      ${[-14, -5, 5, 14].map((dx, i) => `<path d="M${dx},30 q${i % 2 ? 3 : -3},20 ${dx * .3},${44 + i * 4}" stroke="${["#F0C24A", "#E0472E", "#F3EEE3", "#2E6B4E"][i]}" stroke-width="3" fill="none"/>`).join("")}
+    </g>`;
+    const bulbs = (path, n, x0, x1, y0, sag, phase = 0) => Array.from({ length: n }, (_, i) => {
+      const t = i / (n - 1), x = x0 + t * (x1 - x0), seg = ((x - x0) % ((x1 - x0) / 4)) / ((x1 - x0) / 4), y = y0 + Math.sin(seg * Math.PI) * sag + 4;
+      return `<circle cx="${x}" cy="${y}" r="5" fill="${["#E0472E", "#2EA05A", "#F0C24A", "#3E8FD8"][(i + phase) % 4]}" class="xbulb x${(i + phase) % 3}"/>`; }).join("");
+    const wreath = (x, y) => `<g transform="translate(${x},${y})">
+      <circle r="30" fill="none" stroke="#2E6B4E" stroke-width="16"/>
+      ${Array.from({ length: 16 }, (_, i) => { const a = i * 22.5 * Math.PI / 180; return `<ellipse cx="${(Math.cos(a) * 30).toFixed(1)}" cy="${(Math.sin(a) * 30).toFixed(1)}" rx="9" ry="5" transform="rotate(${i * 22.5 + 40} ${(Math.cos(a) * 30).toFixed(1)} ${(Math.sin(a) * 30).toFixed(1)})" fill="${i % 2 ? "#3E8A55" : "#25573D"}"/>`; }).join("")}
+      ${[20, 75, 140, 200, 260, 320].map(d => { const a = d * Math.PI / 180; return `<circle cx="${(Math.cos(a) * 30).toFixed(1)}" cy="${(Math.sin(a) * 30).toFixed(1)}" r="4" fill="#D8322A"/>`; }).join("")}
+      <path d="M-12,24 L0,34 L12,24 L6,48 M-12,24 L-6,48" fill="none" stroke="#C0262B" stroke-width="6" stroke-linejoin="round"/><circle cx="0" cy="32" r="6" fill="#C0262B"/>
+    </g>`;
+    const poinsettia = (x, y, s = 1) => `<g transform="translate(${x},${y}) scale(${s})">
+      ${Array.from({ length: 6 }, (_, i) => `<path d="M0,0 Q6,-10 0,-20 Q-6,-10 0,0Z" fill="#D8322A" transform="rotate(${i * 60})"/>`).join("")}
+      ${Array.from({ length: 6 }, (_, i) => `<path d="M0,0 Q4,-7 0,-13 Q-4,-7 0,0Z" fill="#B0201E" transform="rotate(${i * 60 + 30})"/>`).join("")}
+      <circle r="3" fill="#F0C24A"/></g>`;
+    const xtree = (x, base, h) => `<g>
+      <rect x="${x - 7}" y="${base - 20}" width="14" height="20" fill="#5A3C24"/>
+      ${[0, 1, 2, 3].map(i => { const w = h * (.62 - i * .13), y = base - 16 - i * h * .21; return `<path d="M${x - w / 2},${y} L${x},${y - h * .36} L${x + w / 2},${y} Z" fill="${i % 2 ? "#2E6B4E" : "#255C42"}"/>`; }).join("")}
+      ${Array.from({ length: 16 }, (_, i) => { const t = (i % 4) / 3, row = Math.floor(i / 4), w = h * (.5 - row * .11), y = base - 26 - row * h * .2; return `<circle cx="${x - w / 2 + t * w}" cy="${y - (i % 2) * 6}" r="4" fill="${["#E0472E", "#F0C24A", "#3E8FD8", "#F3EEE3"][i % 4]}" class="xbulb x${i % 3}"/>`; }).join("")}
+      <path d="M${x},${base - h * .98} l4,9 10,1 -8,6 3,10 -9,-5 -9,5 3,-10 -8,-6 10,-1z" fill="#F0C24A" stroke="#B07A1E" stroke-width="1.5"/>
+      <rect x="${x - 30}" y="${base - 12}" width="18" height="14" fill="#C0262B" ${ol(1.5)}/><rect x="${x + 8}" y="${base - 10}" width="16" height="12" fill="#2F5D8A" ${ol(1.5)}/>
+      <path d="M${x - 21},${base - 12} v14 M${x - 30},${base - 5} h18 M${x + 16},${base - 10} v12" stroke="#F0C24A" stroke-width="2"/>
+    </g>`;
+    const christmas = season !== "christmas" ? "" : `
+      <!-- Christmas -->
+      <g id="xmas">
+        <!-- coloured lights along the cornice and round the door arch -->
+        <path d="M470,348 Q575,380 685,350 Q790,380 900,350 Q1010,380 1115,350 Q1225,380 1330,348" stroke="#1E3A2A" stroke-width="2" fill="none"/>
+        ${bulbs("", 33, 470, 1330, 348, 26)}
+        ${Array.from({ length: 15 }, (_, i) => { const a = Math.PI * (1 - i / 14), x = 900 + Math.cos(a) * 118, y = 470 - Math.sin(a) * 92; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="${["#E0472E", "#2EA05A", "#F0C24A", "#3E8FD8"][i % 4]}" class="xbulb x${i % 3}"/>`; }).join("")}
+        <!-- wreath on the door, star lanterns hanging from the awnings -->
+        ${wreath(900, 708)}
+        ${kandil(530, 520, .62, "#E0472E")}${kandil(1290, 520, .62, "#F0C24A")}${kandil(900, 330, .52, "#D8322A")}
+        <!-- garland with bows over the windows -->
+        ${[492, 1052].map(x => `<path d="M${x - 40},408 Q${x + 64},440 ${x + 128},412 Q${x + 192},440 ${x + 296},408" stroke="#2E6B4E" stroke-width="10" fill="none" stroke-linecap="round"/>
+          ${[x - 40, x + 128, x + 296].map(bx => `<path d="M${bx},410 l-12,-8 0,16z M${bx},410 l12,-8 0,16z" fill="#C0262B"/><circle cx="${bx}" cy="410" r="4" fill="#C0262B"/>`).join("")}`).join("")}
+        <!-- poinsettias in the flower boxes and in two pots by the door -->
+        ${[0, 1, 2, 3, 4].map(i => poinsettia(510 + i * 55, 692, .75) + poinsettia(1070 + i * 55, 692, .75)).join("")}
+        ${[728, 1072].map(x => `${poinsettia(x - 10, 730, 1.1)}${poinsettia(x + 12, 720, .95)}${poinsettia(x, 708, .9)}`).join("")}
+        <!-- the tree in the park, lit, with presents underneath -->
+        ${xtree(330, 760, 150)}
+        <!-- a star lantern in the park tree and on the lamp post -->
+        ${kandil(150, 640, .5, "#F0C24A")}
+        <!-- Santa's cap on the chalkboard, and a greeting on it -->
+        <g transform="translate(640,700) scale(.86)">
+          <path d="M-58,4 Q-40,-40 10,-34 Q46,-28 60,4 Z" fill="#C0262B"/><path d="M-62,2 Q0,14 62,2 L62,12 Q0,24 -62,12 Z" fill="#F3EEE3"/>
+          <path d="M10,-34 Q40,-44 52,-20" stroke="#C0262B" stroke-width="12" fill="none" stroke-linecap="round"/><circle cx="54" cy="-16" r="9" fill="#F3EEE3"/>
+        </g>
+        <!-- a little lit tree on the outside table -->
+        <g transform="translate(1240,770) scale(.38)">${xtree(0, 0, 90).replace("<g>", "<g>")}</g>
+      </g>`;
+
     return `<svg id="street-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1C2B3F"/><stop offset=".55" stop-color="#4C4A63"/><stop offset=".8" stop-color="#B97A6A"/><stop offset="1" stop-color="#E6A36F"/></linearGradient>
@@ -786,7 +846,7 @@ window.ART = (function () {
         <rect x="-54" y="6" width="108" height="108" fill="#24302C" stroke="${C.teak}" stroke-width="6"/>
         <text x="0" y="34" text-anchor="middle" font-family="Kalam, cursive" font-size="15" fill="${C.ivory}">My portfolio</text>
         <text x="0" y="62" text-anchor="middle" font-family="Kalam, cursive" font-size="22" fill="${C.goldSoft}">16 chapters</text>
-        <text x="0" y="86" text-anchor="middle" font-family="Kalam, cursive" font-size="14" fill="${C.ivory}">of my career</text>
+        <text x="0" y="86" text-anchor="middle" font-family="Kalam, cursive" font-size="14" fill="${C.ivory}">${season === "christmas" ? "Merry Christmas!" : "of my career"}</text>
         <path d="M-36,98 q36,10 72,0" stroke="${C.ivory}" stroke-width="2" fill="none" opacity=".6"/>
       </g>
       <!-- street lamp and the parking sign on the lane side -->
@@ -796,6 +856,7 @@ window.ART = (function () {
         <text x="0" y="-160" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="34" fill="#F3EEE3">P</text></g>
       <!-- coconut palm on the lane side -->
       ${palm(1578, -1, 360, .85)}
+      ${christmas}
       <!-- the comic pointer sits on top of everything -->
       <g id="door-hint" class="hot" data-act="enter">
         <g class="door-hint-inner">

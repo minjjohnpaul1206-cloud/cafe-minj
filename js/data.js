@@ -52,6 +52,9 @@ window.CAFE = {
     resumePdf: "assets/John-Paul-Minj-Resume.pdf",
   },
 
+  /* ---------- Seasonal decorations on the café front: "christmas", or "" for none ---------- */
+  season: "christmas",
+
   /* ---------- Today's special: the chip shown first at the counter ---------- */
   special: "eckstein-espresso",
 

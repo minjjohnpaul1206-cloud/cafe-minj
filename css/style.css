@@ -89,6 +89,9 @@ button { font: inherit; }
 .halo { animation: flicker 5s infinite; }
 .surf { animation: surf 4.5s ease-in-out infinite alternate; }
 @keyframes surf { to { transform: translate(-36px, 3px); } }
+.xbulb { animation: twinkle 1.8s ease-in-out infinite; }
+.xbulb.x1 { animation-delay: .6s; } .xbulb.x2 { animation-delay: 1.2s; }
+@keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 @keyframes flicker { 0%, 100% { opacity: 1 } 48% { opacity: 1 } 50% { opacity: .82 } 52% { opacity: 1 } }
 
 .flash { position: absolute; inset: 0; background: #FFE3A3; opacity: 0; pointer-events: none; }
@@ -605,7 +608,7 @@ dialog#book-dialog::backdrop { background: rgba(10, 18, 15, .75); backdrop-filte
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .fan-blades, .puff, .halo, #b-eyes, #barista-inner, #machine-body { animation: none !important; }
+  .fan-blades, .puff, .halo, .xbulb, #b-eyes, #barista-inner, #machine-body { animation: none !important; }
 }
 
 /* ============ PRINT (CV) ============ */

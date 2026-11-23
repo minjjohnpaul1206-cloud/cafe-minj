@@ -8,7 +8,7 @@
   const { counter, pages, scene } = Cafe;
 
   /* ---------- the street front ---------- */
-  $("#street-art").innerHTML = A.street(P);
+  $("#street-art").innerHTML = A.street(P, D.season);
   const street = $("#street-svg");
   function fitStreet() { // phones see the whole shop front above the intro card
     const phone = innerWidth < 700;
