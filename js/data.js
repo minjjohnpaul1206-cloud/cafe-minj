@@ -54,6 +54,8 @@ window.CAFE = {
 
   /* ---------- Seasonal decorations on the café front: "christmas", or "" for none ---------- */
   season: "christmas",
+  /* painted café front for the season (leave empty to use the drawn one) */
+  streetArt: { christmas: { scene: "assets/street-christmas.webp", door: "assets/street-christmas-door.webp" } },
 
   /* ---------- Today's special: the chip shown first at the counter ---------- */
   special: "eckstein-espresso",

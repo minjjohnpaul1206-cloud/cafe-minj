@@ -869,5 +869,42 @@ window.ART = (function () {
     </svg>`;
   }
 
-  return { item, itemSVG, cupName, bookCover, certArt, interior, street, colors: C };
+
+  /* the café front as a painted scene (made in Gemini from the drawn layout), with the live bits on top:
+     the sign lettering, the chalkboard, and a door that opens */
+  function paintedStreet(art, season) {
+    return `<svg id="street-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs><linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFDB8C"/><stop offset="1" stop-color="#E9A65A"/></linearGradient></defs>
+      <image href="${art.scene}" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
+      <!-- sign lettering -->
+      <g>
+        <text x="900" y="246" text-anchor="middle" font-family="Rozha One, serif" font-size="80" letter-spacing="5" fill="${C.gold}">CAFÉ MINJ</text>
+        <text x="640" y="232" text-anchor="middle" font-family="Rozha One, serif" font-size="22" fill="${C.goldSoft}">कॅफे</text>
+        <text x="1160" y="232" text-anchor="middle" font-family="Rozha One, serif" font-size="22" fill="${C.goldSoft}">मिंज</text>
+        <text x="900" y="274" text-anchor="middle" font-family="Mukta, sans-serif" font-size="18" letter-spacing="3" fill="${C.ivory}" opacity=".85">Andaman-grown. Pune-roasted.</text>
+      </g>
+      <!-- chalkboard -->
+      <g font-family="Kalam, cursive" text-anchor="middle">
+        <text x="645" y="728" font-size="13" fill="${C.ivory}">My portfolio</text>
+        <text x="645" y="754" font-size="19" fill="${C.goldSoft}">16 chapters</text>
+        <text x="645" y="776" font-size="12" fill="${C.ivory}">${season === "christmas" ? "Merry Christmas!" : "of my career"}</text>
+      </g>
+      <!-- the door: the painted door swings open onto the warm room -->
+      <g id="door-frame">
+        <rect x="805" y="470" width="192" height="305" fill="url(#glow)"/>
+        <g id="door" class="hot" data-act="enter"><image href="${art.door}" x="805" y="470" width="192" height="305" preserveAspectRatio="none"/></g>
+      </g>
+      <path class="door-pulse" d="M790,775 L790,470 Q790,384 900,384 Q1010,384 1010,470 L1010,775" fill="none" stroke="#FFE3A3" stroke-width="10" stroke-linecap="round"/>
+      <g id="door-hint" class="hot" data-act="enter">
+        <g class="door-hint-inner">
+          <path d="M1042,612 L1014,632 L1046,640 Z" fill="#fff" ${ol(4)}/>
+          <rect x="1036" y="590" width="196" height="56" rx="16" fill="#fff" ${ol(4)}/>
+          <path d="M1040,616 L1040,636" stroke="#fff" stroke-width="8"/>
+          <text id="door-hint-text" x="1134" y="628" text-anchor="middle" textLength="164" lengthAdjust="spacingAndGlyphs" font-family="Bangers, Impact, sans-serif" font-size="30" fill="${INK}">Click the door!</text>
+        </g>
+      </g>
+    </svg>`;
+  }
+
+  return { item, itemSVG, cupName, bookCover, certArt, interior, street, paintedStreet, colors: C };
 })();
