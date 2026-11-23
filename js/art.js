@@ -957,10 +957,10 @@ window.ART = (function () {
       <path class="door-pulse" d="M790,775 L790,470 Q790,384 900,384 Q1010,384 1010,470 L1010,775" fill="none" stroke="#FFE3A3" stroke-width="10" stroke-linecap="round"/>
       <g id="door-hint" class="hot" data-act="enter">
         <g class="door-hint-inner">
-          <path d="M1042,612 L1014,632 L1046,640 Z" fill="#fff" ${ol(4)}/>
-          <rect x="1036" y="590" width="196" height="56" rx="16" fill="#fff" ${ol(4)}/>
-          <path d="M1040,616 L1040,636" stroke="#fff" stroke-width="8"/>
-          <text id="door-hint-text" x="1134" y="628" text-anchor="middle" textLength="164" lengthAdjust="spacingAndGlyphs" font-family="Bangers, Impact, sans-serif" font-size="30" fill="${INK}">Click the door!</text>
+          <path d="M1042,660 L1014,680 L1046,688 Z" fill="#fff" ${ol(4)}/>
+          <rect x="1036" y="642" width="196" height="56" rx="16" fill="#fff" ${ol(4)}/>
+          <path d="M1040,664 L1040,684" stroke="#fff" stroke-width="8"/>
+          <text id="door-hint-text" x="1134" y="680" text-anchor="middle" textLength="164" lengthAdjust="spacingAndGlyphs" font-family="Bangers, Impact, sans-serif" font-size="30" fill="${INK}">Click the door!</text>
         </g>
       </g>
     </svg>`;
