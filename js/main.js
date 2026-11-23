@@ -8,6 +8,7 @@
   const { counter, pages, scene } = Cafe;
 
   /* ---------- the street front ---------- */
+  document.querySelectorAll(".intro-face").forEach(i => (i.src = P.illustration)); // seasonal portrait
   $("#street-art").innerHTML = D.streetArt?.[D.season] ? A.paintedStreet(D.streetArt[D.season], D.season) : A.street(P, D.season);
   const street = $("#street-svg");
   function fitStreet() { // phones see the whole shop front above the intro card

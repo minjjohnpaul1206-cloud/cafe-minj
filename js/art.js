@@ -284,12 +284,16 @@ window.ART = (function () {
     write4: [-129, 204, 325, 414],
     write5: [-176, 204, 373, 414],
   };
+  /* how much taller each Christmas frame is (the Santa cap), as a share of the normal frame's height */
+  const XMAS_CAP = {"bill": 0.1189, "blink": 0.1377, "book": 0.1129, "brew": 0.1307, "cloche": 0.1153, "crossed": 0.1292, "espresso": 0.1294, "frame": 0.1129, "hands": 0.1274, "jar": 0.1174, "laugh": 0.157, "phone": 0.1288, "plate": 0.1146, "point": 0.1316, "reach": 0.1807, "serve": 0.121, "shrug": 0.1236, "idle": 0.1377, "tada": 0.1268, "talk1": 0.1377, "talk2": 0.1377, "think": 0.1338, "thumbs": 0.1274, "togo": 0.1188, "tongs1": 0.213, "tongs2": 0.1285, "tongs3": 0.1147, "walk": 0.1643, "wave1": 0.1345, "wave2": 0.1345, "wave3": 0.1276, "write": 0.1248, "write1": 0.1248, "write2": 0.1248, "write3": 0.1248, "write4": 0.1248, "write5": 0.1215};
   function barista(initials = "JPM", img = null, poses = null) {
     /* the illustration version: picture poses that walk, lean, reach and serve */
     if (img) {
       const all = { idle: img, ...(poses || {}) };
       const layers = Object.entries(all).map(([name, href]) => {
-        const [x, y, w, h] = POSE_BOX[name] || POSE_BOX.idle;
+        let [x, y, w, h] = POSE_BOX[name] || POSE_BOX.idle;
+        const f = /\/xmas\//.test(href) ? XMAS_CAP[name] || 0 : 0; // Christmas frames are taller: room for the Santa cap
+        y -= h * f; h *= 1 + f;
         return `<image class="pose${name === "idle" ? " on" : ""}" data-pose="${name}" href="${href}" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
       }).join("");
       return `<g id="barista" data-pose="idle" style="transform: translate(800px, 0px)"><g id="barista-inner">
@@ -354,13 +358,53 @@ window.ART = (function () {
   }
 
   /* ---------- the inside of the café (viewBox 0 0 1600 900) ---------- */
-  function interior(person, shelves, rules, books = [], certs = []) {
+  function interior(person, shelves, rules, books = [], certs = [], season = "") {
     const initials = person.name.split(" ").map(w => w[0]).join("").slice(0, 3);
     const jarSlots = [0, 1, 2, 3, 4].map(i => 420 + i * 74);
     const lamp = x => `<g class="lamp"><path d="M${x},0 L${x},118" stroke="#2A2A26" stroke-width="2"/>
       <circle cx="${x}" cy="170" r="120" fill="url(#lampGlow)"/>
       <path d="M${x - 34},150 Q${x},104 ${x + 34},150 Z" fill="${C.bottle}"/><path d="M${x - 34},150 L${x + 34},150" stroke="${C.gold}" stroke-width="3"/>
       <ellipse cx="${x}" cy="152" rx="12" ry="6" fill="#FFE6A8"/></g>`;
+
+
+    /* ---------- Christmas inside: lights, paper star lanterns, garlands, a small tree, poinsettias ---------- */
+    const XC = ["#E0472E", "#2EA05A", "#F0C24A", "#3E8FD8"];
+    const star = (r1, r2) => Array.from({ length: 10 }, (_, i) => { const a = (i * 36 - 90) * Math.PI / 180, r = i % 2 ? r2 : r1; return `${i ? "L" : "M"}${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`; }).join(" ") + "Z";
+    const lantern = (x, y, s, col) => `<g transform="translate(${x},0)"><path d="M0,0 L0,${y - 34 * s}" stroke="#2A2A26" stroke-width="2"/>
+      <g transform="translate(0,${y}) scale(${s})"><circle r="60" fill="url(#lampGlow)" class="halo"/>
+      <path d="${star(36, 16)}" fill="${col}" stroke="#7A1E16" stroke-width="2.5" stroke-linejoin="round"/><path d="${star(18, 8)}" fill="#FFF1C4" opacity=".85"/>
+      ${[-14, -5, 5, 14].map((dx, i) => `<path d="M${dx},30 q${i % 2 ? 3 : -3},20 ${dx * .3},${44 + i * 4}" stroke="${["#F0C24A", "#E0472E", "#F3EEE3", "#2E6B4E"][i]}" stroke-width="3" fill="none"/>`).join("")}</g></g>`;
+    const garland = (x0, x1, y, sag = 18) => { const n = 3, w = (x1 - x0) / n;
+      return `<path d="${Array.from({ length: n }, (_, i) => `${i ? "" : `M${x0},${y}`} Q${x0 + w * i + w / 2},${y + sag} ${x0 + w * (i + 1)},${y}`).join(" ")}" stroke="#2E6B4E" stroke-width="10" fill="none" stroke-linecap="round"/>
+        ${Array.from({ length: n + 1 }, (_, i) => `<g transform="translate(${x0 + w * i},${y})"><path d="M0,0 l-11,-7 0,14z M0,0 l11,-7 0,14z" fill="#C0262B"/><circle r="4" fill="#C0262B"/></g>`).join("")}
+        ${Array.from({ length: n * 4 }, (_, i) => { const t = (i + .5) / (n * 4), seg = (t * n) % 1; return `<circle cx="${x0 + t * (x1 - x0)}" cy="${y + Math.sin(seg * Math.PI) * sag * .9 + 3}" r="3.5" fill="${XC[i % 4]}" class="xbulb x${i % 3}"/>`; }).join("")}`; };
+    const poin = (x, y, s = 1) => `<g transform="translate(${x},${y}) scale(${s})">${Array.from({ length: 6 }, (_, i) => `<path d="M0,0 Q6,-10 0,-20 Q-6,-10 0,0Z" fill="#D8322A" transform="rotate(${i * 60})"/>`).join("")}${Array.from({ length: 6 }, (_, i) => `<path d="M0,0 Q4,-7 0,-13 Q-4,-7 0,0Z" fill="#B0201E" transform="rotate(${i * 60 + 30})"/>`).join("")}<circle r="3" fill="#F0C24A"/></g>`;
+    const xmasWall = season !== "christmas" ? "" : `
+      <g id="xmas-in">
+        <!-- fairy lights swagged under the ceiling -->
+        <path d="M0,58 Q100,92 200,62 Q300,92 400,62 Q500,92 600,62 Q700,92 800,62 Q900,92 1000,62 Q1100,92 1200,62 Q1300,92 1400,62 Q1500,92 1600,58" stroke="#1E3A2A" stroke-width="2" fill="none"/>
+        ${Array.from({ length: 48 }, (_, i) => { const x = 8 + i * 33.2, seg = (x % 200) / 200; return `<circle cx="${x}" cy="${62 + Math.sin(seg * Math.PI) * 26 + 4}" r="5" fill="${XC[i % 4]}" class="xbulb x${i % 3}"/>`; }).join("")}
+        <!-- star lanterns -->
+        ${lantern(370, 250, .5, "#E0472E")}${lantern(1572, 250, .5, "#F0C24A")}
+        <!-- garlands on the rules board, the menu and the jar shelf -->
+        ${garland(70, 342, 94)}${garland(938, 1322, 112)}${garland(392, 768, 302, 14)}
+        <!-- a wreath on the window -->
+        <g transform="translate(1445,150)"><circle r="17" fill="none" stroke="#2E6B4E" stroke-width="9"/>${[0, 72, 144, 216, 288].map(d => `<circle cx="${(Math.cos(d * Math.PI / 180) * 17).toFixed(1)}" cy="${(Math.sin(d * Math.PI / 180) * 17).toFixed(1)}" r="3" fill="#D8322A"/>`).join("")}<path d="M-8,14 L0,20 L8,14 L4,30 M-8,14 L-4,30" fill="none" stroke="#C0262B" stroke-width="4"/></g>
+        <!-- two stockings hanging from the jar shelf -->
+        ${[[402, "#C0262B"], [446, "#2E6B4E"]].map(([x, c]) => `<g transform="translate(${x},319)"><path d="M0,0 L0,8" stroke="#2A2A26" stroke-width="2"/>
+          <path d="M-9,8 L9,8 L9,34 Q9,44 18,46 Q24,50 20,56 Q14,60 0,56 Q-9,52 -9,40 Z" fill="${c}" ${ol(2)}/><rect x="-11" y="6" width="22" height="9" rx="3" fill="#FBF6EC" ${ol(2)}/></g>`).join("")}
+        <!-- a little tree on the window sill -->
+        <g transform="translate(1494,352)">
+          <rect x="-5" y="-12" width="10" height="12" fill="#5A3C24"/>
+          ${[0, 1, 2].map(i => `<path d="M${-(26 - i * 7)},${-10 - i * 15} L0,${-34 - i * 15} L${26 - i * 7},${-10 - i * 15} Z" fill="${i % 2 ? "#2E6B4E" : "#255C42"}"/>`).join("")}
+          ${[[-14, -16], [10, -20], [-6, -32], [8, -38], [-4, -50]].map(([x, y], i) => `<circle cx="${x}" cy="${y}" r="2.8" fill="${XC[i % 4]}" class="xbulb x${i % 3}"/>`).join("")}
+          <path d="M0,-73 l3,6 7,1 -5,5 1,7 -6,-3 -6,3 1,-7 -5,-5 7,-1z" fill="#F0C24A"/></g>
+      </g>`;
+    const xmasCounter = season !== "christmas" ? "" : `
+      <!-- a poinsettia on the counter, beside the pastry case -->
+      <g transform="translate(588,560)"><path d="M-20,0 L20,0 L16,-30 L-16,-30 Z" fill="#B5452E" ${ol(2.4)}/><rect x="-19" y="-35" width="38" height="7" rx="2" fill="#8E3020" ${ol(2)}/>
+        ${[[-16, -46], [14, -48], [0, -62], [-6, -38], [12, -36]].map(([x, y], i) => `<path d="M0,-34 L${x * .6},${y + 12}" stroke="#3E6B45" stroke-width="3"/>`).join("")}
+        ${poin(-16, -48, .95)}${poin(15, -50, .9)}${poin(0, -66, 1)}${poin(-2, -40, .75)}</g>`;
 
     return `<svg id="scene" viewBox="0 0 1600 800" role="img" aria-label="Inside Café Minj: ${person.firstName} stands behind the counter, with an espresso machine, a pastry case and a shelf of glass jars.">
       <defs>
@@ -459,6 +503,7 @@ window.ART = (function () {
         <text x="1445" y="389" text-anchor="middle" font-family="Mukta, sans-serif" font-weight="700" font-size="14" fill="${C.bottleInk}">Port Blair, Andamans</text>
       </g>
 
+      ${xmasWall}
       <!-- the barista (behind the counter) -->
       ${barista(initials, person.baristaImage, person.baristaPoses)}
 
@@ -495,6 +540,7 @@ window.ART = (function () {
         <path d="M-12,-22 q4,8 0,16 M10,-14 q2,4 0,8" ${ol(1.8)} fill="none" opacity=".5"/>
       </g>
 
+      ${xmasCounter}
       <!-- pastry case -->
       <g id="pastry-case" class="hot" data-act="shelf:pastry-case">
         <path d="M184,548 L184,424 Q184,410 198,410 L502,410 Q516,410 516,424 L516,548 Z" fill="#EAF4F1" fill-opacity=".4"/>

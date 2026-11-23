@@ -6,7 +6,7 @@
   const { A, D, P, $, reduce, speed, wait, usesCup, state } = Cafe;
   const NS = "http://www.w3.org/2000/svg";
 
-  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || [], D.learning || []);
+  $("#scene-host").innerHTML = A.interior(P, D.shelves, D.rules, D.writing || [], D.learning || [], D.season);
   const svg = $("#scene"), barista = $("#barista"), inner = $("#barista-inner");
   const armL = $("#armL"), armR = $("#armR"), layer = $("#items-layer");
   armL.style.transform = armR.style.transform = "rotate(0deg)";

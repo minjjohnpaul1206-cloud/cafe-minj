@@ -394,3 +394,12 @@ window.CAFE = {
     { short: "Tip with a connection", full: "Tip your barista with a LinkedIn connection." },
     { short: "Island time: off", full: "Island time does not apply to replies. Expect one within a day." },
   ],};
+
+/* In the Christmas season the barista wears a Santa cap and a red apron (frames in assets/xmas/) */
+(c => {
+  if (c.season !== "christmas") return;
+  const xmas = s => s && s.replace("assets/", "assets/xmas/");
+  const p = c.person;
+  p.baristaImage = xmas(p.baristaImage); p.illustration = xmas(p.illustration);
+  for (const k in p.baristaPoses) p.baristaPoses[k] = xmas(p.baristaPoses[k]);
+})(window.CAFE);
