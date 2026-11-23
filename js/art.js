@@ -17,9 +17,17 @@ window.ART = (function () {
      foreground reads as one illustrated world. */
   const INK = "#2A1A12";
   const ol = (w = 3) => `stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+  /* Christmas dresses the crockery too: holly on the cups and plates, a red sleeve on the paper cup */
+  const XM = (window.CAFE || {}).season === "christmas";
+  const holly = (x, y, s = 1, rot = 0) => `<g transform="translate(${x},${y}) rotate(${rot}) scale(${s})">
+      <path d="M0,0 C-4,-3 -6,-8 -12,-8 C-10,-5 -12,-2 -16,-1 C-12,1 -10,4 -11,7 C-6,4 -3,4 0,0 Z" fill="#2E7A4A" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M0,0 C4,-3 6,-8 12,-8 C10,-5 12,-2 16,-1 C12,1 10,4 11,7 C6,4 3,4 0,0 Z" fill="#3E8F57" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>
+      <circle cx="-2.6" cy="-2.6" r="2.8" fill="#D8322A" stroke="${INK}" stroke-width="1"/><circle cx="2.8" cy="-2.2" r="2.8" fill="#D8322A" stroke="${INK}" stroke-width="1"/><circle cx="0" cy="1.8" r="2.8" fill="#C0262B" stroke="${INK}" stroke-width="1"/></g>`;
+  const xstar = (x, y, r = 3) => `<path transform="translate(${x},${y})" d="M0,${-r} L${r * .3},${-r * .3} ${r},0 ${r * .3},${r * .3} 0,${r} ${-r * .3},${r * .3} ${-r},0 ${-r * .3},${-r * .3}Z" fill="#F0C24A"/>`;
   const shadow = (rx = 40, y = 109) => `<ellipse cx="60" cy="${y}" rx="${rx}" ry="5" fill="#000" opacity=".16"/>`;
   const plate = (rx = 46, y = 104) => `<g class="dish">${shadow(rx - 2, y + 5)}<ellipse cx="60" cy="${y}" rx="${rx}" ry="8" fill="#FBF7EE" ${ol()}/>
-      <ellipse cx="60" cy="${y - 1}" rx="${rx - 12}" ry="4" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".3"/></g>`;
+      <ellipse cx="60" cy="${y - 1}" rx="${rx - 12}" ry="4" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".3"/>
+      ${XM ? `<ellipse cx="60" cy="${y}" rx="${rx - 4}" ry="5.6" fill="none" stroke="#C0262B" stroke-width="1.8"/>${holly(60 - rx + 9, y + 1, .5, -10)}${holly(60 + rx - 9, y + 1, .5, 10)}` : ""}</g>`;
   /* steam that drifts up from hot drinks */
   const wisps = (x = 60, y = 62) => `<g class="wisps" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round">
       <path d="M${x - 8},${y} q-6,-9 0,-17 q6,-8 0,-16"/><path class="w2" d="M${x + 8},${y - 2} q6,-9 0,-17 q-6,-8 0,-16"/></g>`;
@@ -37,6 +45,7 @@ window.ART = (function () {
     return `${handle ? `<path d="${hd}" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="${hd}" fill="none" stroke="#FBF7EE" stroke-width="3.6" stroke-linecap="round"/>` : ""}
       <path d="M${x0},${y0} C${x0},${y1 - 2} ${cx - w * .3},${y1} ${cx},${y1} C${cx + w * .3},${y1} ${x1},${y1 - 2} ${x1},${y0} Z" fill="#FBF7EE" ${ol()}/>
       <path d="M${cx + w * .18},${y1 - 4} C${cx + w * .36},${y1 - 6} ${x1 - 5},${y1 - h * .45} ${x1 - 5},${y0 + 7}" fill="none" stroke="${INK}" stroke-width="1.6" opacity=".28" stroke-linecap="round"/>
+      ${XM ? `<path d="M${x0 + 1.2},${y0 + h * .16} L${x1 - 1.2},${y0 + h * .16} L${x1 - 1.6},${y0 + h * .3} C${cx + w * .2},${y0 + h * .34} ${cx - w * .2},${y0 + h * .34} ${x0 + 1.6},${y0 + h * .3} Z" fill="#C0262B"/>${holly(cx - w * .08, y0 + h * .62, w / 64)}` : ""}
       <ellipse cx="${cx}" cy="${y0}" rx="${w / 2}" ry="${Math.max(4, w * .11)}" fill="#C98A4B" ${ol()}/>
       <ellipse cx="${cx - w * .06}" cy="${y0 + .5}" rx="${w * .26}" ry="${Math.max(1.6, w * .05)}" fill="#5A3018"/>`;
   };
@@ -51,7 +60,8 @@ window.ART = (function () {
       <path d="M44.4,70 L75.6,70 L74.8,80 L45.2,80 Z" fill="#E9CFA6"/>
       <path d="M43,62 L77,62 L74,103 Q60,107 46,103 Z" fill="none" ${ol()}/>
       <ellipse cx="60" cy="62" rx="17" ry="5" fill="#FFFDF7" ${ol()}/><ellipse cx="60" cy="62" rx="5.5" ry="2" fill="#C98A4B"/>
-      <path d="M48,68 L49.6,98" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" stroke-linecap="round"/>`,
+      <path d="M48,68 L49.6,98" stroke="#fff" stroke-opacity=".7" stroke-width="2.6" stroke-linecap="round"/>
+      ${XM ? `<path d="M43.6,64.5 L76.4,64.5 L76.1,68.5 L43.9,68.5 Z" fill="#C0262B"/>${holly(68, 66.5, .42)}` : ""}`,
     latte: () => `${shadow(30)}
       <path d="M40,26 L80,26 L76,104 Q60,109 44,104 Z" fill="#FFF8EA"/>
       <path d="M41.7,50 L78.3,50 L76,104 Q60,109 44,104 Z" fill="#E4C295"/>
@@ -59,7 +69,8 @@ window.ART = (function () {
       <path d="M40,26 L80,26 L76,104 Q60,109 44,104 Z" fill="none" ${ol()}/>
       <ellipse cx="60" cy="26" rx="20" ry="5" fill="#FFFDF7" ${ol()}/>
       <path d="M73,6 L65,56" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/><path d="M73,6 L65,56" stroke="${C.gold}" stroke-width="3" stroke-linecap="round"/>
-      <path d="M47,36 L49.5,98" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>`,
+      <path d="M47,36 L49.5,98" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>
+      ${XM ? `<path d="M41.2,44 L78.8,44 L78.5,49 L41.5,49 Z" fill="#C0262B"/>${holly(66, 46, .5)}` : ""}`,
     cookies: () => `${plate(46, 105)}
       ${[96, 86, 76].map((y, i) => `<g transform="translate(${i % 2 ? 4 : -3},0)">
         <ellipse cx="60" cy="${y + 5}" rx="31" ry="8" fill="#B5732F" ${ol(2.6)}/>
@@ -110,9 +121,11 @@ window.ART = (function () {
   /* to-go paper cup: kraft sleeve, lid, and a slot for the visitor's name */
   items.togo = (o = {}) => `${shadow(26)}
       <path d="M33,34 L87,34 L81,108 L39,108 Z" fill="#FFFDF7" ${ol()}/>
-      <path d="M36.4,96 L83.6,96 L83,102 L37,102 Z" fill="${o.accent || C.bottle}"/>
-      <path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#CFA06C" ${ol(2.2)}/>
-      ${[43, 51, 59, 67, 75].map(x => `<path d="M${x},65 l0,21" stroke="#A97D4E" stroke-width="1.2"/>`).join("")}
+      <path d="M36.4,96 L83.6,96 L83,102 L37,102 Z" fill="${XM ? "#2E6B4E" : o.accent || C.bottle}"/>
+      ${XM ? `<path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#C8262B" ${ol(2.2)}/>
+        <path d="M35.6,66 L84.4,66 M37.1,85 L82.9,85" stroke="#FBF6EC" stroke-width="1.6" stroke-dasharray="3 3"/>
+        ${holly(60, 76, .62)}${xstar(44, 75, 3.2)}${xstar(76, 75, 3.2)}` : `<path d="M35.3,62 L84.7,62 L82.6,89 L37.4,89 Z" fill="#CFA06C" ${ol(2.2)}/>
+      ${[43, 51, 59, 67, 75].map(x => `<path d="M${x},65 l0,21" stroke="#A97D4E" stroke-width="1.2"/>`).join("")}`}
       <rect x="29" y="26" width="62" height="10" rx="4" fill="#F2EEE6" ${ol()}/>
       <path d="M35,26 Q37,15 60,14 Q83,15 85,26 Z" fill="#FFFDF7" ${ol()}/>
       <rect x="62" y="17" width="12" height="4" rx="2" fill="${INK}" opacity=".45"/>
